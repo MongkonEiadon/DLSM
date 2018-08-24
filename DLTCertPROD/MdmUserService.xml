@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsp200409="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsp200607="http://www.w3.org/2006/07/ws-policy" xmlns:ns0="http://esv.dlt.go.th" targetNamespace="http://esv.dlt.go.th">
+<wsdl:types xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<xsd:schema>
+<xsd:import schemaLocation="MdmUserService.xsd1.xsd" namespace="http://esv.dlt.go.th"/>
+<xsd:import schemaLocation="MdmUserService.xsd2.xsd" namespace="http://ws.esv.dlt.go.th"/></xsd:schema></wsdl:types>
+<wsdl:message name="authenUser_BusinessFaultMsg">
+<wsdl:part name="BusinessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/></wsdl:message>
+<wsdl:message name="authenUser_SystemFaultMsg">
+<wsdl:part name="SystemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/></wsdl:message>
+<wsdl:message name="authenUserRequestMsg">
+<wsdl:part name="authenUserParameters" element="xsns:authenUser" xmlns:xsns="http://esv.dlt.go.th"/></wsdl:message>
+<wsdl:message name="authenUserResponseMsg">
+<wsdl:part name="authenUserResult" element="xsns:authenUserResponse" xmlns:xsns="http://esv.dlt.go.th"/></wsdl:message>
+<wsdl:message name="getUserInfo_BusinessFaultMsg">
+<wsdl:part name="BusinessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/></wsdl:message>
+<wsdl:message name="getUserInfo_SystemFaultMsg">
+<wsdl:part name="SystemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/></wsdl:message>
+<wsdl:message name="getUserInfoRequestMsg">
+<wsdl:part name="getUserInfoParameters" element="xsns:getUserInfo" xmlns:xsns="http://esv.dlt.go.th"/></wsdl:message>
+<wsdl:message name="getUserInfoResponseMsg">
+<wsdl:part name="getUserInfoResult" element="xsns:getUserInfoResponse" xmlns:xsns="http://esv.dlt.go.th"/></wsdl:message>
+<wsdl:portType name="MdmUserService">
+<wsdl:operation name="authenUser">
+<wsdl:input name="authenUserRequest" message="ns0:authenUserRequestMsg"/>
+<wsdl:output name="authenUserResponse" message="ns0:authenUserResponseMsg"/>
+<wsdl:fault name="BusinessFault" message="ns0:authenUser_BusinessFaultMsg"/>
+<wsdl:fault name="SystemFault" message="ns0:authenUser_SystemFaultMsg"/></wsdl:operation>
+<wsdl:operation name="getUserInfo">
+<wsdl:input name="getUserInfoRequest" message="ns0:getUserInfoRequestMsg"/>
+<wsdl:output name="getUserInfoResponse" message="ns0:getUserInfoResponseMsg"/>
+<wsdl:fault name="BusinessFault" message="ns0:getUserInfo_BusinessFaultMsg"/>
+<wsdl:fault name="SystemFault" message="ns0:getUserInfo_SystemFaultMsg"/></wsdl:operation></wsdl:portType>
+<wsdl:binding name="MdmUserServiceExport1_MdmUserServiceHttpBinding" type="ns0:MdmUserService">
+<soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+<wsdl:operation name="authenUser">
+<soap12:operation soapAction="http://esv.dlt.go.th/MdmUserService/authenUser" soapActionRequired="false" style="document"/>
+<wsdl:input name="authenUserRequest">
+<soap12:body use="literal"/></wsdl:input>
+<wsdl:output name="authenUserResponse">
+<soap12:body use="literal"/></wsdl:output>
+<wsdl:fault name="BusinessFault">
+<soap12:fault name="BusinessFault" use="literal"/></wsdl:fault>
+<wsdl:fault name="SystemFault">
+<soap12:fault name="SystemFault" use="literal"/></wsdl:fault></wsdl:operation>
+<wsdl:operation name="getUserInfo">
+<soap12:operation soapAction="http://esv.dlt.go.th/MdmUserService/getUserInfo" soapActionRequired="false" style="document"/>
+<wsdl:input name="getUserInfoRequest">
+<soap12:body use="literal"/></wsdl:input>
+<wsdl:output name="getUserInfoResponse">
+<soap12:body use="literal"/></wsdl:output>
+<wsdl:fault name="BusinessFault">
+<soap12:fault name="BusinessFault" use="literal"/></wsdl:fault>
+<wsdl:fault name="SystemFault">
+<soap12:fault name="SystemFault" use="literal"/></wsdl:fault></wsdl:operation></wsdl:binding>
+<wsdl:service name="MdmUserServiceExport1_MdmUserServiceHttpService">
+<wsdl:port name="MdmUserService_MdmUserServiceHttpPort" binding="ns0:MdmUserServiceExport1_MdmUserServiceHttpBinding">
+<soap12:address location="https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/MdmUserService"/></wsdl:port></wsdl:service></wsdl:definitions>

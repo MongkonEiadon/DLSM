@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ReportCommand>
+<Report>NotEnough.rpt</Report>
+<Output>NotEnough.pdf</Output>
+<Server>GALAXY-EYES</Server>
+<Database>DLSM</Database>
+<User>sa</User>
+<Password>1867</Password>
+<Parameters>
+<Item Name="@whid" Type="Integer" Value="0"/>
+<Item Name="WhName" Type="String" Value="(ไม่ระบุ)"/>
+</Parameters>
+</ReportCommand>

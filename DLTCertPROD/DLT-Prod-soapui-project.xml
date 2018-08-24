@@ -1,0 +1,2474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="DLT_Prod" resourceRoot="" soapui-version="4.6.4" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="LicenceServiceExport1_LicenceServiceHttpBinding" type="wsdl" bindingName="{http://esv.dlt.go.th}LicenceServiceExport1_LicenceServiceHttpBinding" soapVersion="1_2" anonymous="optional" definition="http://gservice.dlt.go.th:10080/EsvProcessWeb/sca/LicenceService?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://gservice.dlt.go.th:10080/EsvProcessWeb/sca/LicenceService?wsdl"><con:part><con:url>http://gservice.dlt.go.th:10080/EsvProcessWeb/sca/LicenceService?wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://esv.dlt.go.th" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsp200409="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsp200607="http://www.w3.org/2006/07/ws-policy" xmlns:ns0="http://esv.dlt.go.th">
+  <wsdl:types xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:schema>
+      <xsd:import schemaLocation="LicenceService.xsd1.xsd" namespace="http://esv.dlt.go.th"/>
+      <xsd:import schemaLocation="LicenceService.xsd2.xsd" namespace="http://ws.esv.dlt.go.th"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="addDriverLicenceDriveExam_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addDriverLicenceDriveExam_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addDriverLicenceDriveExamRequestMsg">
+    <wsdl:part name="addDriverLicenceDriveExamParameters" element="xsns:addDriverLicenceDriveExam" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addDriverLicenceDriveExamResponseMsg">
+    <wsdl:part name="addDriverLicenceDriveExamResult" element="xsns:addDriverLicenceDriveExamResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addDriverLicencePaperExam_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addDriverLicencePaperExam_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addDriverLicencePaperExamRequestMsg">
+    <wsdl:part name="addDriverLicencePaperExamParameters" element="xsns:addDriverLicencePaperExam" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addDriverLicencePaperExamResponseMsg">
+    <wsdl:part name="addDriverLicencePaperExamResult" element="xsns:addDriverLicencePaperExamResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addPublicLicenceDriveExam_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addPublicLicenceDriveExam_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addPublicLicenceDriveExamRequestMsg">
+    <wsdl:part name="addPublicLicenceDriveExamParameters" element="xsns:addPublicLicenceDriveExam" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addPublicLicenceDriveExamResponseMsg">
+    <wsdl:part name="addPublicLicenceDriveExamResult" element="xsns:addPublicLicenceDriveExamResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addPublicLicencePaperExam_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addPublicLicencePaperExam_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addPublicLicencePaperExamRequestMsg">
+    <wsdl:part name="addPublicLicencePaperExamParameters" element="xsns:addPublicLicencePaperExam" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addPublicLicencePaperExamResponseMsg">
+    <wsdl:part name="addPublicLicencePaperExamResult" element="xsns:addPublicLicencePaperExamResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addTrainSchoolInfo_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addTrainSchoolInfo_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addTrainSchoolInfoRequestMsg">
+    <wsdl:part name="addTrainSchoolInfoParameters" element="xsns:addTrainSchoolInfo" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="addTrainSchoolInfoResponseMsg">
+    <wsdl:part name="addTrainSchoolInfoResult" element="xsns:addTrainSchoolInfoResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangeDriverLicenceInfo_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangeDriverLicenceInfo_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangeDriverLicenceInfoRequestMsg">
+    <wsdl:part name="getAllChangeDriverLicenceInfoParameters" element="xsns:getAllChangeDriverLicenceInfo" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangeDriverLicenceInfoResponseMsg">
+    <wsdl:part name="getAllChangeDriverLicenceInfoResult" element="xsns:getAllChangeDriverLicenceInfoResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangePersonInfo_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangePersonInfo_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangePersonInfoRequestMsg">
+    <wsdl:part name="getAllChangePersonInfoParameters" element="xsns:getAllChangePersonInfo" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangePersonInfoResponseMsg">
+    <wsdl:part name="getAllChangePersonInfoResult" element="xsns:getAllChangePersonInfoResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangePublicLicenceInfo_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangePublicLicenceInfo_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangePublicLicenceInfoRequestMsg">
+    <wsdl:part name="getAllChangePublicLicenceInfoParameters" element="xsns:getAllChangePublicLicenceInfo" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getAllChangePublicLicenceInfoResponseMsg">
+    <wsdl:part name="getAllChangePublicLicenceInfoResult" element="xsns:getAllChangePublicLicenceInfoResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByDocNo_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByDocNo_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByDocNoRequestMsg">
+    <wsdl:part name="getDriverLicenceInfoByDocNoParameters" element="xsns:getDriverLicenceInfoByDocNo" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByDocNoResponseMsg">
+    <wsdl:part name="getDriverLicenceInfoByDocNoResult" element="xsns:getDriverLicenceInfoByDocNoResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByName_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByName_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByNameRequestMsg">
+    <wsdl:part name="getDriverLicenceInfoByNameParameters" element="xsns:getDriverLicenceInfoByName" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByNameResponseMsg">
+    <wsdl:part name="getDriverLicenceInfoByNameResult" element="xsns:getDriverLicenceInfoByNameResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByRequestNo_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByRequestNo_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByRequestNoRequestMsg">
+    <wsdl:part name="getDriverLicenceInfoByRequestNoParameters" element="xsns:getDriverLicenceInfoByRequestNo" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceInfoByRequestNoResponseMsg">
+    <wsdl:part name="getDriverLicenceInfoByRequestNoResult" element="xsns:getDriverLicenceInfoByRequestNoResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceRequestNo_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceRequestNo_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceRequestNoRequestMsg">
+    <wsdl:part name="getDriverLicenceRequestNoParameters" element="xsns:getDriverLicenceRequestNo" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getDriverLicenceRequestNoResponseMsg">
+    <wsdl:part name="getDriverLicenceRequestNoResult" element="xsns:getDriverLicenceRequestNoResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByDocNo_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByDocNo_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByDocNoRequestMsg">
+    <wsdl:part name="getPublicLicenceInfoByDocNoParameters" element="xsns:getPublicLicenceInfoByDocNo" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByDocNoResponseMsg">
+    <wsdl:part name="getPublicLicenceInfoByDocNoResult" element="xsns:getPublicLicenceInfoByDocNoResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByName_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByName_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByNameRequestMsg">
+    <wsdl:part name="getPublicLicenceInfoByNameParameters" element="xsns:getPublicLicenceInfoByName" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByNameResponseMsg">
+    <wsdl:part name="getPublicLicenceInfoByNameResult" element="xsns:getPublicLicenceInfoByNameResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByRequestNo_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByRequestNo_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByRequestNoRequestMsg">
+    <wsdl:part name="getPublicLicenceInfoByRequestNoParameters" element="xsns:getPublicLicenceInfoByRequestNo" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceInfoByRequestNoResponseMsg">
+    <wsdl:part name="getPublicLicenceInfoByRequestNoResult" element="xsns:getPublicLicenceInfoByRequestNoResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceRequestNo_businessFaultMsg">
+    <wsdl:part name="businessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceRequestNo_systemFaultMsg">
+    <wsdl:part name="systemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceRequestNoRequestMsg">
+    <wsdl:part name="getPublicLicenceRequestNoParameters" element="xsns:getPublicLicenceRequestNo" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getPublicLicenceRequestNoResponseMsg">
+    <wsdl:part name="getPublicLicenceRequestNoResult" element="xsns:getPublicLicenceRequestNoResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:portType name="LicenceService">
+    <wsdl:operation name="addDriverLicenceDriveExam">
+      <wsdl:input name="addDriverLicenceDriveExamRequest" message="ns0:addDriverLicenceDriveExamRequestMsg"/>
+      <wsdl:output name="addDriverLicenceDriveExamResponse" message="ns0:addDriverLicenceDriveExamResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:addDriverLicenceDriveExam_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:addDriverLicenceDriveExam_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="addDriverLicencePaperExam">
+      <wsdl:input name="addDriverLicencePaperExamRequest" message="ns0:addDriverLicencePaperExamRequestMsg"/>
+      <wsdl:output name="addDriverLicencePaperExamResponse" message="ns0:addDriverLicencePaperExamResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:addDriverLicencePaperExam_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:addDriverLicencePaperExam_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="addPublicLicenceDriveExam">
+      <wsdl:input name="addPublicLicenceDriveExamRequest" message="ns0:addPublicLicenceDriveExamRequestMsg"/>
+      <wsdl:output name="addPublicLicenceDriveExamResponse" message="ns0:addPublicLicenceDriveExamResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:addPublicLicenceDriveExam_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:addPublicLicenceDriveExam_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="addPublicLicencePaperExam">
+      <wsdl:input name="addPublicLicencePaperExamRequest" message="ns0:addPublicLicencePaperExamRequestMsg"/>
+      <wsdl:output name="addPublicLicencePaperExamResponse" message="ns0:addPublicLicencePaperExamResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:addPublicLicencePaperExam_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:addPublicLicencePaperExam_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="addTrainSchoolInfo">
+      <wsdl:input name="addTrainSchoolInfoRequest" message="ns0:addTrainSchoolInfoRequestMsg"/>
+      <wsdl:output name="addTrainSchoolInfoResponse" message="ns0:addTrainSchoolInfoResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:addTrainSchoolInfo_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:addTrainSchoolInfo_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getAllChangeDriverLicenceInfo">
+      <wsdl:input name="getAllChangeDriverLicenceInfoRequest" message="ns0:getAllChangeDriverLicenceInfoRequestMsg"/>
+      <wsdl:output name="getAllChangeDriverLicenceInfoResponse" message="ns0:getAllChangeDriverLicenceInfoResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:getAllChangeDriverLicenceInfo_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:getAllChangeDriverLicenceInfo_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getAllChangePersonInfo">
+      <wsdl:input name="getAllChangePersonInfoRequest" message="ns0:getAllChangePersonInfoRequestMsg"/>
+      <wsdl:output name="getAllChangePersonInfoResponse" message="ns0:getAllChangePersonInfoResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:getAllChangePersonInfo_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:getAllChangePersonInfo_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getAllChangePublicLicenceInfo">
+      <wsdl:input name="getAllChangePublicLicenceInfoRequest" message="ns0:getAllChangePublicLicenceInfoRequestMsg"/>
+      <wsdl:output name="getAllChangePublicLicenceInfoResponse" message="ns0:getAllChangePublicLicenceInfoResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:getAllChangePublicLicenceInfo_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:getAllChangePublicLicenceInfo_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDriverLicenceInfoByDocNo">
+      <wsdl:input name="getDriverLicenceInfoByDocNoRequest" message="ns0:getDriverLicenceInfoByDocNoRequestMsg"/>
+      <wsdl:output name="getDriverLicenceInfoByDocNoResponse" message="ns0:getDriverLicenceInfoByDocNoResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:getDriverLicenceInfoByDocNo_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:getDriverLicenceInfoByDocNo_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDriverLicenceInfoByName">
+      <wsdl:input name="getDriverLicenceInfoByNameRequest" message="ns0:getDriverLicenceInfoByNameRequestMsg"/>
+      <wsdl:output name="getDriverLicenceInfoByNameResponse" message="ns0:getDriverLicenceInfoByNameResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:getDriverLicenceInfoByName_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:getDriverLicenceInfoByName_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDriverLicenceInfoByRequestNo">
+      <wsdl:input name="getDriverLicenceInfoByRequestNoRequest" message="ns0:getDriverLicenceInfoByRequestNoRequestMsg"/>
+      <wsdl:output name="getDriverLicenceInfoByRequestNoResponse" message="ns0:getDriverLicenceInfoByRequestNoResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:getDriverLicenceInfoByRequestNo_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:getDriverLicenceInfoByRequestNo_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDriverLicenceRequestNo">
+      <wsdl:input name="getDriverLicenceRequestNoRequest" message="ns0:getDriverLicenceRequestNoRequestMsg"/>
+      <wsdl:output name="getDriverLicenceRequestNoResponse" message="ns0:getDriverLicenceRequestNoResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:getDriverLicenceRequestNo_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:getDriverLicenceRequestNo_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getPublicLicenceInfoByDocNo">
+      <wsdl:input name="getPublicLicenceInfoByDocNoRequest" message="ns0:getPublicLicenceInfoByDocNoRequestMsg"/>
+      <wsdl:output name="getPublicLicenceInfoByDocNoResponse" message="ns0:getPublicLicenceInfoByDocNoResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:getPublicLicenceInfoByDocNo_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:getPublicLicenceInfoByDocNo_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getPublicLicenceInfoByName">
+      <wsdl:input name="getPublicLicenceInfoByNameRequest" message="ns0:getPublicLicenceInfoByNameRequestMsg"/>
+      <wsdl:output name="getPublicLicenceInfoByNameResponse" message="ns0:getPublicLicenceInfoByNameResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:getPublicLicenceInfoByName_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:getPublicLicenceInfoByName_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getPublicLicenceInfoByRequestNo">
+      <wsdl:input name="getPublicLicenceInfoByRequestNoRequest" message="ns0:getPublicLicenceInfoByRequestNoRequestMsg"/>
+      <wsdl:output name="getPublicLicenceInfoByRequestNoResponse" message="ns0:getPublicLicenceInfoByRequestNoResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:getPublicLicenceInfoByRequestNo_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:getPublicLicenceInfoByRequestNo_systemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getPublicLicenceRequestNo">
+      <wsdl:input name="getPublicLicenceRequestNoRequest" message="ns0:getPublicLicenceRequestNoRequestMsg"/>
+      <wsdl:output name="getPublicLicenceRequestNoResponse" message="ns0:getPublicLicenceRequestNoResponseMsg"/>
+      <wsdl:fault name="businessFault" message="ns0:getPublicLicenceRequestNo_businessFaultMsg"/>
+      <wsdl:fault name="systemFault" message="ns0:getPublicLicenceRequestNo_systemFaultMsg"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LicenceServiceExport1_LicenceServiceHttpBinding" type="ns0:LicenceService">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="addDriverLicenceDriveExam">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/addDriverLicenceDriveExam" soapActionRequired="false" style="document"/>
+      <wsdl:input name="addDriverLicenceDriveExamRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addDriverLicenceDriveExamResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addDriverLicencePaperExam">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/addDriverLicencePaperExam" soapActionRequired="false" style="document"/>
+      <wsdl:input name="addDriverLicencePaperExamRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addDriverLicencePaperExamResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addPublicLicenceDriveExam">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/addPublicLicenceDriveExam" soapActionRequired="false" style="document"/>
+      <wsdl:input name="addPublicLicenceDriveExamRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addPublicLicenceDriveExamResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addPublicLicencePaperExam">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/addPublicLicencePaperExam" soapActionRequired="false" style="document"/>
+      <wsdl:input name="addPublicLicencePaperExamRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addPublicLicencePaperExamResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addTrainSchoolInfo">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/addTrainSchoolInfo" soapActionRequired="false" style="document"/>
+      <wsdl:input name="addTrainSchoolInfoRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addTrainSchoolInfoResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllChangeDriverLicenceInfo">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/getAllChangeDriverLicenceInfo" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getAllChangeDriverLicenceInfoRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllChangeDriverLicenceInfoResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllChangePersonInfo">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/getAllChangePersonInfo" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getAllChangePersonInfoRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllChangePersonInfoResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllChangePublicLicenceInfo">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/getAllChangePublicLicenceInfo" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getAllChangePublicLicenceInfoRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllChangePublicLicenceInfoResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDriverLicenceInfoByDocNo">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/getDriverLicenceInfoByDocNo" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getDriverLicenceInfoByDocNoRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDriverLicenceInfoByDocNoResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDriverLicenceInfoByName">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/getDriverLicenceInfoByName" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getDriverLicenceInfoByNameRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDriverLicenceInfoByNameResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDriverLicenceInfoByRequestNo">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/getDriverLicenceInfoByRequestNo" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getDriverLicenceInfoByRequestNoRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDriverLicenceInfoByRequestNoResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDriverLicenceRequestNo">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/getDriverLicenceRequestNo" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getDriverLicenceRequestNoRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDriverLicenceRequestNoResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPublicLicenceInfoByDocNo">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/getPublicLicenceInfoByDocNo" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getPublicLicenceInfoByDocNoRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPublicLicenceInfoByDocNoResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPublicLicenceInfoByName">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/getPublicLicenceInfoByName" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getPublicLicenceInfoByNameRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPublicLicenceInfoByNameResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPublicLicenceInfoByRequestNo">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/getPublicLicenceInfoByRequestNo" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getPublicLicenceInfoByRequestNoRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPublicLicenceInfoByRequestNoResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPublicLicenceRequestNo">
+      <soap12:operation soapAction="http://esv.dlt.go.th/LicenceService/getPublicLicenceRequestNo" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getPublicLicenceRequestNoRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPublicLicenceRequestNoResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="businessFault">
+        <soap12:fault name="businessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="systemFault">
+        <soap12:fault name="systemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LicenceServiceExport1_LicenceServiceHttpService">
+    <wsdl:port name="LicenceService_LicenceServiceHttpPort" binding="ns0:LicenceServiceExport1_LicenceServiceHttpBinding">
+      <soap12:address location="https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService"/>
+    </wsdl:port>
+    <wsdl:port name="LicenceService_LicenceServiceHttpPort.0" binding="ns0:LicenceServiceExport1_LicenceServiceHttpBinding">
+      <soap12:address location="https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>http://gservice.dlt.go.th:10080/EsvProcessWeb/sca/LicenceService.xsd1.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://esv.dlt.go.th" xmlns:bons1="http://esv.dlt.go.th" xmlns:bons11="http://ws.esv.dlt.go.th" xmlns:bons110="http://ws.esv.dlt.go.th" xmlns:bons111="http://ws.esv.dlt.go.th" xmlns:bons112="http://ws.esv.dlt.go.th" xmlns:bons113="http://ws.esv.dlt.go.th" xmlns:bons114="http://ws.esv.dlt.go.th" xmlns:bons115="http://ws.esv.dlt.go.th" xmlns:bons116="http://ws.esv.dlt.go.th" xmlns:bons117="http://ws.esv.dlt.go.th" xmlns:bons118="http://ws.esv.dlt.go.th" xmlns:bons12="http://ws.esv.dlt.go.th" xmlns:bons13="http://ws.esv.dlt.go.th" xmlns:bons14="http://ws.esv.dlt.go.th" xmlns:bons15="http://ws.esv.dlt.go.th" xmlns:bons16="http://ws.esv.dlt.go.th" xmlns:bons17="http://ws.esv.dlt.go.th" xmlns:bons18="http://ws.esv.dlt.go.th" xmlns:bons19="http://ws.esv.dlt.go.th" xmlns:bons2="http://ws.esv.dlt.go.th" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://esv.dlt.go.th" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="LicenceService.xsd2.xsd" namespace="http://ws.esv.dlt.go.th"/>
+  <xsd:element name="getDriverLicenceRequestNo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getDriverLicenceRequestNoInput" nillable="true" type="tns:GetDriverLicenceRequestNoInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getDriverLicenceRequestNoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getDriverLicenceRequestNoOutput" nillable="true" type="tns:GetDriverLicenceRequestNoOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getPublicLicenceRequestNo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getPublicLicenceRequestNoInput" nillable="true" type="tns:GetPublicLicenceRequestNoInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getPublicLicenceRequestNoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getPublicLicenceRequestNoOutput" nillable="true" type="tns:GetPublicLicenceRequestNoOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="addDriverLicenceDriveExam">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="addDriverLicenceDriveExamInput" nillable="true" type="tns:AddDriverLicenceDriveExamInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="addDriverLicenceDriveExamResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="addDriverLicenceDriveExamOutput" nillable="true" type="tns:AddDriverLicenceDriveExamOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="addPublicLicenceDriveExam">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="addPublicLicenceDriveExamInput" nillable="true" type="tns:AddPublicLicenceDriveExamInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="addPublicLicenceDriveExamResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="addPublicLicenceDriveExamOutput" nillable="true" type="tns:AddPublicLicenceDriveExamOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="addDriverLicencePaperExam">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="addDriverLicencePaperExamInput" nillable="true" type="tns:AddDriverLicencePaperExamInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="addDriverLicencePaperExamResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="addDriverLicencePaperExamOutput" nillable="true" type="tns:AddDriverLicencePaperExamOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="addPublicLicencePaperExam">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="addPublicLicencePaperExamInput" nillable="true" type="tns:AddPublicLicencePaperExamInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="addPublicLicencePaperExamResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="addPublicLicencePaperExamOutput" nillable="true" type="tns:AddPublicLicencePaperExamOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="addTrainSchoolInfo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="addTrainSchoolInfoInput" nillable="true" type="tns:AddTrainSchoolInfoInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="addTrainSchoolInfoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="addTrainSchoolInfoOutput" nillable="true" type="tns:AddTrainSchoolInfoOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getDriverLicenceInfoByDocNo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getDriverLicenceInfoByDocNoInput" nillable="true" type="tns:GetDriverLicenceInfoByDocNoInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getDriverLicenceInfoByDocNoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getDriverLicenceInfoByDocNoOutput" nillable="true" type="tns:GetDriverLicenceInfoByDocNoOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getDriverLicenceInfoByName">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getDriverLicenceInfoByNameInput" nillable="true" type="tns:GetDriverLicenceInfoByNameInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getDriverLicenceInfoByNameResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getDriverLicenceInfoByNameOutput" nillable="true" type="tns:GetDriverLicenceInfoByNameOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getPublicLicenceInfoByDocNo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getPublicLicenceInfoByDocNoInput" nillable="true" type="tns:GetPublicLicenceInfoByDocNoInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getPublicLicenceInfoByDocNoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getPublicLicenceInfoByDocNoOutput" nillable="true" type="tns:GetPublicLicenceInfoByDocNoOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getPublicLicenceInfoByName">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getPublicLicenceInfoByNameInput" nillable="true" type="tns:GetPublicLicenceInfoByNameInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getPublicLicenceInfoByNameResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getPublicLicenceInfoByNameOutput" nillable="true" type="tns:GetPublicLicenceInfoByNameOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getAllChangeDriverLicenceInfo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getAllChangeDriverLicenceInfoInput" nillable="true" type="tns:GetAllChangeDriverLicenceInfoInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getAllChangeDriverLicenceInfoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getAllChangeDriverLicenceInfoOutput" nillable="true" type="tns:GetAllChangeDriverLicenceInfoOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getAllChangePublicLicenceInfo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getAllChangePublicLicenceInfoInput" nillable="true" type="tns:GetAllChangePublicLicenceInfoInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getAllChangePublicLicenceInfoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getAllChangePublicLicenceInfoOutput" nillable="true" type="tns:GetAllChangePublicLicenceInfoOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getAllChangePersonInfo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getAllChangePersonInfoInput" nillable="true" type="tns:GetAllChangePersonInfoInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getAllChangePersonInfoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getAllChangePersonInfoOutput" nillable="true" type="tns:GetAllChangePersonInfoOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getDriverLicenceInfoByRequestNo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getDriverLicenceInfoByRequestNoInput" nillable="true" type="tns:GetDriverLicenceInfoByRequestNoInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getDriverLicenceInfoByRequestNoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getDriverLicenceInfoByRequestNoOutput" nillable="true" type="tns:GetDriverLicenceInfoByRequestNoOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getPublicLicenceInfoByRequestNo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getPublicLicenceInfoByRequestNoInput" nillable="true" type="tns:GetPublicLicenceInfoByRequestNoInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getPublicLicenceInfoByRequestNoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="getPublicLicenceInfoByRequestNoOutput" nillable="true" type="tns:GetPublicLicenceInfoByRequestNoOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="GetChangeDriverLicenceInfoByReferenceInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getChangeDriverLicenceInfoByReference"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AuthenticationInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="userId" type="xsd:string"></xsd:element>
+      <xsd:element minOccurs="0" name="password" type="xsd:string"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AddDriverLicencePaperExamInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:addDriverLicencePaperExam"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetDriverLicenceInfoByNameInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="GetDriverLicenceInfoByName" type="bons2:getDriverLicenceInfoByName"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetPublicLicenceInfoByDocNoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getPublicLicenceInfoByDocNo"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetPublicLicenceInfoByNameInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getPublicLicenceInfoByName"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AddPublicLicenceDriveExamInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:addPublicLicenceDriveExam"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AddDriverLicenceDriveExamInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:addDriverLicenceDriveExam"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetDriverLicenceInfoByDocNoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getDriverLicenceInfoByDocNo"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AddTrainSchoolInfoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons11:addTrainSchoolInfoResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetPublicLicenceRequestNoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getPublicLicenceRequestNo"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetAllChangePersonInfoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getAllChangePersonInfo"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetDriverLicenceRequestNoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getDriverLicenceRequestNo"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetAllChangeDriverLicenceInfoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getAllChangeDriverLicenceInfo"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetAllChangePublicLicenceInfoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getAllChangePublicLicenceInfo"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetPublicLicenceInfoByRequestNoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getPublicLicenceInfoByRequestNo"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetDriverLicenceInfoByRequestNoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getDriverLicenceInfoByRequestNo"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetDriverLicenceInfoByRequestNoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons12:getDriverLicenceInfoByRequestNoResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetPublicLicenceInfoByRequestNoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons13:getPublicLicenceInfoByRequestNoResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetAllChangePublicLicenceInfoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons14:getAllChangePublicLicenceInfoResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetAllChangeDriverLicenceInfoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons15:getAllChangeDriverLicenceInfoResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetDriverLicenceRequestNoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons16:getDriverLicenceRequestNoResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetPublicLicenceRequestNoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons17:getPublicLicenceRequestNoResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetAllChangePersonInfoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons18:getAllChangePersonInfoResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AddTrainSchoolInfoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:addTrainSchoolInfo"/>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AddDriverLicenceDriveExamOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons19:addDriverLicenceDriveExamResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetDriverLicenceInfoByDocNoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons110:getDriverLicenceInfoByDocNoResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetPublicLicenceInfoByNameOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons111:getPublicLicenceInfoByNameResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetPublicLicenceInfoByDocNoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons112:getPublicLicenceInfoByDocNoResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AddPublicLicenceDriveExamOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons113:addPublicLicenceDriveExamResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetChangeDriverLicenceInfoByReferenceOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons114:getChangeDriverLicenceInfoByReferenceResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetDriverLicenceInfoByNameOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons115:getDriverLicenceInfoByNameResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AddDriverLicencePaperExamOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons116:addDriverLicencePaperExamResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AddPublicLicencePaperExamOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons117:addPublicLicencePaperExamResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetChangePublicLicenceInfoByReferenceOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons118:getChangePublicLicenceInfoByReferenceResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetChangePublicLicenceInfoByReferenceInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getChangePublicLicenceInfoByReference"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AddPublicLicencePaperExamInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:addPublicLicencePaperExam"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>http://gservice.dlt.go.th:10080/EsvProcessWeb/sca/LicenceService.xsd2.xsd</con:url><con:content><![CDATA[<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://ws.esv.dlt.go.th" xmlns:tns="http://ws.esv.dlt.go.th" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bons2="http://ws.esv.dlt.go.th" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="publicLicenceInfoByDocNoOutput">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="publicLicenceInfoList" nillable="true" type="tns:publicLicenceInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="publicLicenceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="addrNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="birthDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="bldName" type="xs:string"/>
+      <xs:element minOccurs="0" name="canFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="completeFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="excFee" type="xs:string"/>
+      <xs:element minOccurs="0" name="expDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fname" type="xs:string"/>
+      <xs:element minOccurs="0" name="fnameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="issDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="lname" type="xs:string"/>
+      <xs:element minOccurs="0" name="lnameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="locCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="locDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="locFullDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="natCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="natDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="needDrive" type="xs:string"/>
+      <xs:element minOccurs="0" name="needEff" type="xs:string"/>
+      <xs:element minOccurs="0" name="needPaper" type="xs:string"/>
+      <xs:element minOccurs="0" name="needTrain" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="passDriveExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passEffExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passPaperExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passTrainExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="pcNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="rcpNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqTrCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="result" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="rvkFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="sex" type="xs:string"/>
+      <xs:element minOccurs="0" name="soi" type="xs:string"/>
+      <xs:element minOccurs="0" name="srlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="street" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleEngDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageName" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="zipCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getChangeDriverLicenceInfoByReference" type="tns:getChangeDriverLicenceInfoByReference"/>
+  <xs:complexType name="getChangeDriverLicenceInfoByReference">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:changeDriverLicenceInfoByReferenceInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="changeDriverLicenceInfoByReferenceInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="driverLicenceReference" type="xs:int"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addDriverLicencePaperExam">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:driverLicencePaperExamInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="addDriverLicencePaperExam" type="tns:addDriverLicencePaperExam"/>
+  <xs:complexType name="driverLicencePaperExamInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="drltReqMasRef" type="xs:long"/>
+      <xs:element minOccurs="0" name="examDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="examEnd" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="examFlag" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="examPaperDetailsList" nillable="true" type="tns:examPaperDetails"/>
+      <xs:element minOccurs="0" name="examResult" type="xs:string"/>
+      <xs:element minOccurs="0" name="examScore" type="xs:long"/>
+      <xs:element minOccurs="0" name="examStart" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ipAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="issOffLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="passNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="seqNo" type="xs:long"/>
+      <xs:element minOccurs="0" name="totalCorrectExam" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="examPaperDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="examNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="result" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getDriverLicenceInfoByName">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:driverLicenceInfoByNameInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getDriverLicenceInfoByName" type="tns:getDriverLicenceInfoByName"/>
+  <xs:complexType name="driverLicenceInfoByNameInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDocNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="fName" type="xs:string"/>
+      <xs:element minOccurs="0" name="fNameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="lName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lNameEng" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="changeDriverLicenceInfoByReferenceOutput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="driverLicenceInfo" type="tns:driverLicenceInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="driverLicenceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="addrNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="birthDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="bldName" type="xs:string"/>
+      <xs:element minOccurs="0" name="canFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="completeFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="conditionDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="excFee" type="xs:string"/>
+      <xs:element minOccurs="0" name="expDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="issDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="locCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="locDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="locFullDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="natCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="natDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="needDrive" type="xs:string"/>
+      <xs:element minOccurs="0" name="needEff" type="xs:string"/>
+      <xs:element minOccurs="0" name="needPaper" type="xs:string"/>
+      <xs:element minOccurs="0" name="needTrain" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="passDriveExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passEffExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passPaperExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passTrainExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="pcNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="rcpNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqTrCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="result" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="rvkFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="sex" type="xs:string"/>
+      <xs:element minOccurs="0" name="soi" type="xs:string"/>
+      <xs:element minOccurs="0" name="srlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="street" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleEngDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageName" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="zipCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="fName" type="xs:string"/>
+      <xs:element minOccurs="0" name="fNameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="lName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lNameEng" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getPublicLicenceInfoByDocNo" type="tns:getPublicLicenceInfoByDocNo"/>
+  <xs:complexType name="getPublicLicenceInfoByDocNo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:publicLicenceInfoByDocNoInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="publicLicenceInfoByDocNoInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDocNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getPublicLicenceInfoByName" type="tns:getPublicLicenceInfoByName"/>
+  <xs:complexType name="getPublicLicenceInfoByName">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:publicLicenceInfoByNameInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="publicLicenceInfoByNameInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDocNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="fName" type="xs:string"/>
+      <xs:element minOccurs="0" name="fNameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="lName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lNameEng" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addPublicLicenceDriveExam">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:publicLicenceDriveExamInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="addPublicLicenceDriveExam" type="tns:addPublicLicenceDriveExam"/>
+  <xs:complexType name="publicLicenceDriveExamInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="createUserId" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="driveExamList" nillable="true" type="tns:driveExam"/>
+      <xs:element minOccurs="0" name="examDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="examResultAll" type="xs:string"/>
+      <xs:element minOccurs="0" name="pblReqMasRef" type="xs:long"/>
+      <xs:element minOccurs="0" name="seqNo" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="driveExam">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="examResult" type="xs:string"/>
+      <xs:element minOccurs="0" name="tabtDriveMannerRef" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="trainSchoolInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="certDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="certName" type="xs:string"/>
+      <xs:element minOccurs="0" name="certNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="certType" type="xs:string"/>
+      <xs:element minOccurs="0" name="certYear" type="xs:string"/>
+      <xs:element minOccurs="0" name="courseName" type="xs:string"/>
+      <xs:element minOccurs="0" name="courseType" type="xs:string"/>
+      <xs:element minOccurs="0" name="createUserId" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="examResult" type="xs:string"/>
+      <xs:element minOccurs="0" name="trainningDuration" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="businessException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="errorCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="faultName" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BusinessFault" nillable="true" type="tns:businessException"/>
+  <xs:element name="addDriverLicenceDriveExam" type="tns:addDriverLicenceDriveExam"/>
+  <xs:complexType name="addDriverLicenceDriveExam">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:driverLicenceDriveExamInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="driverLicenceDriveExamInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="createUserId" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="driveExamList" nillable="true" type="tns:driveExam"/>
+      <xs:element minOccurs="0" name="drltReqMasRef" type="xs:int"/>
+      <xs:element minOccurs="0" name="examDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="examFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="examResultAll" type="xs:string"/>
+      <xs:element minOccurs="0" name="seqNo" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getDriverLicenceInfoByDocNo" type="tns:getDriverLicenceInfoByDocNo"/>
+  <xs:complexType name="getDriverLicenceInfoByDocNo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:driverLicenceInfoInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="driverLicenceInfoInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDocNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="changePublicLicenceInfoByReferenceOutput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="changePublicLicenceInfo" type="tns:changePublicLicenceInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="changePublicLicenceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="conDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="conNo" type="xs:int"/>
+      <xs:element minOccurs="0" name="cpyNo" type="xs:int"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="expDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="holdFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="issDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="offLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo1" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo2" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevOffLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevOffLocDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="srlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addTrainSchoolInfoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:trainSchoolOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="addTrainSchoolInfoResponse" type="tns:addTrainSchoolInfoResponse"/>
+  <xs:complexType name="trainSchoolOutput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="messages" type="xs:string"/>
+      <xs:element minOccurs="0" name="result" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getPublicLicenceRequestNo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:publicLicenceRequestNoInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getPublicLicenceRequestNo" type="tns:getPublicLicenceRequestNo"/>
+  <xs:complexType name="publicLicenceRequestNoInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="checkFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="issOffLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAllChangePersonInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:allChangePersonInfoInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getAllChangePersonInfo" type="tns:getAllChangePersonInfo"/>
+  <xs:complexType name="allChangePersonInfoInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="expiredDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getDriverLicenceRequestNo" type="tns:getDriverLicenceRequestNo"/>
+  <xs:complexType name="getDriverLicenceRequestNo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:driverLicenceRequestNoInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="driverLicenceRequestNoInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="checkFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="issOffLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAllChangeDriverLicenceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:allChangeDriverLicenceInfoInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getAllChangeDriverLicenceInfo" type="tns:getAllChangeDriverLicenceInfo"/>
+  <xs:complexType name="allChangeDriverLicenceInfoInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="expiredDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAllChangePublicLicenceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:allChangePublicLicenceInfoInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getAllChangePublicLicenceInfo" type="tns:getAllChangePublicLicenceInfo"/>
+  <xs:complexType name="allChangePublicLicenceInfoInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="expiredDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="allChangePersonInfoOutput">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="personInfo" nillable="true" type="tns:personInfoToPolis"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="personInfoToPolis">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="addrNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="birthDate" type="xs:string"/>
+      <xs:element minOccurs="0" name="bldName" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="locCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="locFullDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="natDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="result" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="sex" type="xs:string"/>
+      <xs:element minOccurs="0" name="soi" type="xs:string"/>
+      <xs:element minOccurs="0" name="street" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleEngDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="updFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageName" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="zipCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="fName" type="xs:string"/>
+      <xs:element minOccurs="0" name="fNameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="lName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lNameEng" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getPublicLicenceInfoByRequestNo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:publicLicenceInfoByRequestNoInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getPublicLicenceInfoByRequestNo" type="tns:getPublicLicenceInfoByRequestNo"/>
+  <xs:complexType name="publicLicenceInfoByRequestNoInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="issOffLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getDriverLicenceInfoByRequestNo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:driverLicenceInfoByRequestNoInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getDriverLicenceInfoByRequestNo" type="tns:getDriverLicenceInfoByRequestNo"/>
+  <xs:complexType name="driverLicenceInfoByRequestNoInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="issOffLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="driverLicenceInfoOutput">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="driverLicenceInfo" nillable="true" type="tns:driverLicenceInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="publicLicenceInfoByNameOutput">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="publicLicenceInfoList" nillable="true" type="tns:publicLicenceInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getDriverLicenceInfoByRequestNoResponse" type="tns:getDriverLicenceInfoByRequestNoResponse"/>
+  <xs:complexType name="getDriverLicenceInfoByRequestNoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:driverLicenceInfoByRequestNoOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="driverLicenceInfoByRequestNoOutput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="addrNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="birthDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="bldName" type="xs:string"/>
+      <xs:element minOccurs="0" name="canFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="completeFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="conditionDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="excFee" type="xs:string"/>
+      <xs:element minOccurs="0" name="expDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="issDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="locCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="locDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="locFullDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="natCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="natDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="needDrive" type="xs:string"/>
+      <xs:element minOccurs="0" name="needEff" type="xs:string"/>
+      <xs:element minOccurs="0" name="needPaper" type="xs:string"/>
+      <xs:element minOccurs="0" name="needTrain" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="passDriveExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passEffExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passPaperExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passTrainExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="pcNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="rcpNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqTrCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="result" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="rvkFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="sex" type="xs:string"/>
+      <xs:element minOccurs="0" name="soi" type="xs:string"/>
+      <xs:element minOccurs="0" name="srlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="street" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleEngDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageName" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="zipCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="fName" type="xs:string"/>
+      <xs:element minOccurs="0" name="fNameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="lName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lNameEng" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="driverLicenceInfoByNameOutput">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="driverLicenceInfoList" nillable="true" type="tns:driverLicenceInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getPublicLicenceInfoByRequestNoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:publicLicenceInfoByRequestNoOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getPublicLicenceInfoByRequestNoResponse" type="tns:getPublicLicenceInfoByRequestNoResponse"/>
+  <xs:complexType name="publicLicenceInfoByRequestNoOutput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="addrNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="birthDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="bldName" type="xs:string"/>
+      <xs:element minOccurs="0" name="canFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="completeFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="excFee" type="xs:string"/>
+      <xs:element minOccurs="0" name="expDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fname" type="xs:string"/>
+      <xs:element minOccurs="0" name="fnameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="issDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="lname" type="xs:string"/>
+      <xs:element minOccurs="0" name="lnameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="locCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="locDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="locFullDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="natCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="natDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="needDrive" type="xs:string"/>
+      <xs:element minOccurs="0" name="needEff" type="xs:string"/>
+      <xs:element minOccurs="0" name="needPaper" type="xs:string"/>
+      <xs:element minOccurs="0" name="needTrain" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="passDriveExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passEffExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passPaperExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="passTrainExam" type="xs:string"/>
+      <xs:element minOccurs="0" name="pcNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="rcpNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqTrCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="result" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="rvkFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="sex" type="xs:string"/>
+      <xs:element minOccurs="0" name="soi" type="xs:string"/>
+      <xs:element minOccurs="0" name="srlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="street" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleEngDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageName" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="zipCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAllChangePublicLicenceInfoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:allChangePublicLicenceInfoOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getAllChangePublicLicenceInfoResponse" type="tns:getAllChangePublicLicenceInfoResponse"/>
+  <xs:complexType name="allChangePublicLicenceInfoOutput">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="publicLicenceInfoToPolisList" nillable="true" type="tns:publicLicenceInfoToPolis"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="publicLicenceInfoToPolis">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="conditionDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="excFee" type="xs:string"/>
+      <xs:element minOccurs="0" name="expDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="issDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pcNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevExpDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="prevIssDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="prevOffLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevOffLocDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="rcpNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="result" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="rvkFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="srlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="updFlag" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="changePublicLicenceInfoByReferenceInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="publicLicenceReference" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAllChangeDriverLicenceInfoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:allChangeDriverLicenceInfoOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getAllChangeDriverLicenceInfoResponse" type="tns:getAllChangeDriverLicenceInfoResponse"/>
+  <xs:complexType name="allChangeDriverLicenceInfoOutput">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="driverLicenceInfoToPolisList" nillable="true" type="tns:driverLicenceInfoToPolis"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="driverLicenceInfoToPolis">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="conditionDescp" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="excFee" type="xs:string"/>
+      <xs:element minOccurs="0" name="expDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="issDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pcNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevExpDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="prevIssDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="prevOffLocDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPrevOffLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPrevPltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="rcpNo" type="xs:string"/>
+      <xs:element name="result" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="rvkFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="srlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="updFlag" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getDriverLicenceRequestNoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:driverLicenceRequestNoOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getDriverLicenceRequestNoResponse" type="tns:getDriverLicenceRequestNoResponse"/>
+  <xs:complexType name="driverLicenceRequestNoOutput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="addrNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="alienFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="ampDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="ampDescEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="birthDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="birthFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="ccFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="conditionDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="dciCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="distDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="distDescEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="drltReqMasRef" type="xs:long"/>
+      <xs:element minOccurs="0" name="expDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fname" type="xs:string"/>
+      <xs:element minOccurs="0" name="fnameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="issDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="issOffLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="lane" type="xs:string"/>
+      <xs:element minOccurs="0" name="lname" type="xs:string"/>
+      <xs:element minOccurs="0" name="lnameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="locFullDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="natDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocEngDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="organDonateFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="pcNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltEngDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltPrnDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevExpDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="prevIssDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="prevOffLocDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="prvCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="prvDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prvDescEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="rcpNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqTrDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="sex" type="xs:string"/>
+      <xs:element minOccurs="0" name="soi" type="xs:string"/>
+      <xs:element minOccurs="0" name="street" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleAbrev" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleEngAbrev" type="xs:string"/>
+      <xs:element minOccurs="0" name="trsFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="zipCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getPublicLicenceRequestNoResponse" type="tns:getPublicLicenceRequestNoResponse"/>
+  <xs:complexType name="getPublicLicenceRequestNoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:publicLicenceRequestNoOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="publicLicenceRequestNoOutput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="addrNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="ampDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="ampDescEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="birthDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="birthFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="distDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="distDescEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="docDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="docNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="expDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="firstIssueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fname" type="xs:string"/>
+      <xs:element minOccurs="0" name="fnameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="issDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="lane" type="xs:string"/>
+      <xs:element minOccurs="0" name="lname" type="xs:string"/>
+      <xs:element minOccurs="0" name="lnameEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="locFullDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="natDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocEngDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pbltReqMasRef" type="xs:long"/>
+      <xs:element minOccurs="0" name="pcNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltDescShort" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltEngDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo1" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltNo2" type="xs:string"/>
+      <xs:element minOccurs="0" name="pltPrnDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevExpDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="prevIssDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="prevOffLocDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltDescShort" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltNo1" type="xs:string"/>
+      <xs:element minOccurs="0" name="prevPltNo2" type="xs:string"/>
+      <xs:element minOccurs="0" name="prvCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="prvDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="prvDescEng" type="xs:string"/>
+      <xs:element minOccurs="0" name="rcpNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqTrDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="sex" type="xs:string"/>
+      <xs:element minOccurs="0" name="soi" type="xs:string"/>
+      <xs:element minOccurs="0" name="street" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleAbrev" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="titleEngAbrev" type="xs:string"/>
+      <xs:element minOccurs="0" name="villageNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="zipCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getAllChangePersonInfoResponse" type="tns:getAllChangePersonInfoResponse"/>
+  <xs:complexType name="getAllChangePersonInfoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:allChangePersonInfoOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SystemFault" nillable="true" type="tns:systemException"/>
+  <xs:complexType name="systemException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="errorCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="exceptionName" type="xs:string"/>
+      <xs:element minOccurs="0" name="faultName" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="stacktrace" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="driverLicenceDriveExamOutput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="isSuccess" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getDriverLicenceInfoByDocNoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:driverLicenceInfoOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getDriverLicenceInfoByDocNoResponse" type="tns:getDriverLicenceInfoByDocNoResponse"/>
+  <xs:complexType name="addDriverLicenceDriveExamResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:driverLicenceDriveExamOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="addDriverLicenceDriveExamResponse" type="tns:addDriverLicenceDriveExamResponse"/>
+  <xs:complexType name="publicLicenceDriveExamOutput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="isSuccess" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="addPublicLicenceDriveExamResponse" type="tns:addPublicLicenceDriveExamResponse"/>
+  <xs:complexType name="addPublicLicenceDriveExamResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:publicLicenceDriveExamOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getPublicLicenceInfoByDocNoResponse" type="tns:getPublicLicenceInfoByDocNoResponse"/>
+  <xs:complexType name="getPublicLicenceInfoByDocNoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:publicLicenceInfoByDocNoOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getPublicLicenceInfoByNameResponse" type="tns:getPublicLicenceInfoByNameResponse"/>
+  <xs:complexType name="getPublicLicenceInfoByNameResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:publicLicenceInfoByNameOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="driverLicencePaperExamOutput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="result" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="addPublicLicencePaperExam" type="tns:addPublicLicencePaperExam"/>
+  <xs:complexType name="addPublicLicencePaperExam">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:publicLicencePaperExamInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="publicLicencePaperExamInput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="examDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="examEnd" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="examFlag" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="examPaperDetailsList" nillable="true" type="tns:examPaperDetails"/>
+      <xs:element minOccurs="0" name="examResult" type="xs:string"/>
+      <xs:element minOccurs="0" name="examScore" type="xs:long"/>
+      <xs:element minOccurs="0" name="examStart" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ipAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="issOffLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="paperType" type="xs:string"/>
+      <xs:element minOccurs="0" name="passNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pbltReqMasRef" type="xs:long"/>
+      <xs:element minOccurs="0" name="pltCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="seqNo" type="xs:long"/>
+      <xs:element minOccurs="0" name="totalCorrectExam" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getChangePublicLicenceInfoByReference" type="tns:getChangePublicLicenceInfoByReference"/>
+  <xs:complexType name="getChangePublicLicenceInfoByReference">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:changePublicLicenceInfoByReferenceInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="publicLicencePaperExamOutput">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="messages" type="xs:string"/>
+      <xs:element minOccurs="0" name="result" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addDriverLicencePaperExamResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:driverLicencePaperExamOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="addDriverLicencePaperExamResponse" type="tns:addDriverLicencePaperExamResponse"/>
+  <xs:element name="getDriverLicenceInfoByNameResponse" type="tns:getDriverLicenceInfoByNameResponse"/>
+  <xs:complexType name="getDriverLicenceInfoByNameResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:driverLicenceInfoByNameOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getChangeDriverLicenceInfoByReferenceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:changeDriverLicenceInfoByReferenceOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getChangeDriverLicenceInfoByReferenceResponse" type="tns:getChangeDriverLicenceInfoByReferenceResponse"/>
+  <xs:complexType name="getChangePublicLicenceInfoByReferenceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:changePublicLicenceInfoByReferenceOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getChangePublicLicenceInfoByReferenceResponse" type="tns:getChangePublicLicenceInfoByReferenceResponse"/>
+  <xs:complexType name="addPublicLicencePaperExamResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:publicLicencePaperExamOutput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="addPublicLicencePaperExamResponse" type="tns:addPublicLicencePaperExamResponse"/>
+  <xs:complexType name="addTrainSchoolInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:trainSchoolInput"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="addTrainSchoolInfo" type="tns:addTrainSchoolInfo"/>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint></con:endpoints><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/addDriverLicenceDriveExam" name="addDriverLicenceDriveExam" bindingOperationName="addDriverLicenceDriveExam" type="Request-Response" outputName="addDriverLicenceDriveExamResponse" inputName="addDriverLicenceDriveExamRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:addDriverLicenceDriveExam>
+         <addDriverLicenceDriveExamInput>
+            <!--Optional:-->
+            <ws:addDriverLicenceDriveExam>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <createUserId>?</createUserId>
+                  <!--Zero or more repetitions:-->
+                  <driveExamList>
+                     <!--Optional:-->
+                     <examResult>?</examResult>
+                     <!--Optional:-->
+                     <tabtDriveMannerRef>?</tabtDriveMannerRef>
+                  </driveExamList>
+                  <!--Optional:-->
+                  <drltReqMasRef>?</drltReqMasRef>
+                  <!--Optional:-->
+                  <examDate>?</examDate>
+                  <!--Optional:-->
+                  <examFlag>?</examFlag>
+                  <!--Optional:-->
+                  <examResultAll>?</examResultAll>
+                  <!--Optional:-->
+                  <seqNo>?</seqNo>
+               </arg0>
+            </ws:addDriverLicenceDriveExam>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </addDriverLicenceDriveExamInput>
+      </esv:addDriverLicenceDriveExam>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/addDriverLicenceDriveExamRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/addDriverLicencePaperExam" name="addDriverLicencePaperExam" bindingOperationName="addDriverLicencePaperExam" type="Request-Response" outputName="addDriverLicencePaperExamResponse" inputName="addDriverLicencePaperExamRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:addDriverLicencePaperExam>
+         <addDriverLicencePaperExamInput>
+            <!--Optional:-->
+            <ws:addDriverLicencePaperExam>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <drltReqMasRef>?</drltReqMasRef>
+                  <!--Optional:-->
+                  <examDate>?</examDate>
+                  <!--Optional:-->
+                  <examEnd>?</examEnd>
+                  <!--Optional:-->
+                  <examFlag>?</examFlag>
+                  <!--Zero or more repetitions:-->
+                  <examPaperDetailsList>
+                     <!--Optional:-->
+                     <examNo>?</examNo>
+                     <!--Optional:-->
+                     <result>?</result>
+                  </examPaperDetailsList>
+                  <!--Optional:-->
+                  <examResult>?</examResult>
+                  <!--Optional:-->
+                  <examScore>?</examScore>
+                  <!--Optional:-->
+                  <examStart>?</examStart>
+                  <!--Optional:-->
+                  <ipAddress>?</ipAddress>
+                  <!--Optional:-->
+                  <issOffLocCode>?</issOffLocCode>
+                  <!--Optional:-->
+                  <passNo>?</passNo>
+                  <!--Optional:-->
+                  <pltCode>?</pltCode>
+                  <!--Optional:-->
+                  <reqNo>?</reqNo>
+                  <!--Optional:-->
+                  <seqNo>?</seqNo>
+                  <!--Optional:-->
+                  <totalCorrectExam>?</totalCorrectExam>
+               </arg0>
+            </ws:addDriverLicencePaperExam>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </addDriverLicencePaperExamInput>
+      </esv:addDriverLicencePaperExam>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/addDriverLicencePaperExamRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/addPublicLicenceDriveExam" name="addPublicLicenceDriveExam" bindingOperationName="addPublicLicenceDriveExam" type="Request-Response" outputName="addPublicLicenceDriveExamResponse" inputName="addPublicLicenceDriveExamRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:addPublicLicenceDriveExam>
+         <addPublicLicenceDriveExamInput>
+            <!--Optional:-->
+            <ws:addPublicLicenceDriveExam>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <createUserId>?</createUserId>
+                  <!--Zero or more repetitions:-->
+                  <driveExamList>
+                     <!--Optional:-->
+                     <examResult>?</examResult>
+                     <!--Optional:-->
+                     <tabtDriveMannerRef>?</tabtDriveMannerRef>
+                  </driveExamList>
+                  <!--Optional:-->
+                  <examDate>?</examDate>
+                  <!--Optional:-->
+                  <examResultAll>?</examResultAll>
+                  <!--Optional:-->
+                  <pblReqMasRef>?</pblReqMasRef>
+                  <!--Optional:-->
+                  <seqNo>?</seqNo>
+               </arg0>
+            </ws:addPublicLicenceDriveExam>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </addPublicLicenceDriveExamInput>
+      </esv:addPublicLicenceDriveExam>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/addPublicLicenceDriveExamRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/addPublicLicencePaperExam" name="addPublicLicencePaperExam" bindingOperationName="addPublicLicencePaperExam" type="Request-Response" outputName="addPublicLicencePaperExamResponse" inputName="addPublicLicencePaperExamRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:addPublicLicencePaperExam>
+         <addPublicLicencePaperExamInput>
+            <!--Optional:-->
+            <ws:addPublicLicencePaperExam>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <examDate>?</examDate>
+                  <!--Optional:-->
+                  <examEnd>?</examEnd>
+                  <!--Optional:-->
+                  <examFlag>?</examFlag>
+                  <!--Zero or more repetitions:-->
+                  <examPaperDetailsList>
+                     <!--Optional:-->
+                     <examNo>?</examNo>
+                     <!--Optional:-->
+                     <result>?</result>
+                  </examPaperDetailsList>
+                  <!--Optional:-->
+                  <examResult>?</examResult>
+                  <!--Optional:-->
+                  <examScore>?</examScore>
+                  <!--Optional:-->
+                  <examStart>?</examStart>
+                  <!--Optional:-->
+                  <ipAddress>?</ipAddress>
+                  <!--Optional:-->
+                  <issOffLocCode>?</issOffLocCode>
+                  <!--Optional:-->
+                  <paperType>?</paperType>
+                  <!--Optional:-->
+                  <passNo>?</passNo>
+                  <!--Optional:-->
+                  <pbltReqMasRef>?</pbltReqMasRef>
+                  <!--Optional:-->
+                  <pltCode>?</pltCode>
+                  <!--Optional:-->
+                  <reqNo>?</reqNo>
+                  <!--Optional:-->
+                  <seqNo>?</seqNo>
+                  <!--Optional:-->
+                  <totalCorrectExam>?</totalCorrectExam>
+               </arg0>
+            </ws:addPublicLicencePaperExam>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </addPublicLicencePaperExamInput>
+      </esv:addPublicLicencePaperExam>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/addPublicLicencePaperExamRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/addTrainSchoolInfo" name="addTrainSchoolInfo" bindingOperationName="addTrainSchoolInfo" type="Request-Response" outputName="addTrainSchoolInfoResponse" inputName="addTrainSchoolInfoRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:addTrainSchoolInfo>
+         <addTrainSchoolInfoInput>
+            <!--Optional:-->
+            <ws:addTrainSchoolInfo>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <certDate>?</certDate>
+                  <!--Optional:-->
+                  <certName>?</certName>
+                  <!--Optional:-->
+                  <certNo>?</certNo>
+                  <!--Optional:-->
+                  <certType>?</certType>
+                  <!--Optional:-->
+                  <certYear>?</certYear>
+                  <!--Optional:-->
+                  <courseName>?</courseName>
+                  <!--Optional:-->
+                  <courseType>?</courseType>
+                  <!--Optional:-->
+                  <createUserId>?</createUserId>
+                  <!--Optional:-->
+                  <docNo>?</docNo>
+                  <!--Optional:-->
+                  <docType>?</docType>
+                  <!--Optional:-->
+                  <examResult>?</examResult>
+                  <!--Optional:-->
+                  <trainningDuration>?</trainningDuration>
+               </arg0>
+            </ws:addTrainSchoolInfo>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </addTrainSchoolInfoInput>
+      </esv:addTrainSchoolInfo>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/addTrainSchoolInfoRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/getAllChangeDriverLicenceInfo" name="getAllChangeDriverLicenceInfo" bindingOperationName="getAllChangeDriverLicenceInfo" type="Request-Response" outputName="getAllChangeDriverLicenceInfoResponse" inputName="getAllChangeDriverLicenceInfoRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getAllChangeDriverLicenceInfo>
+         <getAllChangeDriverLicenceInfoInput>
+            <!--Optional:-->
+            <ws:getAllChangeDriverLicenceInfo>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <expiredDate>?</expiredDate>
+                  <!--Optional:-->
+                  <startDate>?</startDate>
+               </arg0>
+            </ws:getAllChangeDriverLicenceInfo>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </getAllChangeDriverLicenceInfoInput>
+      </esv:getAllChangeDriverLicenceInfo>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/getAllChangeDriverLicenceInfoRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/getAllChangePersonInfo" name="getAllChangePersonInfo" bindingOperationName="getAllChangePersonInfo" type="Request-Response" outputName="getAllChangePersonInfoResponse" inputName="getAllChangePersonInfoRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getAllChangePersonInfo>
+         <getAllChangePersonInfoInput>
+            <!--Optional:-->
+            <ws:getAllChangePersonInfo>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <expiredDate>?</expiredDate>
+                  <!--Optional:-->
+                  <startDate>?</startDate>
+               </arg0>
+            </ws:getAllChangePersonInfo>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </getAllChangePersonInfoInput>
+      </esv:getAllChangePersonInfo>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/getAllChangePersonInfoRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/getAllChangePublicLicenceInfo" name="getAllChangePublicLicenceInfo" bindingOperationName="getAllChangePublicLicenceInfo" type="Request-Response" outputName="getAllChangePublicLicenceInfoResponse" inputName="getAllChangePublicLicenceInfoRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getAllChangePublicLicenceInfo>
+         <getAllChangePublicLicenceInfoInput>
+            <!--Optional:-->
+            <ws:getAllChangePublicLicenceInfo>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <expiredDate>?</expiredDate>
+                  <!--Optional:-->
+                  <startDate>?</startDate>
+               </arg0>
+            </ws:getAllChangePublicLicenceInfo>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </getAllChangePublicLicenceInfoInput>
+      </esv:getAllChangePublicLicenceInfo>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/getAllChangePublicLicenceInfoRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/getDriverLicenceInfoByDocNo" name="getDriverLicenceInfoByDocNo" bindingOperationName="getDriverLicenceInfoByDocNo" type="Request-Response" outputName="getDriverLicenceInfoByDocNoResponse" inputName="getDriverLicenceInfoByDocNoRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getDriverLicenceInfoByDocNo>
+         <getDriverLicenceInfoByDocNoInput>
+            <!--Optional:-->
+            <ws:getDriverLicenceInfoByDocNo>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <docNo>?</docNo>
+                  <!--Optional:-->
+                  <docType>?</docType>
+                  <!--Optional:-->
+                  <pltCode>?</pltCode>
+                  <!--Optional:-->
+                  <reqDocNo>?</reqDocNo>
+               </arg0>
+            </ws:getDriverLicenceInfoByDocNo>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </getDriverLicenceInfoByDocNoInput>
+      </esv:getDriverLicenceInfoByDocNo>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/getDriverLicenceInfoByDocNoRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/getDriverLicenceInfoByName" name="getDriverLicenceInfoByName" bindingOperationName="getDriverLicenceInfoByName" type="Request-Response" outputName="getDriverLicenceInfoByNameResponse" inputName="getDriverLicenceInfoByNameRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getDriverLicenceInfoByName>
+         <getDriverLicenceInfoByNameInput>
+            <!--Optional:-->
+            <GetDriverLicenceInfoByName>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <pltCode>?</pltCode>
+                  <!--Optional:-->
+                  <reqDocNo>?</reqDocNo>
+                  <!--Optional:-->
+                  <fName>?</fName>
+                  <!--Optional:-->
+                  <fNameEng>?</fNameEng>
+                  <!--Optional:-->
+                  <lName>?</lName>
+                  <!--Optional:-->
+                  <lNameEng>?</lNameEng>
+               </arg0>
+            </GetDriverLicenceInfoByName>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </getDriverLicenceInfoByNameInput>
+      </esv:getDriverLicenceInfoByName>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/getDriverLicenceInfoByNameRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/getDriverLicenceInfoByRequestNo" name="getDriverLicenceInfoByRequestNo" bindingOperationName="getDriverLicenceInfoByRequestNo" type="Request-Response" outputName="getDriverLicenceInfoByRequestNoResponse" inputName="getDriverLicenceInfoByRequestNoRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getDriverLicenceInfoByRequestNo>
+         <getDriverLicenceInfoByRequestNoInput>
+            <!--Optional:-->
+            <ws:getDriverLicenceInfoByRequestNo>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <issOffLocCode>?</issOffLocCode>
+                  <!--Optional:-->
+                  <reqDate>?</reqDate>
+                  <!--Optional:-->
+                  <reqNo>?</reqNo>
+               </arg0>
+            </ws:getDriverLicenceInfoByRequestNo>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </getDriverLicenceInfoByRequestNoInput>
+      </esv:getDriverLicenceInfoByRequestNo>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/getDriverLicenceInfoByRequestNoRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/getDriverLicenceRequestNo" name="getDriverLicenceRequestNo" bindingOperationName="getDriverLicenceRequestNo" type="Request-Response" outputName="getDriverLicenceRequestNoResponse" inputName="getDriverLicenceRequestNoRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://172.20.254.132/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getDriverLicenceRequestNo>
+         <getDriverLicenceRequestNoInput>
+            <!--Optional:-->
+            <ws:getDriverLicenceRequestNo>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <checkFlag>?</checkFlag>
+                  <!--Optional:-->
+                  <docNo>?</docNo>
+                  <!--Optional:-->
+                  <issOffLocCode>?</issOffLocCode>
+                  <!--Optional:-->
+                  <reqDate>?</reqDate>
+                  <!--Optional:-->
+                  <reqNo>?</reqNo>
+                  <!--Optional:-->
+                  <userId>?</userId>
+               </arg0>
+            </ws:getDriverLicenceRequestNo>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </getDriverLicenceRequestNoInput>
+      </esv:getDriverLicenceRequestNo>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/getDriverLicenceRequestNoRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/getPublicLicenceInfoByDocNo" name="getPublicLicenceInfoByDocNo" bindingOperationName="getPublicLicenceInfoByDocNo" type="Request-Response" outputName="getPublicLicenceInfoByDocNoResponse" inputName="getPublicLicenceInfoByDocNoRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getPublicLicenceInfoByDocNo>
+         <getPublicLicenceInfoByDocNoInput>
+            <!--Optional:-->
+            <ws:getPublicLicenceInfoByDocNo>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <docNo>?</docNo>
+                  <!--Optional:-->
+                  <docType>?</docType>
+                  <!--Optional:-->
+                  <pltCode>?</pltCode>
+                  <!--Optional:-->
+                  <reqDocNo>?</reqDocNo>
+               </arg0>
+            </ws:getPublicLicenceInfoByDocNo>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </getPublicLicenceInfoByDocNoInput>
+      </esv:getPublicLicenceInfoByDocNo>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/getPublicLicenceInfoByDocNoRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/getPublicLicenceInfoByName" name="getPublicLicenceInfoByName" bindingOperationName="getPublicLicenceInfoByName" type="Request-Response" outputName="getPublicLicenceInfoByNameResponse" inputName="getPublicLicenceInfoByNameRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getPublicLicenceInfoByName>
+         <getPublicLicenceInfoByNameInput>
+            <!--Optional:-->
+            <ws:getPublicLicenceInfoByName>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <pltCode>?</pltCode>
+                  <!--Optional:-->
+                  <reqDocNo>?</reqDocNo>
+                  <!--Optional:-->
+                  <fName>?</fName>
+                  <!--Optional:-->
+                  <fNameEng>?</fNameEng>
+                  <!--Optional:-->
+                  <lName>?</lName>
+                  <!--Optional:-->
+                  <lNameEng>?</lNameEng>
+               </arg0>
+            </ws:getPublicLicenceInfoByName>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </getPublicLicenceInfoByNameInput>
+      </esv:getPublicLicenceInfoByName>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/getPublicLicenceInfoByNameRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/getPublicLicenceInfoByRequestNo" name="getPublicLicenceInfoByRequestNo" bindingOperationName="getPublicLicenceInfoByRequestNo" type="Request-Response" outputName="getPublicLicenceInfoByRequestNoResponse" inputName="getPublicLicenceInfoByRequestNoRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getPublicLicenceInfoByRequestNo>
+         <getPublicLicenceInfoByRequestNoInput>
+            <!--Optional:-->
+            <ws:getPublicLicenceInfoByRequestNo>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <issOffLocCode>?</issOffLocCode>
+                  <!--Optional:-->
+                  <reqDate>?</reqDate>
+                  <!--Optional:-->
+                  <reqNo>?</reqNo>
+               </arg0>
+            </ws:getPublicLicenceInfoByRequestNo>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </getPublicLicenceInfoByRequestNoInput>
+      </esv:getPublicLicenceInfoByRequestNo>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/getPublicLicenceInfoByRequestNoRequest"/></con:call></con:operation><con:operation isOneWay="false" action="http://esv.dlt.go.th/LicenceService/getPublicLicenceRequestNo" name="getPublicLicenceRequestNo" bindingOperationName="getPublicLicenceRequestNo" type="Request-Response" outputName="getPublicLicenceRequestNoResponse" inputName="getPublicLicenceRequestNoRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/LicenceService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getPublicLicenceRequestNo>
+         <getPublicLicenceRequestNoInput>
+            <!--Optional:-->
+            <ws:getPublicLicenceRequestNo>
+               <!--Optional:-->
+               <arg0>
+                  <!--Optional:-->
+                  <checkFlag>?</checkFlag>
+                  <!--Optional:-->
+                  <docNo>?</docNo>
+                  <!--Optional:-->
+                  <issOffLocCode>?</issOffLocCode>
+                  <!--Optional:-->
+                  <reqDate>?</reqDate>
+                  <!--Optional:-->
+                  <reqNo>?</reqNo>
+                  <!--Optional:-->
+                  <userId>?</userId>
+               </arg0>
+            </ws:getPublicLicenceRequestNo>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>?</userId>
+               <!--Optional:-->
+               <password>?</password>
+            </authenticationInput>
+         </getPublicLicenceRequestNoInput>
+      </esv:getPublicLicenceRequestNo>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/LicenceService/getPublicLicenceRequestNoRequest"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer><con:crypto><con:source>F:/Temp/dlt-effectivesoluction for PROD/dlt-effectivesoluction.jks</con:source><con:password>p@ssw0rd1234</con:password><con:type>KEYSTORE</con:type></con:crypto></con:wssContainer><con:sensitiveInformation/></con:soapui-project>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ReportCommand>
+<Report>Movement.rpt</Report>
+<Output>Movement.pdf</Output>
+<Server>GALAXY-EYES</Server>
+<Database>DLSM</Database>
+<User>sa</User>
+<Password>1867</Password>
+<Parameters>
+  <Item Name="@date1" Type="String" Value="2016-10-10 00:00:00"/>
+  <Item Name="@date2" Type="String" Value="2018-10-10 00:00:00"/>
+  <Item Name="@whid" Type="Integer" Value="0"/>
+  <Item Name="@pdid" Type="Integer" Value="0"/>
+  <Item Name="WhName" Type="String" Value="(ไม่ระบุ)"/>
+  <Item Name="PdName" Type="String" Value="(ไม่ระบุ)"/>
+  <Item Name="d1" Type="String" Value="10/10/2559"/>
+  <Item Name="d2" Type="String" Value="10/10/2561"/>
+</Parameters>
+</ReportCommand>

@@ -1,0 +1,12 @@
+D:\Projects\NySiis\Others\Effective Solution\DLSM\Application\NReportManager\NReportManager\bin\Debug\NReportManager.exe.config
+D:\Projects\NySiis\Others\Effective Solution\DLSM\Application\NReportManager\NReportManager\bin\Debug\NReportManager.exe
+D:\Projects\NySiis\Others\Effective Solution\DLSM\Application\NReportManager\NReportManager\bin\Debug\NReportManager.pdb
+D:\Projects\NySiis\Others\Effective Solution\DLSM\Application\NReportManager\NReportManager\obj\Debug\NReportManager.csprojResolveAssemblyReference.cache
+D:\Projects\NySiis\Others\Effective Solution\DLSM\Application\NReportManager\NReportManager\obj\Debug\NReportManager.exe
+D:\Projects\NySiis\Others\Effective Solution\DLSM\Application\NReportManager\NReportManager\obj\Debug\NReportManager.pdb
+A:\EffectiveSolution\DLSM_CHANG\NReportManager\NReportManager\bin\Debug\NReportManager.exe
+A:\EffectiveSolution\DLSM_CHANG\NReportManager\NReportManager\bin\Debug\NReportManager.exe.config
+A:\EffectiveSolution\DLSM_CHANG\NReportManager\NReportManager\obj\Debug\NReportManager.csprojResolveAssemblyReference.cache
+A:\EffectiveSolution\DLSM_CHANG\NReportManager\NReportManager\obj\Debug\NReportManager.exe
+A:\EffectiveSolution\DLSM_CHANG\NReportManager\NReportManager\obj\Debug\NReportManager.pdb
+A:\EffectiveSolution\DLSM_CHANG\NReportManager\NReportManager\bin\Debug\NReportManager.pdb
