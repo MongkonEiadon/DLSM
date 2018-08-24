@@ -1,0 +1,464 @@
+﻿@model DLSM.Models.Issue
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    SelectList TgID = ViewBag.TgList;
+    //SelectList WhID = ViewBag.WhList;
+    //SelectList TpID = ViewBag.TpList;
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+<link href="~/Content/datepicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker-thai.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.th.js"></script>
+<script src="~/Scripts/jquery.tabletojson.js"></script>
+<script src="~/Scripts/jquery.validateV17.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#CreateDate').datepicker({
+            autoclose: true
+        });
+
+
+        var btnClick;
+
+        $("button").on('click',function () {
+            btnClick = $(this).attr("id");
+        });
+        
+        $("#Issue").on("submit", function (e) {
+            console.log(btnClick);
+            var isValid = true;
+            //Validate form
+            $("#inputDiv :input").each(function () {
+
+                var acceptElement = ["Subject", "TgID","Description"];
+                // validate element if element in array 
+                if ($.inArray($(this).attr("id"), acceptElement) !== -1) {
+                    if ($(this).val() == "") {
+                        var txtRequire = $(this).attr("data-val-required");
+                        var id = $(this).attr("id");
+
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html(txtRequire);
+
+                        isValid = false;
+                    } else {
+                        var id = $(this).attr("id");
+
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html("");
+                    }
+                }
+            });
+
+            console.log(isValid);
+            if (!isValid) {
+
+                return false;
+            }
+
+            if (btnClick == "btnSave") {
+                $("#CreateDate").val(formatDate($("#CreateDate").val()));
+            }
+            if (btnClick == "btnCheckJob") {
+                $("#CreateDate").val(formatDate($("#CreateDate").val()));
+                $("#Issue").attr("action", "/Issues/CheckJob");
+              
+            }
+            if (btnClick == "btnReqCloseJob") {
+                $("#CreateDate").val(formatDate($("#CreateDate").val()));
+                $("#Issue").attr("action", "/Issues/ReqCloseJob");
+               
+            }
+            if (btnClick == "btnCloseJob") {
+                $("#CreateDate").val(formatDate($("#CreateDate").val()));
+                $("#Issue").attr("action", "/Issues/CloseJob");
+               
+            }
+            if (btnClick == "btnNoCloseJob") {
+                $("#CreateDate").val(formatDate($("#CreateDate").val()));
+                $("#Issue").attr("action", "/Issues/NoCloseJob");
+              
+            }
+
+        });
+
+       
+
+        //Select Warehouse Find
+        $("i[name=SelW]").click(function () {
+            //event.preventDefault();
+            //console.log($(this));
+            var whCode = $(this).attr("whCode");
+            var whName = $(this).attr("whName");
+            var whTelNo = $(this).attr("whTelNo");
+
+            $("#WhName").val(whName);
+            $("#WhID").val(whCode);
+            $("#WhTelNo").val(whTelNo);
+
+            $("#WModal").modal("hide");
+        });
+
+        //Select Supplier Find
+        $("i[name=SelSt]").click(function () {
+            //event.preventDefault();
+            //console.log($(this));
+            var stCode = $(this).attr("stCode");
+            var stName = $(this).attr("stName");
+            var stTelNo = $(this).attr("stTelNo");
+            
+
+            $("#CreateName").val(stName);
+            $("#CreateBy").val(stCode);
+            $("#StTelNo").val(stTelNo);
+           
+            $("#StModal").modal("hide");
+        });
+
+        $("i[name=SelT]").click(function () {
+            //event.preventDefault();
+            //console.log($(this));
+            var tCode = $(this).attr("tCode");
+            var tName = $(this).attr("tName");
+
+            $("#TpName").val(tName);
+            $("#TpID").val(tCode);
+
+            
+            $("#TModal").modal("hide");
+        });
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    //console.log($(this).closest("tr").index());
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+
+        //Date + time
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+
+        var output =
+            (('' + day).length < 2 ? '0' : '') + day + '/' +
+            (('' + month).length < 2 ? '0' : '') + month + '/' +
+            (parseInt(d.getFullYear()) + 543)
+
+        $("#CreateDate").val(output);
+
+
+       
+    });
+
+
+    function formatDate(date) {
+        var res = date.split("/");
+        return parseInt(res[2]) - 543 + '-' + res[1] + '-' + res[0];
+    }
+    
+</script>
+
+<style>
+    .card {
+        border: 1px solid rgba(0, 0, 0, 1);
+    }
+
+    .card-header:first-child {
+        border-radius: unset;
+    }
+
+    .centered {
+        position: relative;
+        left: 20%;
+        /*margin-left: -100px;*/
+    }
+
+    /*Validate*/ 
+    .field-validation-error {
+        color: red;
+    }
+</style>
+
+<h2>แจ้งปัญหา</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "Issue" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-9">
+            <div class="form-horizontal">
+                <div id="inputDiv">
+                    <table class="table" style="min-width:70%">
+                        <tr>
+                            <td style="padding: 10px;width:30%;">
+                                <div class="form-group">
+                                    วันที่
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control input-medium" data-provide="datepicker" data-date-language="th-th" name="CreateDate" id="CreateDate" value="@Html.DisplayFor( m => m.CreateDate, "{0:dd/MM/yyyy}")" placeholder="วว/ดด/ปปปป" style="width:165px;" required>
+                                        @Html.ValidationMessageFor(model => model.CreateDate, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    ผู้แจ้ง
+                                    <div class="col-md-10">
+                                        <input class="find" name="CreateBy" id="CreateBy" value="@Session["UserID"]" style="display:none;">
+                                        <input class="find" name="CreateName" id="CreateName" value="@Session["UserName"]" style="width:185px;" disabled required>
+                                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#StModal"><i class="fa fa-search fa-3"></i></a>
+
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    เบอร์โทรศัพท์
+                                    <div class="col-md-10">
+                                        <input class="form-control" name="StTelNo" id="StTelNo" value="@Session["UserTelNo"]" style="width:185px;" disabled>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    สถานะ
+                                    <div class="col-md-10">
+                                        <input class="form-control" name="StatusName" id="StatusName" value="กำลังดำเนินการ" style="width:165px;" disabled>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    หน่วยงาน
+                                    <div class="col-md-10">
+                                        <input class="find" name="WhID" id="WhID" value="@Session["UserWhID"]" style="display:none;">
+                                        <input class="find" name="WhName" id="WhName" value="@Session["UserWhName"]" style="width:185px;" disabled>
+                                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#WModal"><i class="fa fa-search fa-3"></i></a>
+
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    เบอร์โทรศัพท์
+                                    <div class="col-md-10">
+                                        <input class="form-control" name="WhTelNo" id="WhTelNo" value="@Session["UserWhTelNo"]" style="width:185px;" disabled>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="form-group">
+                                    หัวเรื่อง
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" , maxlength = "255" } })
+                                        @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger", required= "required" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    กลุ่มปัญหา
+                                    <div class="col-md-10">
+                                        @Html.DropDownList("TgID", TgID, "----กรุณาเลือก----", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.TgID, "", new { @class = "text-danger", required = "required" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div class="form-group">
+                                    รายละเอียด
+                                    <div class="col-md-10">
+                                        @Html.TextAreaFor(model => model.Description,new  { @class = "form-control" ,cols="60",rows="5", @style = "max-width:120%;" } )
+                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger", required = "required" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div class="form-group">
+                                    ปัญหาและการแก้ไข
+                                    <div class="col-md-10">
+                                        <input class="find" name="TpID" id="TpID" value="" style="display:none;">
+                                        <input class="find" name="TpName" id="TpName" value="" style="width:460px;max-width:460px;" disabled>
+                                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#TModal"><i class="fa fa-search fa-3"></i></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <br />
+                @*<div class="centered">
+
+                    <table>
+                        <tr>
+                            <td>เพิ่มข้อความ</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <textarea class="form-control" name="CommendDescription" id="CommendDescription" cols="50" rows="5" style="width:534.21px;max-width:534.21px;"></textarea>
+                            </td>
+                        </tr>
+
+                    </table>
+                    <br />
+                    <div class="search">
+
+                        <button class="btn btn-warning" type="submit" id="btnCloseJob" style="width:130px;">ปิดงาน</button>
+                           
+                        <button class="btn btn-success" type="submit" id="btnNoCloseJob" style="width:130px;">ไม่ปิดงาน</button>
+                          
+                        <button class="btn btn-success" type="submit" id="btnReqCloseJob" style="width:130px;">ขอปิดงาน</button>
+                           
+                    </div>
+                </div>*@
+                </div>
+        </div>
+
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="search-form" style="border-left:1px solid #777;height:400px;">
+                <div class="search">
+                    <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                        <li class="menu-item" style="padding-top:30px;">
+                            @*<button class="btn btn-warning" type="submit" style="width:130px;"></button>*@
+                            <a href="/Issues/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="submit" value="Create" id="btnSave" style="width:130px;">บันทึก</button>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="submit" id="btnCheckJob"  style="width:130px;">ตรวจสอบ</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}
+
+
+@*PopUp Warehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="WModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">หน่วยงาน</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelWH">
+                        @foreach (var w in ViewBag.WhList)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelW" whCode="@w.ID" whName="@w.Name" whTelNo="@w.TelNo" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*PopUp Staff*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="StModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">ผู้แจ้ง</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelST" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelST">
+                        @foreach (var w in ViewBag.StList)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelSt" stCode="@w.ID" stName="@w.Name" stTelNo="@w.TelNo" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+@*PopUp Topic*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="TModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">ปัญหาและการแก้ไข</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchTopic" name="txtSearch" tb="modSelTopic" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelTopic">
+                        @foreach (var w in ViewBag.TpList)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelT" tCode="@w.ID" tName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

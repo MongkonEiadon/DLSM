@@ -1,0 +1,434 @@
+﻿@model IEnumerable<DLSM.Models.Document>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+}
+<link href="~/Content/datepicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker-thai.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.th.js"></script>
+
+<script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+
+        //sort column
+        var table = $('#tbMain').DataTable({
+            "dom": "rtp",
+            "pageLength": 20,
+            "language": {
+                "paginate": {
+                    "next": "ถัดไป",
+                    "previous": "ก่อนหน้า"
+                }
+            },
+            "order": [[1, 'desc']]
+        });
+
+        $('#SeachFromDate').datepicker({
+            autoclose: true
+        });
+
+        $('#SeachToDate').datepicker({
+            autoclose: true
+        });
+
+        $("#btnSearchW").click(function () {
+            var url = "/Transfers/Search?";
+            var searchFromDate = "";
+            var searchToDate = "";
+            var searchWare = "";
+            var searchPro = "";
+            var searchStatus = "";
+            var searchSN = "";
+
+            if ($("#SeachFromDate").val().trim() != "") {
+                searchFromDate = "searchFromDate=" + formatDate($("#SeachFromDate").val().trim());
+                url = url + "&" + searchFromDate;
+            }
+
+            if ($("#SeachToDate").val().trim() != "") {
+                searchToDate = "searchToDate=" + formatDate($("#SeachToDate").val().trim());
+                url = url + "&" + searchToDate;
+            }
+
+            if ($("#SearchIDW").val().trim() != "") {
+                searchWare = "searchWare=" + $("#SearchIDW").val().trim();
+                url = url + "&" + searchWare;
+            }
+
+            if ($("#SearchIDP").val().trim() != "") {
+                searchPro = "searchPro=" + $("#SearchIDP").val().trim();
+                url = url + "&" + searchPro;
+            }
+
+            if ($("#SearchStatus").val().trim() != "") {
+                searchStatus = "SearchStatus=" + $("#SearchStatus :selected").val().trim();
+                url = url + "&" + searchStatus;
+            }
+
+            if ($("#SearchSN").val().trim() != "") {
+                searchSN = "searchSN=" + $("#SearchSN").val().trim();
+                url = url + "&" + searchSN;
+            }
+
+            if (searchFromDate != "" || searchToDate != "" || searchWare != "" || searchPro != "" || searchStatus != "" || searchSN != "") {
+                window.location.href = url;
+            } else {
+                window.location.href = "/Transfers/Index";
+            }
+
+            //$.ajax({
+            //    type: "Post",
+            //    url: "/Transfers/Search?SearchFromDate=" + searchFromDate + "&SearchToDate=" + searchToDate + "&searchWare=" + searchWare + "&searchPro=" + searchPro,
+            //    contentType: "html",
+            //    success: function (response) {
+            //        $("#SearchRow").html(response);
+            //    }
+            //});
+        })
+
+         $("#btnOpenModal").click(function (e) {
+            e.defaultPrevented;
+            //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetWH")",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#modSelWH tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelW" whCode="' + response[x].ID + '" whName="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selWH(event,this)" ></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#modSelWH tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+            $("#WModal").modal("show");
+
+        });
+
+        //Select Warehouse Find
+        //$("i[name=SelW]").click(function () {
+        //    //console.log($(this));
+        //    var whCode = $(this).attr("whCode");
+        //    var whName = $(this).attr("whName");
+
+        //    $("#SearchW").val(whName);
+        //    $("#SearchIDW").val(whCode);
+
+        //    $("#WModal").modal("hide");
+        //});
+
+        //Select Product Find
+        $("i[name=SelP]").click(function () {
+            //console.log($(this));
+            var pCode = $(this).attr("pCode");
+            var pName = $(this).attr("pName");
+
+            $("#SearchP").val(pName);
+            $("#SearchIDP").val(pCode);
+
+            $("#PModal").modal("hide");
+        });
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    //console.log($(this).closest("tr").index());
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+
+        function formatDate(date) {
+            var res = date.split("/");
+            return parseInt(res[2]) - 543 + '-' + res[1] + '-' + res[0];
+        }
+
+
+    })
+
+    function selWH(event, t) {
+        var whCode = $(t).attr("whCode").trim();
+        var whName = $(t).attr("whName").trim();
+
+        $("#SearchW").val(whName);
+        $("#SearchIDW").val(whCode);
+
+        $("#WModal").modal("hide");
+    }
+</script>
+
+<h2>เบิกจ่าย</h2>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-right:1px solid #777;height:400px;">
+            <div class="search">
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">จากวันที่</p>
+                    <input type="text" class="form-control input-medium" data-provide="datepicker" data-date-language="th-th" id="SeachFromDate" style="width:200px;margin-left:30px;" placeholder="DD/MM/YYYY">
+                </div>
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">ถึงวันที่</p>
+                    <input type="text" class="form-control input-medium" data-provide="datepicker" data-date-language="th-th" id="SeachToDate" style="width:200px;margin-left:30px;" placeholder="DD/MM/YYYY">
+                </div>
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">สำนักงานขนส่ง</p>
+                    <input class="find" name="SearchIDW" id="SearchIDW" style="display:none;">
+                    <input class="find" name="SearchW" id="SearchW" style="width:165px;" disabled>
+                    <a href="#" class="btn btn-success" data-toggle="modal" id="btnOpenModal"><i class="fa fa-search fa-3"></i></a>
+                </div>
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">วัสดุ</p>
+                    <input class="find" name="SearchIDP" id="SearchIDP" style="display:none;" value="">
+                    <input class="find" name="SearchP" id="SearchP" style="width:165px;" value="" disabled>
+                    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#PModal"><i class="fa fa-search fa-3"></i></a>
+                </div>
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">เลขคุม</p>
+                    <input class="form-control" name="SearchSN" id="SearchSN" style="width:200px;margin-left:30px;" value="">
+                </div>
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">สถานะ</p>
+                    <select name="SearchStatus" id="SearchStatus" class="form-control" style="width:200px;margin-left:30px;">
+                        <option value="" >----กรุณาเลือก----</option>
+                        <option value="1">กำลังดำเนินการ</option>
+                        <option value="2">รออนุมัติ</option>
+                        <option value="3">อนุมัติ</option>
+                        <option value="4">ไม่อนุมัติ</option>
+                        <option value="5">รับของ</option>
+                        <option value="6">อนุมัติรับของ</option>
+                        <option value="7">ไม่อนุมัติรับของ</option>
+                        <option value="8">รับคืน</option>
+                    </select>
+                </div>
+
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;">
+                    <li class="menu-item" style="padding-top:10px;">
+                        <button class="btn btn-primary" id="btnSearchW" style="width:130px;" type="submit">สืบค้น</button>
+                    </li>
+
+                    <li class="menu-item" style="padding-top:10px;">
+                        @*<button class="btn btn-primary" type="submit" style="width:130px;cursor:pointer;"><a href="/Transfers/Create" style="color:white;">เพิ่มรายการ</a></button>*@
+                        <a href="/Transfers/Create" style="color:white;width:130px;cursor:pointer;" class="btn btn-primary">เพิ่มรายการ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-9">
+        <table class="table table-hover" id="tbMain">
+            <thead>
+                <tr>
+                    <th>
+                        เลขที่เอกสาร
+                    </th>
+                    <th>
+                        วันที่
+                    </th>
+                    <th>
+                        โอน
+                    </th>
+                    <th>
+                        รับโอน
+                    </th>
+                    <th>
+                        ประเภท
+                    </th>
+                    <th>
+                        วัสดุ
+                    </th>
+                    <th>
+                        จำนวน
+                    </th>
+                    <th>
+                        สถานะ
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="SearchRow">
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DocNo)
+                            </td>
+                            <td>
+                                <span style="display:none;">@item.DocDate.Value.ToString("yyyyMMdd")</span>
+                                @Html.DisplayFor(modelItem => item.DocDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WarehouseName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ToWarehouseName)
+                            </td>
+                            
+                                @if (item.SubType.ToString() == "1")
+                                {
+                                    <td>
+                                        โอนส่งของ
+                                    </td>
+                                }
+                                else if (item.SubType.ToString() == "2")
+                                {
+                                    <td>
+                                        โอนรับของ
+                                    </td>
+                                }
+                                else if (item.SubType.ToString() == "3")
+                                {
+                                    <td>
+                                        โอนส่งคืน
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        -
+                                    </td>
+                                }
+                           
+                            <td>
+                                @Html.DisplayFor(model => item.ProductName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Qty)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.StatusName)
+                            </td>
+                            @if (item.Status.ToString() == "3" || (item.Status.ToString() == "5" && item.SubType.ToString() == "2") || (item.Status.ToString() == "6" && item.SubType.ToString() == "2"))
+                            {
+                                <td>
+                                    <a href="\Transfers\ReceiveTransfer?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            }
+                            else if ((item.Status.ToString() == "6" || item.Status.ToString() == "7" || item.Status.ToString() == "8") && item.SubType.ToString() == "3")
+                            {
+                                <td>
+                                    <a href="\Transfers\ReceiveBackTransfer?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            }
+                            else if (item.Status.ToString() == "7" && item.SubType.ToString() == "2")
+                            {
+                                <td>
+                                    <a href="\Transfers\ReceiveTransfer?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <a href="\Transfers\Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            }
+                            
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*Popup Warehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="WModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">สำนักงานขนส่ง</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelWH">
+                        <thead></thead>
+                        <tbody></tbody>
+                        @*@foreach (var w in ViewBag.WarehouseList)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelW" whCode="@w.ID" whName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }*@
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    @*<button id="addW" name="addW" type="submit" data-target="#WModal" class="btn btn-success">Submit</button>
+                        <a href="#" class="btn btn-warning" data-dismiss="modal">Cancle</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*PopUp Product*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="PModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">วัสดุ</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelSP" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody2">
+                    <table class="table" id="modSelSP">
+                        @foreach (var p in ViewBag.ProductList)
+                        {
+                            <tr>
+                                <td>
+                                    @p.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelP" pCode="@p.ID" pName="@p.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

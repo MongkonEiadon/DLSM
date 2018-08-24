@@ -1,0 +1,121 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+
+    var MenuSettingAccess = ViewBag.MenuSettingAccess;
+}
+
+
+
+
+<div class="row" style="padding-left:100px;padding-top:50px;">
+    @if (MenuSettingAccess.Contains("Receives"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse card-primary o-hidden">
+                <a href="\Receives\Index" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-download"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รับวัสดุ</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+    @if (MenuSettingAccess.Contains("Transfers"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse card-warning o-hidden h-100">
+                <a href="\Transfers\Index" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-home"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>เบิกจ่าย</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+    @if (MenuSettingAccess.Contains("Requisitions"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse card-success o-hidden h-100">
+                <a href="\Requisitions\Index" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-upload"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>จ่ายวัสดุ</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+    @if (MenuSettingAccess.Contains("Borrows"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse card-danger o-hidden h-100 w-100">
+                <a href="\Borrows\Index" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-exchange"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>ยืม/คืน</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+    @if (MenuSettingAccess.Contains("CheckStocks"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse card-info o-hidden h-100">
+                <a href="\CheckStocks\Index" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-check-square"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>ตรวจนับ</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+    
+    @if (MenuSettingAccess.Contains("FailCard"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse card-primary o-hidden">
+                <a href="\FailCard\Index" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa far fa-id-card"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>บัตรเสีย</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+</div>
+

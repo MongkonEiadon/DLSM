@@ -1,0 +1,285 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @*<script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>*@
+    <script src="~/Scripts/tether.min.js"></script>
+    <link href="~/Content/Template/sb-admin.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            console.log("loading");
+        });
+
+
+        window.addEventListener("load", function () {
+            console.log("finished");
+        });
+
+
+        $(window).load(function () {
+            // set left side-bar to height windows
+            $(".sidebar-nav").height($('body').outerHeight());
+            // set vertical line height
+            $(".search-form").height($('body').outerHeight());
+            // Loading spinner
+            $('#cover').fadeOut(500);
+        });
+
+        //only thai char
+        function onlyThaichar(str, obj) {
+            var isThai = true;
+            var th_letters = /^[ก-๙0-9.]+$/;
+
+            if (th_letters.test(str)) {
+                isThai = true;
+            } else {
+                isThai = false;
+                obj.value = str.replace(/[A-Za-z_+-,!#$%^&*();\/|<>"']/g, "");
+            }
+            return isThai; // ถ้าเป็น true แสดงว่าเป็นภาษาไทยทั้งหมด*/
+        }
+
+        //only eng char
+        function onlyEngchar(str, obj) {
+            var isEng = true;
+            var eng_letters = /^[a-zA-z0-9.]+$/;
+
+            if (eng_letters.test(str)) {
+                isEng = true;
+            } else {
+                isEng = false;
+                obj.value = str.replace(/[ก-๙_+-,!#$%^&*();\/|<>"']/g, "");
+            }
+            return isEng; // ถ้าเป็น true แสดงว่าเป็นภาษาอังกฤษทั้งหมด*/
+        }
+
+
+        //only number
+        function onlyNumber(str, obj) {
+            var isNum = true;
+            var num_letters = /^[0-9]+$/;
+
+            if (num_letters.test(str)) {
+                isNum = true;
+            } else {
+                isNum = false;
+                obj.value = str.replace(/[A-Za-zก-๙_.+-,!#$%^&*();\/|<>"']/g, "");
+            }
+            return isNum; // ถ้าเป็น true แสดงว่าเป็นตัวเลขทั้งหมด*/
+        }
+    </script>
+
+
+    @RenderSection("scripts", required: false)
+
+    @{ 
+
+        var AccessMenu = (List<String>)Session["MenuAccess"];
+
+
+        // access list lowwer case only
+        // Controller : Transactions 
+        string[] Transactions = { "transactions", "receives", "requisitions", "transfer", "borrows", "checkstocks" };
+
+        // Controller : Stocks 
+        string[] Stocks = { "stocks" };
+
+        string[] Report = { "report" };
+
+        // Controller : Helpdesks 
+        string[] Helpdesks = { "helpdesks", "issues", "topics" };
+
+        // Controller : Settings 
+        string[] Settings = { "setting", "warehouses", "categories", "products", "staffs", "topicgroups", "suppliers" };
+
+        string[] WorkStations = { "workstations" };
+        // get controller name
+        string controller_name = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+     }
+
+    <style>
+        /*! สีตอน active menu ด้านซ้าย */
+        #mainNav .navbar-collapse .navbar-nav.sidebar-nav li.active a {
+            color: white; /*! สีตัวอักษร */
+            /*!background-color: magenta; */ /*! สี bg ตอน active menu */
+            background-color: rgba(220, 220, 220, 0.2);
+        }
+
+        .hover:hover {
+            background-color: mediumpurple;
+        }
+
+        .navbar-inverse .navbar-nav .nav-link{
+            color:white;
+        }
+        .br {
+            border: 0px solid #555555;
+        }
+
+        #logo {
+            position: absolute;
+            margin-top: -80px;
+            margin-left: 40px;
+            top: 5px;
+            left: 55px;
+            width: 120px;
+            height: 120px;
+        }
+
+        #mainNav {
+            background-color: rgba(77, 43, 104, .9);
+            position: relative;
+            margin-top:-20px;
+        }
+
+        #cover {
+            background: url("http://www.aveva.com/Images/ajax-loader.gif") no-repeat scroll center center #FFF;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            z-index: 999;
+            margin-top:-120px;
+        }
+
+        body {
+            padding-top: 35px;
+            padding-bottom: 20px;
+        }
+    </style>
+
+</head>
+
+
+<body>
+    <h3 style="text-align:right;padding-right:20px;margin-top:-10px; text-shadow: 2px 2px 2px #d642d6;font-size:xx-large;">ระบบควบคุมบริหารจัดการบัตร</h3>
+    <h5 style="text-align:right;padding-right:20px;font-weight:500;">กรมการขนส่งทางบก</h5>
+
+    <div class="form-row form-inline br" style="margin-top: -80px; margin-left:-15px;margin-bottom:-6px;margin-top:-101px;">
+        <div class="col-6 br">
+            <svg width="500" height="110">
+                <!-- 0,0 130,0 200,110 0,110 2017/11/15-->
+                <polygon points="0,0 200,0 260,110 0,110"
+                         style="fill: rebeccapurple; stroke: rebeccapurple; stroke-width: 1;fill-rule: evenodd;" />
+                Sorry, your browser does not support inline SVG.
+            </svg>
+        </div>
+
+    </div>
+    <div id="cover"></div>
+    <nav id="mainNav" class="navbar static-top navbar-toggleable-md navbar-inverse " style="background-color:rebeccapurple;">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarExample" aria-controls="navbarExample" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+            <img src="~/Content/Images/logo_web.png" id="logo" alt="" style="position:static;">
+        </a>
+
+
+        <div class="collapse navbar-collapse" id="navbarExample">
+            <ul class="sidebar-nav navbar-nav" style="background-color:rebeccapurple;">
+
+                @{
+                    if (AccessMenu != null)
+                    {
+                        foreach (var m in AccessMenu)
+                        {
+                            if (m.ToLower() == "transactions")
+                            {
+                                <li class="nav-item hover @{ if (Array.IndexOf(Transactions, (controller_name).ToLower()) >= 0) { WriteLiteral(" active"); }}">
+                                    <a class="nav-link" href="\Transactions\Index"><i class="fa fa-fw fa-exchange"></i> รับ/จ่าย วัสดุ</a>
+                                </li>
+                            }
+                            else if (m.ToLower() == "stocks")
+                            {
+                                <li class="nav-item hover @{ if (Array.IndexOf(Stocks, (controller_name).ToLower()) >= 0) { WriteLiteral(" active"); }}">
+                                    <a class="nav-link" href="\Stocks\Index"><i class="fa fa-fw fa-archive"></i> ยอดคงเหลือวัสดุ</a>
+                                </li>
+                            }
+                            else if (m.ToLower() == "report")
+                            {
+                                <li class="nav-item hover @{ if (Array.IndexOf(Report, (controller_name).ToLower()) >= 0) { WriteLiteral(" active"); }}">
+                                    <a class="nav-link" href="\Report\Index"><i class="fa fa-fw fa-bar-chart-o"></i> รายงาน</a>
+                                </li>
+                                    }
+                            else if (m.ToLower() == "workstations")
+                            {
+                                <li class="nav-item hover @{ if (Array.IndexOf(WorkStations, (controller_name).ToLower()) >= 0) { WriteLiteral(" active"); }}">
+                                    <a class="nav-link" href="\WorkStations\Index"><i class="fa fa-fw fa-sitemap"></i> WorkStations</a>
+                                </li>
+                            }
+                            else if (m.ToLower() == "helpdesks")
+                            {
+
+                                <li class="nav-item hover @{ if (Array.IndexOf(Helpdesks, (controller_name).ToLower()) >= 0) { WriteLiteral(" active"); }}">
+                                    <a class="nav-link" href="\Helpdesks\Index"><i class="fa fa-fw fa-phone"></i> Help Desk</a>
+                                </li>
+                            }
+                            else if (m.ToLower() == "setting")
+                            {
+                                <li class="nav-item hover @{ if (Array.IndexOf(Settings, (controller_name).ToLower()) >= 0) { WriteLiteral(" active"); }}">
+                                    <a class="nav-link" href="\Setting\Index"><i class="fa fa-fw fa-gears"></i> ตั้งค่าระบบ</a>
+                                </li>
+                            }
+                        }
+                    }
+                }
+
+
+                @if(AccessMenu != null)
+                {
+                    <li class="nav-item hover">
+                        <a class="nav-link" href="\Login\LogOut"><i class="fa fa-fw fa-unlock"></i> ออกจากระบบ</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item hover">
+                        &nbsp;  
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <h5>
+            <span class="badge badge-info" style="display:ruby-text;"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp; @if (Session["UserName"] != null) { WriteLiteral(Session["UserName"] + " (" + Session["UserGroupName"] + ")" + " ("+ Session["UserWhName"] + ")" ); }</span>
+        @if (AccessMenu != null)
+        {
+            <span class="badge badge-danger" style="display:ruby-text;"><a href="\Login\LogOut"><i class="fa fa-sign-out" style="color:white;" aria-hidden="true" title="ออกจากระบบ"></i></a></span>
+        }
+        else
+        {
+            <span>&nbsp;</span>
+        }
+        </h5>
+
+    </nav>
+    <div class="content-wrapper py-3">
+        <div class="container-fluid">
+
+
+            @RenderBody()
+
+            @*<footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>*@
+        </div>
+
+       
+    </div>
+</body>
+</html>

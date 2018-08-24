@@ -1,0 +1,84 @@
+﻿@model IEnumerable<DLSM.Models.Warehouse>
+
+@{ 
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+@*<table class="table" id="tbMain">
+    <thead>
+        <tr>
+            <th>
+                รหัส
+            </th>
+            <th>
+                ชื่อคลัง
+            </th>
+            <th>
+                เบอร์โทรศัพท์
+            </th>
+            <th>
+                e-mail
+            </th>
+            <th>
+                สถานะ
+            </th>
+            <th></th>
+        </tr>
+    </thead>*@
+    @*<tbody id="SearchWarehRow">*@
+        @if (Model != null)
+        {
+            if (Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TelNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        @if (item.IsMain.Contains("1"))
+                        {
+                            <td>
+                                คลังหลัก
+                            </td>
+                        }
+                        else if (item.IsMain.Contains("2"))
+                        {
+                            <td>
+                                คลังทั่วไป
+                            </td>
+                        }
+                        <td>
+                            <a href="\Warehouses\Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" style="text-align:center;">
+                        ไม่พบข้อมูล
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:center;">
+                        @Html.ActionLink("Back", "Index", "Warehouses")
+                    </td>
+                </tr>
+            }
+        }
+    @*</tbody>
+</table>*@

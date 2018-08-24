@@ -1,0 +1,197 @@
+﻿@model DLSM.Models.Permission
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("input[type=checkbox]").on("click", function () {
+            
+            var isName = $(this).attr("Name");
+            var ParentMenu = $(this).attr("parent");
+            var MainChk = "#Main_" + ParentMenu;
+            var subMenuCheck = false;
+            
+            if (($(this).attr("parent") != $(this).attr("menu"))) {
+
+                $("input[parent=" + ParentMenu + "]").each(function () {
+                    if (($(this).attr("parent") != $(this).attr("menu"))) {
+                        if (subMenuCheck == "") {
+                            subMenuCheck = $(this).is(":checked") == true ? true : false;
+                        }
+                    }
+                });
+
+                $(MainChk).prop("checked", subMenuCheck);
+
+            } else {
+                $("input[parent=" + ParentMenu + "]").each(function () {
+                    $(this).prop("checked", $(MainChk).is(":checked"));
+                });
+            }
+        });
+
+
+
+        $("#btnSave").on("click", function () {
+
+            var UserGroupName = $("#UserGroupName").val().trim();
+            var UserGroupID = $("#UserGroupID").val().trim();
+
+            if (UserGroupName == "") {
+                alert("กรุณากรอก ชื่อกลุ่มผู้ใช้");
+                $("#UserGroupName").focus();
+                return false;
+            }
+
+
+            var items = [];
+
+            $("input:checked").each(function () {
+
+                var menu = $(this).attr("menu");
+                var parent = $(this).attr("parent");
+
+                items.push({ "ModuleName": menu, "ModuleParent": parent });
+            });
+
+
+            //console.log({ menu: JSON.stringify(items), UserGroupName: UserGroupName });
+
+            var objJson = {
+                "Menu": items,
+                "UserGroupName": UserGroupName,
+                "UserGroupID": UserGroupID
+            }
+             
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Edit")",
+                data: JSON.stringify(objJson),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response == 'success') {
+                        alert("บันทึกข้อมูลเรียบร้อยแล้ว");
+                        window.location.href = "Index";
+                    } else {
+                        alert("บันทึกข้อมูลไม่สำเร็จ");
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+        });
+
+
+        $("#btnDelete").on("click", function (id) {
+            var trans_id = $(this).attr("trans_id");
+            console.log(trans_id);
+            if (confirm("คุณต้องการจะลบข้อมูลใช่หรือไม่?") == true) {
+                window.location.href = "/Permissions/DeleteConfirmed?id=" + trans_id
+
+            }
+        });
+
+
+    });
+
+</script>
+
+<h2>การจัดการสิทธิ์</h2>
+
+@using (Html.BeginForm())
+{
+
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-9">
+            <div class="form-horizontal">
+                <input type="hidden" name="UserGroupID" id="UserGroupID" value="@Model.UserGroupID" />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    ชื่อกลุ่มผู้ใช้
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.UserGroupName, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.UserGroupName, "", new { @class = "text-danger", required = "required" })
+                    </div>
+                </div>
+
+                <br>
+                @if (ViewBag.MainMenu != null)
+                {
+                    foreach (var i in ViewBag.MainMenu)
+                    {
+                        <div class="form-group">
+
+                            <div style="background-color:cornflowerblue;margin-bottom:15px;margin-top:15px;">
+                                <input type="checkbox" name="Main_@i.ParentMenu" id="Main_@i.ParentMenu" class="form-control" style="display:unset;" menu="@i.Name" parent="@i.ParentMenu" @(i.isChecked == true ? "checked":"") />
+                                <span style="color:white;font-size:x-large;font-weight:500;">@i.NameTH</span>
+                            </div>
+
+                            @if (ViewBag.SubMenu != null)
+                            {
+                                foreach (var x in ViewBag.SubMenu)
+                                {
+                                    if (i.Name == x.ParentMenu)
+                                    {
+                                        <div style="margin-bottom:15px;margin-top:15px;">
+                                            <input type="checkbox" name="Sub_@x.ParentMenu" id="Sub_@x.ParentMenu" class="form-control" style="display:unset;" menu="@x.Name" parent="@x.ParentMenu" @(x.isChecked == true ? "checked":"") />
+                                            <span>@x.NameTH</span>
+                                        </div>
+                                    }
+                                }
+                            }
+
+                            <div class="col-md-10">
+
+                            </div>
+                        </div>
+                    }
+                }
+
+
+
+
+            </div>
+        </div>
+
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="search-form" style="border-left:1px solid #777;height:400px;">
+                <div class="search">
+                    <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                        <li class="menu-item" style="padding-top:30px;">
+                            @*<button class="btn btn-warning" type="submit" style="width:130px;"></button>*@
+                            <a href="/Permissions/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="button" value="Create" style="width:130px;" name="btnSave" id="btnSave">บันทึก</button>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-danger" type="button" id="btnDelete" trans_id="@Model.UserGroupID" value="Delete" style="width:130px;">ลบ</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}

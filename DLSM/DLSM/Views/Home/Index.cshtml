@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+
+<div class="table" style="min-height:400px;">
+
+    <div class="card">
+        <div class="card-block">
+            <h4>ยินดีต้อนรับ ,</h4>
+            <h4>User Login : @Session["UserLogin"].ToString()</h4>
+            <h4>Name : @Session["UserName"].ToString()</h4>
+            <h4>คลังวัสดุอุปกรณ์ : @Session["UserWhName"].ToString()</h4>
+        </div>
+    </div>
+      
+</div>

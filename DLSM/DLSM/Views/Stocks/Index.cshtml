@@ -1,0 +1,453 @@
+﻿@model IEnumerable<DLSM.Models.Stock>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    SelectList CategoryList = ViewBag.CategoryList;
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+<script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+
+        $("#btnOpenModal").click(function (e) {
+            e.defaultPrevented;
+            //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetWH")",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#modSelWH tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelW" whCode="' + response[x].ID + '" whName="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selWH(event,this)" ></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#modSelWH tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+            $("#WModal").modal("show");
+
+        });
+
+        $("#btnSearchW").click(function () {
+
+            try {
+                var searchWare = $("#SearchIDW").val() != "" ? $("#SearchIDW").val() : 0;
+                var searchPro = $("#SearchIDP").val() != "" ? $("#SearchIDP").val() : 0;
+
+                var searchtype = $("#CategoryList :selected").val() != "" ? $("#CategoryList :selected").val() : 0;
+                $.ajax({
+                    type: "Post",
+                    url: "/Stocks/Search?searchWare=" + searchWare + "&searchPro=" + searchPro + "&searchCat=" + searchtype,
+                    contentType: "html",
+                    success: function (response) {
+                        $("#SearchRow").html(response);
+                        console.log(response);
+                    }
+                });
+            }
+            catch (e) {
+                console.log(e);
+            }
+
+        });
+
+        $("#tbMain tbody tr").not(':first').each(function () {
+
+            var balance = $(this).find("td:eq(1)").text().replace(/,/g, '');
+            var minimum = $(this).find("td:eq(2)").text().replace(/,/g, '');
+
+            if (parseInt(balance) >= parseInt(minimum)) {
+                $(this).find("td:eq(1)").css("color", "#5cb85c"); //Green
+            } else {
+                //console.log($(this).find("td:eq(1)").children());
+
+                $(this).find("td:eq(1)").children().addClass("badge badge-pill badge-danger");
+
+                $(this).find("td:eq(1)").css("color", "#FF0000");	//Red
+                $("#tooltipsMsg").css("visibility", "visible");
+            }
+        });
+
+        //Select Product Find
+        $("i[name=SelP]").click(function () {
+            //console.log($(this));
+            var pCode = $(this).attr("pCode");
+            var pName = $(this).attr("pName");
+
+            $("#SearchP").val(pName);
+            $("#SearchIDP").val(pCode);
+
+            $("#PModal").modal("hide");
+        });
+
+
+        // set min qty product
+        $("i[name=popwh]").click(function () {
+
+            var ProductID = $(this).attr("PdID");
+            var ProductName = $(this).closest("tr").find("td:eq(0)").text().trim();
+            var MinQty = $(this).closest("tr").find("td:eq(2)").text().trim();
+            var WHID = $(this).attr("WHID") == 0 ? $("#SearchIDW").val() : $(this).attr("WHID") ;
+            var WHName = $("#SearchW").val();
+
+            $("#mWhID").val(WHID);
+            $("#mWhName").val(WHName);
+            $("#mPdID").val(ProductID);
+            $("#mPdName").val(ProductName);
+            $("#mMinStock").val(MinQty);
+
+            $("#MinModal").modal("show");
+        });
+
+
+        //Click ok in modal qty product
+        $("#addM").click(function () {
+
+            var WhID = $("#mWhID").val();
+            var PDID = $("#mPdID").val();
+            var MinStock = $("#mMinStock").val().replace(/,/g, '');
+            var Predict = ($("#mPredictMonth").val().trim() == "" ? 0 : parseInt($("#mPredictMonth").val()));
+            
+            if ($("#mWhName").val().trim() == "" || $("#mPdName").val().trim() == "" || $("#mMinStock").val().trim() == "") {
+                return false;
+            } else {
+                
+                    $.ajax({
+                        type: "Get",
+                        url: "/Stocks/InsertMinStock?whid=" + WhID + "&pdid=" + PDID + "&minstock=" + MinStock + "&predict=" + Predict,
+                        contentType: "html",
+                        success: function (response) {
+                            console.log(response);
+                            if (response == "success") {
+                                $("#MinModal").modal("hide");
+                                alert("บันทึกสำเร็จ");
+                                $("#btnSearchW").click();
+                                //window.location.reload();
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+            }
+
+        });
+
+        String.prototype.commafy = function () {
+            return this.replace(/(.)(?=(.{3})+$)/g, "$1,")
+        }
+        $.fn.digits = function () {
+            return this.each(function () {
+                $(this).val($(this).val().replace(/(,| )/g, '').commafy());
+            })
+        }
+
+        $("#mMinStock").bind('blur keyup', function () { $(this).digits(); }).digits();
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    //console.log($(this).closest("tr").index());
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+        
+
+    });
+
+    function selWH(event, t) {
+        var whCode = $(t).attr("whCode").trim();
+        var whName = $(t).attr("whName").trim();
+
+        console.log(whCode);
+        console.log(whName);
+
+        $("#SearchW").val(whName);
+        $("#SearchIDW").val(whCode);
+
+        $("#WModal").modal("hide");
+    }
+
+
+
+</script>
+
+<style>
+
+    /*! Tooltips */
+    .tool {
+        position: relative;
+    }
+
+    .tool::before, .tool::after {
+        position: absolute;
+        opacity: 1;
+        z-index: 100;
+    }
+
+
+    .tool::before {
+        border-style: solid;
+        border-width: 1em .75em 0 .75em;
+        border-color: #ff7474 transparent transparent transparent;
+        bottom: -80%;
+        content: " ";
+        }
+
+    .tool::after {
+        background: #ff7474;
+        border-radius: .25em;
+        bottom: 10%;
+        color: white;
+        width: 17.5em;
+        padding: 1em;
+        margin-left: -8.75em;
+        content: attr(data-tip);
+    }
+    
+
+</style>
+
+<h2>ยอดคงเหลือวัสดุ</h2>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-right:1px solid #777;height:400px;">
+            <div class="search">
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">สำนักงานขนส่ง</p>
+                    <input class="find" name="SearchIDW" id="SearchIDW" value="@Session["UserWhID"]" style="display:none;">
+                    <input class="find" name="SearchW" id="SearchW" value="@Session["UserWhName"]" style="width:165px;" disabled>
+                    <a href="#" class="btn btn-success" id="btnOpenModal" data-toggle="modal" ><i class="fa fa-search fa-3"></i></a>
+                </div>
+
+                <div class="menu-search" style="text-align:center;padding-left:30px;">
+                    <p style="margin-bottom: 0;text-align:left;">ประเภท</p>
+                    @Html.DropDownList("CategoryList", CategoryList,"----กรุณาเลือก----",new { @class = "form-control", @style = "width:220px;margin-right: 0;" })
+                </div>
+
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">วัสดุ</p>
+                    <input class="find" name="SearchIDP" id="SearchIDP" style="display:none;" value="">
+                    <input class="find" name="SearchP" id="SearchP" style="width:165px;" value="" disabled>
+                    <a href="#" class="btn btn-success"  data-toggle="modal" data-target="#PModal" ><i class="fa fa-search fa-3"></i></a>
+                </div>
+
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;">
+                    <li class="menu-item" style="padding-top:10px;">
+                        <button class="btn btn-info" id="btnSearchW"  style="width:130px;cursor:pointer;" type="button">สืบค้น</button>
+                    </li>
+
+                    @*<li class="menu-item" style="padding-top:10px;">
+                        <button class="btn btn-info" type="submit" style="width:130px;cursor:pointer;"><a href="/Warehouses/Create" style="color:white;">เพิ่มรายการ</a></button>
+                    </li>*@
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-9">
+        <table class="table table-hover" id="tbMain">
+            <tbody id="SearchRow">
+                <tr>
+                    <th style="text-align:center;">
+                        <span class="tool" data-tip="กรุณาดำเนินการกับรายการที่มี จำนวนน้อยกว่าเกณฑ์ขั้นต่ำ" style="visibility:hidden;" id="tooltipsMsg">&nbsp;</span>
+                    </th>
+                    <th style="text-align:center;">
+                        คงเหลือ
+                    </th>
+                    <th style="text-align:center;" colspan="2">
+                        ขั้นต่ำ
+                    </th>
+                    <th style="text-align:center;" colspan="1">
+                        การคาดคะเน
+                    </th>
+                    <th style="text-align:center;" colspan="1">
+                        เบิกจ่าย
+                    </th>
+                    <th style="text-align:center;" colspan="1">&nbsp;</th>
+                </tr>
+                @foreach (var item in Model)
+            {
+                <tr style="vertical-align:middle;">
+                    <td style="vertical-align:middle;">
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td style="text-align:right;vertical-align:middle;" id="textQty" name="textQty">
+                        <span class="" style="font-size:medium;">@Html.DisplayFor(modelItem => item.Qty)</span>
+                    </td>
+                    <td style="text-align:right;vertical-align:middle;" id="textMin" name="textMin">
+                        @Html.DisplayFor(modelItem => item.MinStock)
+
+                    </td>
+                    <td>
+                        <i name="popwh" class="fa fa-fw fa-pencil-square fa-2x" data-toggle="modal" PdID="@item.PdID" WHID="@item.WhID" style="color: #0275d8;cursor:pointer;"></i>
+                    </td>
+                    <td style="text-align:right;vertical-align:middle;" id="textPredict" name="textPredict">
+                        @Html.DisplayFor(modelItem => item.Predict)
+
+                    </td>
+                    <td style="text-align:right;vertical-align:middle;" id="textTrans" name="textTrans">
+                        @Html.DisplayFor(modelItem => item.Transfer)
+                    </td>
+                    @if (item.Qty > 0)
+    {
+                <td style="vertical-align:middle;text-align:center;">
+                    <a href="\Stocks\Details?pdid=@item.PdID&whid=@item.WhID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                </td>
+}
+else
+{
+                <td> &nbsp;</td>
+}
+                </tr>
+                }
+            </tbody></table></div></div>
+    @*Popup Warehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="WModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">สำนักงานขนส่ง</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelWH">
+                        <thead></thead>
+                        <tbody>
+                        @*@foreach (var w in ViewBag.WarehouseList)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelW" whCode="@w.ID" whName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }*@
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    @*<button id="addW" name="addW" type="submit" data-target="#WModal" class="btn btn-success">Submit</button>
+                        <a href="#" class="btn btn-warning" data-dismiss="modal">Cancle</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*PopUp Product*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="PModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">วัสดุ</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelP" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody2">
+                    <table class="table" id="modSelP">
+                        @foreach (var p in ViewBag.ProductList)
+                        {
+                            <tr>
+                                <td>
+                                    @p.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelP" pCode="@p.ID" pName="@p.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    @*<button id="addW" name="addW" type="submit" data-target="#WModal" class="btn btn-success">Submit</button>
+                        <a href="#" class="btn btn-warning" data-dismiss="modal">Cancle</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*PopUp MinimumStock*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="MinModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">จำนวนขั้นต่ำ</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+
+                <div class="modal-body" id="mypopupbody2">
+                    <table class="table" id="modSelM">
+                        <tbody>
+                            <tr>
+                                <td>สำนักงานขนส่ง</td>
+                                <td style="display:none;"><input type="hidden" name="mWhID" id="mWhID" /></td>
+                                <td><input type="text" name="mWhName" id="mWhName" style="width:300px;" class="form-control"  disabled /></td>
+                            </tr>
+                            <tr>
+                                <td>วัสดุ</td>
+                                <td style="display:none;"><input type="hidden" name="mPdID" id="mPdID" /></td>
+                                <td><input type="text" name="mPdName" id="mPdName" style="width:300px;" class="form-control"  disabled /></td>
+                            </tr>
+                            <tr>
+                                <td>จำนวนขั้นต่ำ</td>
+                                <td style="display:none;"></td>
+                                <td><input type="text" name="mMinStock" id="mMinStock" style="width:300px;" class="form-control"   /></td>
+                            </tr>
+                            <tr style="border-top:2px solid black;">
+                                <td style="vertical-align:middle;">ระยะจำนวน</td>
+                                <td style="display:none;"></td>
+                                <td style="vertical-align:middle;">
+                                    <input type="text" name="mPredictMonth" id="mPredictMonth" style="width:230px;display:unset;" class="form-control" />
+                                    เดือน
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="addM" name="addM" type="submit" data-target="#MinModal" class="btn btn-success">ตกลง</button>
+                        <a href="#" class="btn btn-warning" data-dismiss="modal">ยกเลิก</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

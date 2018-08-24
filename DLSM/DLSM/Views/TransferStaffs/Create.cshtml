@@ -1,0 +1,420 @@
+﻿@model DLSM.Models.TransferStaff
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+<link href="~/Content/datepicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker-thai.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.th.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#EffectiveDate').datepicker({
+            autoclose: true
+        });
+
+        //Date + time
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+        var output =
+            (('' + day).length < 2 ? '0' : '') + day + '/' +
+            (('' + month).length < 2 ? '0' : '') + month + '/' +
+            (parseInt(d.getFullYear()) + 543)
+        $("#EffectiveDate").val(output);
+
+        //Select Warehouse Find
+        $("i[name=SelW]").click(function () {
+            //console.log($(this));
+            var whCode = $(this).attr("whCode");
+            var whName = $(this).attr("whName");
+
+            $("#WhName").val(whName);
+            $("#FromWhID").val(whCode);
+
+            $("#WModal").modal("hide");
+        });
+
+        //Select Warehouse Find
+        $("i[name=SelTW]").click(function () {
+            //console.log($(this));
+            var twhCode = $(this).attr("twhCode");
+            var twhName = $(this).attr("twhName");
+
+            $("#ToWhName").val(twhName);
+            $("#ToWhID").val(twhCode);
+
+            $("#TWModal").modal("hide");
+        });
+
+        //Select Staff Find
+        $("i[name=SelST]").click(function () {
+            //console.log($(this));
+            var sCode = $(this).attr("sCode");
+            var sName = $(this).attr("sName");
+
+            $("#StName").val(sName);
+            $("#StID").val(sCode);
+
+            $("#STModal").modal("hide");
+        });
+
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    //console.log($(this).closest("tr").index());
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+
+        $("#btnSelWh").click(function (e) {
+            e.defaultPrevented;
+            var stid = $("#StID").val()
+            console.log(stid);
+            if ($("#StID").val() != "") {
+
+                //Get Staff in warehouse
+                $.ajax({
+                    type: "POST",
+                    url: "GetWH?StaffID=" + stid,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                        console.log(response.length);
+                        console.log(response[0]);
+                        if (response.length > 0) {
+                            $('#modSelWH tbody').empty();
+                            for (var x = 0; x < response.length; x++) {
+                                var newRow = '<tr>';
+                                newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                                newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelW" whCode="' + response[x].ID + '" whName="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selWH(event,this)" ></i></a>' + '</td>';
+                                newRow = newRow + '</tr>';
+
+                                $('#modSelWH tbody').append(newRow);
+                            }
+                        }
+                        $("#WModal").modal("show");
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+
+            } else {
+                alert("กรุณาเลือกเจ้าหน้าที่");
+            }
+        });
+
+        //Save Data
+        $("#btnSave").on("click", function () {
+            //e.preventDefault();
+
+            var isValid = true;
+
+            $("#inputDiv :input").each(function () {
+                //Validate form
+
+                var acceptElement = ["StID", "FromWhID", "ToWhID","EffectiveDate"];
+                // validate element if element in array
+                if ($.inArray($(this).attr("id"), acceptElement) !== -1) {
+
+                    if ($(this).val() == "") {
+                        var txtRequire = $(this).attr("data-val-required");
+                        var id = $(this).attr("id");
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html(txtRequire);
+
+                        isValid = false;
+                    } else {
+                        var id = $(this).attr("id");
+
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html("");
+                    }
+                }
+            });
+
+            if ($("#IsManager").val() == "0") {
+                var txtRequire = "กรุณาเลือกบทบาท";     //$(this).attr("data-val-required");
+                var id = "IsManager";
+
+                $("#inputDiv").find("[data-valmsg-for=" + id + "]").html(txtRequire);
+                isValid = false;
+            } else {
+                var id = $("#IsManager").attr("id");
+
+                $("#inputDiv").find("[data-valmsg-for=" + id + "]").html("");
+            }
+
+            if (!isValid) {
+                return false;
+            }
+
+            var EffectiveDate = formatDate($("#EffectiveDate").val());
+
+            var objJson = {
+                StID: $("#StID").val(),
+                FromWhID: $("#FromWhID").val(),
+                ToWhID: $("#ToWhID").val(),
+                IsManager: $("#IsManager :selected").val(),
+                EffectiveDate: EffectiveDate
+            };
+            console.log(objJson);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Create")",
+                data: JSON.stringify(objJson),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response == 'success') {
+                        alert("บันทึกข้อมูลเรียบร้อยแล้ว");
+                        window.location.href = "Index";
+                    }
+                    else {
+                        alert(response);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        });
+
+    })
+
+    function formatDate(date) {
+        var res = date.split("/");
+        return parseInt(res[2].trim()) - 543 + '-' + res[1].trim() + '-' + res[0].trim();
+    }
+
+    function selWH(event, t) {
+        var whCode = $(t).attr("whCode").trim();
+        var whName = $(t).attr("whName").trim();
+
+        $("#WhName").val(whName);
+        $("#FromWhID").val(whCode);
+
+        $("#WModal").modal("hide");
+    }
+</script>
+
+<style>
+
+    .form-l {
+        max-width: 600px;
+        width: 400px;
+    }
+</style>
+
+<h2>รายการโอนย้ายเจ้าหน้าที่</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "TransferStaffCreate" }))
+{
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-9">
+            <div name="inputDiv" id="inputDiv">
+                <div class="form-horizontal">
+                    <table class="table" style="min-width:70%">
+                        <tr>
+                            <td style="padding: 10px;">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    ชื่อเจ้าหน้าที่
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.StID, new { htmlAttributes = new { @class = "form-control", @style = "display:none;" } })
+                                        <input class="find form-l" name="StName" id="StName" disabled>
+                                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#STModal"><i class="fa fa-search fa-3"></i></a>
+                                        @Html.ValidationMessageFor(model => model.StID, "", new { @class = "text-danger", required = "required" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    จากสำนักงานขนส่ง
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.FromWhID, new { htmlAttributes = new { @class = "form-control", @style = "display:none;" } })
+                                        <input class="find form-l" name="WhName" id="WhName" disabled>
+                                        <a href="#" class="btn btn-success" id="btnSelWh" data-toggle="modal" style="vertical-align:unset;"><i class="fa fa-search fa-3"></i></a>
+                                        @Html.ValidationMessageFor(model => model.FromWhID, "", new { @class = "text-danger", required = "required" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    ไปสำนักงานขนส่ง
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.ToWhID, new { htmlAttributes = new { @class = "form-control", @style = "display:none;" } })
+                                        <input class="find form-l" name="ToWhName" id="ToWhName" disabled>
+                                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#TWModal"><i class="fa fa-search fa-3"></i></a>
+                                        @Html.ValidationMessageFor(model => model.ToWhID, "", new { @class = "text-danger", required = "required" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    ตำแหน่ง
+                                    <div class="col-md-10">
+                                        <select id="IsManager" name="IsManager" class="form-control">
+                                            <option value="0">----กรุณาเลือก----</option>
+                                            <option value="1">ผู้จัดการ</option>
+                                            <option value="2">เจ้าหน้าที่</option>
+                                        </select>
+                                        @Html.ValidationMessageFor(model => model.IsManager, "", new { @class = "text-danger", required = "required" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    วันที่
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control input-medium" data-provide="datepicker" data-date-language="th-th" id="EffectiveDate" name="EffectiveDate" placeholder="วว/ดด/ปปปป">
+                                        @Html.ValidationMessageFor(model => model.EffectiveDate, "", new { @class = "text-danger", required = "required" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="search-form" style="border-left:1px solid #777;height:400px;">
+                <div class="search">
+                    <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                        <li class="menu-item" style="padding-top:30px;">
+                            <a href="/TransferStaffs/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" id="btnSave" name="btnSave" type="button" style="width:130px;">บันทึก</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@*PopUp Warehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="WModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">จากสำนักงานขนส่ง</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelWH">
+                        <thead></thead>
+                        <tbody></tbody>                  
+                    </table>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*PopUp Warehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="TWModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">ไปสำนักงานขนส่ง</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelTWWH">
+                        @foreach (var w in ViewBag.ToWhID)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelTW" twhCode="@w.ID" twhName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="STModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">เจ้าหน้าที่</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelST" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelST">
+                        @foreach (var w in ViewBag.StID)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelST" sCode="@w.ID" sName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,72 @@
+﻿@model IEnumerable<DLSM.Models.TransferStaff>
+@{    
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+<table class="table table-hover">
+    <tbody id="SearchRow">
+        <tr>
+            <th>
+                วันที่มีผล
+            </th>
+
+            <th>
+                ชื่อเจ้าหน้าที่
+            </th>
+            <th>
+                จากคลัง
+            </th>
+            <th>
+                ไปคลัง
+            </th>
+            <th></th>
+        </tr>
+
+        @if (Model != null)
+        {
+            if (Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EffectiveDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FromWhName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ToWhName)
+                    </td>
+                    <td>
+                        <a href="\TransferStaffs\Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" style="text-align:center;">
+                        ไม่พบข้อมูล
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:center;">
+                        @Html.ActionLink("Back", "Index", "TransferStaffs")
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+
+

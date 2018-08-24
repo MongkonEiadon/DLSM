@@ -1,0 +1,331 @@
+﻿@model IEnumerable<DLSM.Models.Stock>
+@{
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+<script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+        $("#tbMain tbody tr").not(':first').each(function () {
+
+            var balance = $(this).find("td:eq(1)").text().replace(/,/g, '');
+            var minimum = $(this).find("td:eq(2)").text().replace(/,/g, '');
+
+            if (parseInt(balance) >= parseInt(minimum)) {
+                $(this).find("td:eq(1)").css("color", "#5cb85c"); //Green
+            } else {
+                //console.log($(this).find("td:eq(1)").children());
+
+                $(this).find("td:eq(1)").children().addClass("badge badge-pill badge-danger");
+
+                $(this).find("td:eq(1)").css("color", "#FF0000");	//Red
+                $("#tooltipsMsg").css("visibility", "visible");
+            }
+        });
+
+
+        $("#btnOpenModal").click(function (e) {
+            e.defaultPrevented;
+            //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetWH")",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#modSelWH tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelW" whCode="' + response[x].ID + '" whName="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selWH(event,this)" ></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#modSelWH tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+            $("#WModal").modal("show");
+
+        });
+       
+
+        $("i[name=SelP]").click(function () {
+            //console.log($(this));
+            var pCode = $(this).attr("pCode");
+            var pName = $(this).attr("pName");
+
+            $("#SearchP").val(pName);
+            $("#SearchIDP").val(pCode);
+
+            $("#PModal").modal("hide");
+        });
+
+        // set min qty product
+        $("i[name=popwh]").click(function () {
+
+            var ProductID = $(this).attr("PdID");
+            var ProductName = $(this).closest("tr").find("td:eq(0)").text().trim();
+            var MinQty = $(this).closest("tr").find("td:eq(2)").text().trim();
+            var WHID = $(this).attr("WHID") == 0 ? $("#SearchIDW").val() : $(this).attr("WHID");
+            var WHName = $("#SearchW").val();
+
+            $("#mWhID").val(WHID);
+            $("#mWhName").val(WHName);
+            $("#mPdID").val(ProductID);
+            $("#mPdName").val(ProductName);
+            $("#mMinStock").val(MinQty);
+
+            $("#MinModal").modal("show");
+        });
+
+
+        //Click ok in modal qty product
+        $("#addM").click(function () {
+
+            var WhID = $("#mWhID").val();
+            var PDID = $("#mPdID").val();
+            var MinStock = $("#mMinStock").val().replace(/,/g, '');
+            var Predict = ($("#mPredictMonth").val().trim() == "" ? 0 : parseInt($("#mPredictMonth").val()));
+
+            if ($("#mWhName").val().trim() == "" || $("#mPdName").val().trim() == "" || $("#mMinStock").val().trim() == "") {
+                return false;
+            } else {
+
+                $.ajax({
+                    type: "Get",
+                    url: "/Stocks/InsertMinStock?whid=" + WhID + "&pdid=" + PDID + "&minstock=" + MinStock + "&predict=" + Predict,
+                    contentType: "html",
+                    success: function (response) {
+                        console.log(response);
+                        if (response == "success") {
+                            $("#MinModal").modal("hide");
+                            alert("บันทึกสำเร็จ");
+                            $("#btnSearchW").click();
+                            //window.location.reload();
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+
+
+            }
+
+        });        
+
+
+        String.prototype.commafy = function () {
+            return this.replace(/(.)(?=(.{3})+$)/g, "$1,")
+        }
+        $.fn.digits = function () {
+            return this.each(function () {
+                $(this).val($(this).val().replace(/(,| )/g, '').commafy());
+            })
+        }
+
+        $("#mMinStock").bind('blur keyup', function () { $(this).digits(); }).digits();
+
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    //console.log($(this).closest("tr").index());
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+
+
+    });
+
+    function selWH(event, t) {
+        var whCode = $(t).attr("whCode").trim();
+        var whName = $(t).attr("whName").trim();
+
+        console.log(whCode);
+        console.log(whName);
+
+        $("#SearchW").val(whName);
+        $("#SearchIDW").val(whCode);
+
+        $("#WModal").modal("hide");
+    }
+</script>
+
+<style>
+    /*! Tooltips */
+    .tool {
+        position: relative;
+    }
+
+        .tool::before, .tool::after {
+            position: absolute;
+            opacity: 1;
+            z-index: 100;
+        }
+
+
+        .tool::before {
+            border-style: solid;
+            border-width: 1em .75em 0 .75em;
+            border-color: #ff7474 transparent transparent transparent;
+            bottom: -80%;
+            content: " ";
+        }
+
+        .tool::after {
+            background: #ff7474;
+            border-radius: .25em;
+            bottom: 10%;
+            color: white;
+            width: 17.5em;
+            padding: 1em;
+            margin-left: -8.75em;
+            content: attr(data-tip);
+        }
+</style>
+
+<div class="col-xs-12 col-sm-9">
+    <table class="table table-hover" id="tbMain">
+        <tbody id="SearchRow">
+            <tr>
+                <th style="text-align:center;">
+                    <span class="tool" data-tip="กรุณาดำเนินการกับรายการที่มี จำนวนน้อยกว่าเกณฑ์ขั้นต่ำ" style="visibility:hidden;" id="tooltipsMsg">&nbsp;</span>
+                </th>
+                <th style="text-align:center;">
+                    คงเหลือ
+                </th>
+                <th style="text-align:center;" colspan="2">
+                    ขั้นต่ำ
+                </th>
+                <th style="text-align:center;" colspan="1">
+                    การคาดคะเน
+                </th>
+                <th style="text-align:center;" colspan="1">
+                    เบิกจ่าย
+                </th>
+                <th style="text-align:center;" colspan="1">&nbsp;</th>
+            </tr>
+            @if (Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+            <tr style="vertical-align:middle;">
+                <td style="vertical-align:middle;">
+                    @Html.DisplayFor(modelItem => item.ProductName)&nbsp;
+                </td>
+                <td style="text-align:right;vertical-align:middle;" id="textQty" name="textQty">
+                    <span class="" style="font-size:medium;">@Html.DisplayFor(modelItem => item.Qty)</span>&nbsp;
+                </td>
+                <td style="text-align:right;vertical-align:middle;" id="textMin" name="textMin">
+                    @Html.DisplayFor(modelItem => item.MinStock)
+
+                </td>
+                <td>
+                    <i name="popwh" class="fa fa-fw fa-pencil-square fa-2x" data-toggle="modal" PdID="@item.PdID" WHID="@item.WhID" style="color: #0275d8;cursor:pointer;"></i>
+                </td>
+                <td style="text-align:right;vertical-align:middle;" id="textPredict" name="textPredict">
+                    @Html.DisplayFor(modelItem => item.Predict)
+
+                </td>
+                <td style="text-align:right;vertical-align:middle;" id="textTrans" name="textTrans">
+                    @Html.DisplayFor(modelItem => item.Transfer)
+                </td>
+                @if (item.Qty > 0)
+    {
+            <td style="vertical-align:middle;text-align:center;">
+                <a href="\Stocks\Details?pdid=@item.PdID&whid=@item.WhID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+            </td>
+}
+else
+{
+            <td> &nbsp;</td>
+}
+            </tr>
+                }
+            }
+            else
+            {
+        <tr>
+            <td colspan="7" style="text-align:center;">
+                ไม่พบข้อมูล
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5" style="text-align:center;">
+                @Html.ActionLink("Back", "Index", "Stocks")
+            </td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+    @*PopUp MinimumStock*@
+    <div class="container " style="text-align:left">
+        <div class="modal fade" id="MinModal">
+            <div class=" modal-dialog">
+                <div class=" modal-content">
+                    <div class=" modal-header">
+                        <h3 class="modal-title">จำนวนขั้นต่ำ</h3>
+                        <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    </div>
+
+                    <div class="modal-body" id="mypopupbody2">
+                        <table class="table" id="modSelM">
+                            <tbody>
+                                <tr>
+                                    <td>คลังวัสดุอุปกรณ์</td>
+                                    <td style="display:none;"><input type="hidden" name="mWhID" id="mWhID" /></td>
+                                    <td><input type="text" name="mWhName" id="mWhName" style="width:300px;" class="form-control" disabled /></td>
+                                </tr>
+                                <tr>
+                                    <td>วัสดุอุปกรณ์</td>
+                                    <td style="display:none;"><input type="hidden" name="mPdID" id="mPdID" /></td>
+                                    <td><input type="text" name="mPdName" id="mPdName" style="width:300px;" class="form-control" disabled /></td>
+                                </tr>
+                                <tr>
+                                    <td>จำนวนขั้นต่ำ</td>
+                                    <td style="display:none;"></td>
+                                    <td><input type="text" name="mMinStock" id="mMinStock" style="width:300px;" class="form-control" /></td>
+                                </tr>
+                                <tr style="border-top:2px solid black;">
+                                    <td style="vertical-align:middle;">ระยะจำนวน</td>
+                                    <td style="display:none;"></td>
+                                    <td style="vertical-align:middle;">
+                                        <input type="text" name="mPredictMonth" id="mPredictMonth" style="width:230px;display:unset;" class="form-control" />
+                                        เดือน
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="addM" name="addM" type="submit" data-target="#MinModal" class="btn btn-success">ตกลง</button>
+                        <a href="#" class="btn btn-warning" data-dismiss="modal">ยกเลิก</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+

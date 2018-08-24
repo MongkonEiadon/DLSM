@@ -1,0 +1,415 @@
+﻿@model DLSM.Models.Warehouse
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    SelectList PvID = ViewBag.Province;
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+
+
+@{
+    var IsMain = new SelectList(
+new List<SelectListItem>
+{
+                  new SelectListItem() { Value="1" ,Text="คลังหลัก" },
+                  new SelectListItem() { Value ="2", Text ="คลังทั่วไป" }
+
+}, "Value", "Text");
+}
+
+@if (Model.BackgroundPicture != null)
+{
+    <script>
+        if ('@Model.BackgroundPicture.ToString()' != "") {
+            $(document).ready(function () {
+                var image = new Image();
+                image.src = 'data:image/jpg;base64,@Model.BackgroundPicture.ToString()';
+                image.width = "300";
+                image.height = "100";
+                image.id = "imgB64";
+                image.name = "imgB64";
+                $("#divImg").append(image);
+            });
+        }
+    </script>
+}
+
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            if ($("#Email").val() != "") {
+                //email validation
+                $('input[name="Email"]').blur(function () {
+                    var email = $(this).val();
+                    var re = /[A-Z0-9._%+-]+@@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
+                    if (re.test(email)) {
+
+                    } else {
+                        alert('กรุณากรอก Email ให้ถูกต้อง');
+                    }
+                });
+            }
+
+            $("#btnDelete").on("click", function (id) {
+                var trans_id = $(this).attr("trans_id");
+                console.log(trans_id);
+                if (confirm("คุณต้องการจะลบข้อมูลใช่หรือไม่?") == true) {
+                    window.location.href = "/Warehouses/DeleteConfirmed?id=" + trans_id
+
+                }
+            });
+
+            $("#BG64").change(function () {
+                var formData = new FormData();
+                var totalFiles = document.getElementById("BG64").files.length;
+                for (var i = 0; i < totalFiles; i++) {
+                    var file = document.getElementById("BG64").files[i];
+
+
+                    formData.append("BG64", file);
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UploadImage", "Warehouses")',
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response == "error") {
+                            console.log("Upload Error");
+                        } else {
+                            //alert('upload succes!!');
+                            console.log(response);
+                            var image = new Image();
+                            image.src = 'data:image/jpg;base64,' + response;
+                            image.width = "300";
+                            image.height = "100";
+                            $("#divImg").empty();
+                            $("#divImg").append(image)
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+
+
+            //Save Data
+            $("#btnSave").on("click", function () {
+                //e.preventDefault();
+
+                var isValid = true;
+
+                $("#inputDiv :input").each(function () {
+                    //Validate form
+                    var acceptElement = ["Name", "Code", "IsMain","PvID"];
+                    // validate element if element in array
+                    if ($.inArray($(this).attr("id"), acceptElement) !== -1) {
+                        if ($(this).val() == "") {
+                            var txtRequire = $(this).attr("data-val-required");
+                            var id = $(this).attr("id");
+
+                            $("#inputDiv").find("[data-valmsg-for=" + id + "]").html(txtRequire);
+
+                            isValid = false;
+                        } else {
+                            var id = $(this).attr("id");
+
+                            $("#inputDiv").find("[data-valmsg-for=" + id + "]").html("");
+                        }
+                    }
+                });
+
+                if (!isValid) {
+                    return false;
+                }
+
+                if ($("#Email").val() != "") {
+                    // check valid email before save
+                    if (!isValidEmail()) {
+                        return false;
+                    }
+                }
+
+                var file;
+                var totalFiles = document.getElementById("BG64").files.length;
+                for (var i = 0; i < totalFiles; i++) {
+                    file = document.getElementById("BG64").files[i];
+                }
+
+                var objJson = {
+                    ID: $("#ID").val(),
+                    Code: $("#Code").val(),
+                    Name: $("#Name").val(),
+                    NameEN: $("#NameEN").val(),
+                    TelNo: $("#TelNo").val(),
+                    Email: $("#Email").val(),
+                    IsMain: $("#Ismain :selected").val(),
+                    Latitude: $("#Latitude").val(),
+                    Longitude: $("#Longitude").val(),
+                    PvID: $("#PvID :selected").val(),
+                    //LocationName: $("#LocationName").val(),
+                    BackgroundPicture: ($("#imgB64").length == 0 ? null : $("#imgB64").attr('src').replace("data:image/jpg;base64,", "")),
+
+
+                };
+                console.log(objJson);
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Edit")",
+                    data: JSON.stringify(objJson),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    processData: false,
+                    success: function (response) {
+                        console.log(response);
+
+                        if ($.isNumeric(response) && parseInt(response) > 0) {
+
+                            //Upload Signature
+                            // get file
+                            var formData = new FormData();
+                            var totalFiles = document.getElementById("BG64").files.length;
+                            for (var i = 0; i < totalFiles; i++) {
+                                var file = document.getElementById("BG64").files[i];
+                                formData.append("BG64", file);
+                            }
+                            if (totalFiles > 0) {
+                                $.ajax({
+                                    url: "UploadBG?WarehouseID=" + response,
+                                    type: 'POST',
+                                    data: formData,
+                                    processData: false,  // tell jQuery not to process the data
+                                    contentType: false,  // tell jQuery not to set contentType
+                                    success: function (data) {
+                                        console.log(data);
+
+                                        window.location.href = "/Warehouses/Index";
+                                    },
+                                    error: function (error) {
+                                        console.log(error);
+                                    }
+                                });
+                            } else {
+                                alert("บันทึกข้อมูลเรียบร้อยแล้ว");
+                                window.location.href = "/Warehouses/Index";
+                            }
+                        }
+                        else {
+                            alert(response);
+                        }
+
+                    },
+                    error: function (response) {
+                        alert(response)
+                    }
+                });
+
+            });
+
+
+        });
+
+
+        function isValidEmail() {
+            var ret = false;
+            var email = $('input[name = "Email"]').val();
+            var re = /[A-Z0-9._%+-]+@@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
+
+            if (re.test(email)) {
+                ret = true;
+            } else {
+                alert('กรุณากรอก Email ให้ถูกต้อง');
+                ret = false;
+            }
+
+            return ret;
+        }
+    
+</script>
+
+<style>
+    .form-custom {
+        max-width: 500px;
+        width: 300px;
+    }
+
+    .form-s {
+        width: 165px;
+    }
+</style>
+
+
+
+<h2>สำนักงานขนส่ง</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-9">
+            <div class="form-horizontal">
+                <div name="inputDiv" id="inputDiv">
+                    <table class="table" style="min-width:70%">
+                        <tr>
+                            <td style="padding: 10px;" colspan="2">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.HiddenFor(model => model.ID)
+
+                                <div class="form-group">
+                                    รหัสสำนักงานขนส่ง
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control form-s", @readonly = "readonly" , maxlength = "10" } })
+                                        @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger", required = "required" })
+                                    </div>
+                                </div>
+                            </td>
+                            </tr>
+                        <tr>
+                            <td style="padding: 10px;width:900px;" colspan="2">
+                                <div class="form-group" >
+                                    ชื่อสำนักงานขนส่ง (ภาษาไทย)
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control form-custom", maxlength = "255", onkeyup = "onlyThaichar(this.value,this)", style = "width:900px;max-width:900px;" } })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger", required = "required" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>                            
+                            <td style="padding: 10px;width:900px;" colspan="2">
+                                <div class="form-group">
+                                    ชื่อสำนักงานขนส่ง (ภาษาอังกฤษ)
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.NameEN, new { htmlAttributes = new { @class = "form-control form-custom", maxlength = "255", onkeyup = "onlyEngchar(this.value,this)", style = "width:900px;max-width:900px;" } })
+                                        @Html.ValidationMessageFor(model => model.NameEN, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    เบอร์โทรศัพท์
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.TelNo, new { htmlAttributes = new { @class = "form-control form-s", maxlength = "20", onkeyup = "onlyNumber(this.value,this)" } })
+                                        @Html.ValidationMessageFor(model => model.TelNo, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    e-mail
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control form-custom", maxlength = "255" } })
+                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;" colspan="2">
+                                <div class="form-group">
+                                    สถานะ
+                                    <div class="col-md-10">
+                                        @Html.DropDownList("Ismain", new SelectList(IsMain, "Value", "Text", Model.ID), new { @class = "form-control form-s", required = "required" })
+                                        @Html.ValidationMessageFor(model => model.IsMain, "", new { @class = "text-danger", required = "required" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    Latitude
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Latitude, new { htmlAttributes = new { @class = "form-control form-s", maxlength = "50" } })
+                                        @Html.ValidationMessageFor(model => model.Latitude, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    Longitude
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Longitude, new { htmlAttributes = new { @class = "form-control form-s", maxlength = "50" } })
+                                        @Html.ValidationMessageFor(model => model.Longitude, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    จังหวัด
+                                    <div class="col-md-10">
+                                        @Html.DropDownList("PvID", PvID, new Dictionary<string, object> { { "class", "form-control form-s" }, { "data-val-required", "กรุณาเลือกจังหวัด" } })
+                                        @Html.ValidationMessageFor(model => model.PvID, "", new { @class = "text-danger", required = "required" })
+                                    </div>
+                                </div>
+                            </td>
+                            @*<td style="padding: 10px;">
+                                <div class="form-group">
+                                    จังหวัด
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.LocationName, new { htmlAttributes = new { @class = "form-control", maxlength = "255" } })
+                                        @Html.ValidationMessageFor(model => model.LocationName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>*@
+                            <td style="padding: 10px;" colspan="2">
+                                <div class="form-group">
+                                    รูปจังหวัด
+                                    <div class="col-md-10">
+                                        <input type="file" name="BG64" id="BG64" class="form-control" />
+                                    </div>
+                                </div>
+                                <div id="divImg" style="position:relative;"></div>
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="search-form" style="border-left:1px solid #777;height:400px;">
+                <div class="search">
+                    <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                        <li class="menu-item" style="padding-top:30px;">
+                            @*<button class="btn btn-warning" type="submit" style="width:130px;"></button>*@
+                            <a href="/Warehouses/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="button" id="btnSave" name="btnSave" style="width:130px;">บันทึก</button>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-danger" type="button" id="btnDelete" trans_id="@Model.ID" value="Delete" style="width:130px;">ลบ</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+              
+    </div>
+            }

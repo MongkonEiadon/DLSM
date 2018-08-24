@@ -1,0 +1,389 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+
+    var MenuSettingAccess = ViewBag.MenuSettingAccess;
+}
+
+<div class="row" style="padding-left:50px;padding-right:50px;padding-top:50px;min-height:380px;">
+    @if (MenuSettingAccess.Contains("Report1"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report1" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานยอดคงเหลือวัสดุสิ้นเปลืองต่ำกว่ากำหนด</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report2"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report2" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานรายการรับวัสดุ</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report3"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report3" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานรายการรับวัสดุ(รายเดือน)</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report4"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report4" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานรายการรับวัสดุ(รายปี)</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report5"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report5" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานรายการจ่ายวัสดุ</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report6"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report6" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานรายการจ่ายวัสดุ(รายเดือน)</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report7"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report7" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานรายการจ่ายวัสดุ(รายปี)</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report8"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report8" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานความเคลื่อนไหววัสดุ</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report9"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report9" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานยอดคงเหลือวัสดุ</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report10"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report10" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานวัสดุระหว่างการเบิกจ่าย</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report11"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report11" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานการสั่งซื้อวัสดุ</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report12"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report12" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานสถานะการพิมพ์บัตร</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report13"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report13" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานบัตรยกเลิก</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report14"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report14" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานบัตรเสีย</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report15"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report15" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานยอดคงเหลือวัสดุสิ้นเปลือง</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report16"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report16" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานการเบิกจ่ายวัสดุสิ้นเปลือง</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report17"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report17" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานระหว่างการเบิกจ่าย<br />วัสดุสิ้นเปลือง</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report18"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report18" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานสรุปยอดการใช้งานบัตรพลาสติก<br /> แยกตามนายทะเบียน</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Report19"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report19" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานสรุปยอดการใช้งานบัตรพลาสติก<br /> แยกตามสถานะการพิมพ์บัตร</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+    
+
+    @if (MenuSettingAccess.Contains("Report20"))
+    {
+
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse o-hidden" style="background-color:#0093D1;">
+                <a href="\Report\Report20" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text-o "></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>รายงานสรุปยอดการใช้งานบัตรพลาสติก<br /> แยกตามสาขา</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+</div>

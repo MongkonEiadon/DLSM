@@ -1,0 +1,116 @@
+﻿@model DLSM.Models.Supplier
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Save Data
+        $("#btnSave").on("click", function () {
+            //e.preventDefault();
+
+            var isValid = true;
+            $("#inputDiv :input").each(function () {
+                //Validate form
+                var acceptElement = ["Name"];
+                // validate element if element in array
+                if ($.inArray($(this).attr("id"), acceptElement) !== -1) {
+                    if ($(this).val() == "") {
+                        var txtRequire = $(this).attr("data-val-required");
+                        var id = $(this).attr("id");
+
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html(txtRequire);
+
+                        isValid = false;
+                    } else {
+                        var id = $(this).attr("id");
+
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html("");
+                    }
+                }
+            });
+
+            if (!isValid) {
+                return false;
+            }
+
+            var objJson = {               
+                Name: $("#Name").val()
+            };
+            console.log(objJson);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Create")",
+                data: JSON.stringify(objJson),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response == 'success') {
+                        alert("บันทึกข้อมูลเรียบร้อยแล้ว");
+                        window.location.href = "Index";
+                    }
+                    else {
+                        alert(response);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        });
+
+    });
+</script>
+
+<h2>ผู้ประกอบการ</h2>
+
+@using (Html.BeginForm())
+{
+   
+<div class="row">
+    <div class="col-xs-12 col-sm-9">
+        <div name="inputDiv" id="inputDiv">
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    ชื่อผู้ประกอบการ
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" , maxlength = "255" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger", required = "required" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-left:1px solid #777;height:400px;">
+            <div class="search">
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                    <li class="menu-item" style="padding-top:30px;">
+                        @*<button class="btn btn-warning" type="submit" style="width:130px;"></button>*@
+                        <a href="/Suppliers/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                    </li>
+                    <li class="menu-item" style="padding-top:30px;">
+                        <button class="btn btn-success" type="button" name="btnSave" id="btnSave" style="width:130px;">บันทึก</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+ 
+</div>    
+
+}               

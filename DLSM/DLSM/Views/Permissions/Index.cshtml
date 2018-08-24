@@ -1,0 +1,93 @@
+﻿@model IEnumerable<DLSM.Models.Permission>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+}
+
+<script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+        $("#btnSearch").click(function () {
+            var searchtext = $("#SeachC").val();
+
+            $.ajax({
+                type: "Post",
+                url: "/Permissions/Search?SearchText=" + searchtext ,
+                contentType: "html",
+                success: function (response) {
+                    $("#SearchRow").html(response);
+                }
+            })
+        })
+    })
+
+
+</script>
+
+<h2>การจัดการสิทธิ์</h2>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-right:1px solid #777;height:400px;">
+            <div class="search">
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">ค้นหา</p>
+                    <input class="find" name="SeachC" id="SeachC" style="width:220px;">
+                </div>
+
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;">
+                    <li class="menu-item" style="padding-top:10px;">
+                        <button class="btn btn-primary" id="btnSearch" style="width:130px;" type="submit">สืบค้น</button>
+                    </li>
+
+                    <li class="menu-item" style="padding-top:10px;">
+                        @*<button class="btn btn-success" type="submit" style="width:130px;"></button>*@
+                        <a href="\Permissions\Create" style="color:white;width:130px;cursor:pointer;" class="btn btn-primary">เพิ่มรายการ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-9">
+        <table class="table table-hover">
+            <tbody id="SearchRow">
+                <tr>
+                    <th>
+                        กลุ่มผู้ใช้
+                    </th>
+
+                    <th></th>
+                </tr>
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+
+                                @Html.DisplayFor(modelItem => item.UserGroupName)
+                            </td>
+
+                            <td>
+                                <a href="\Permissions\Edit?id=@item.UserGroupID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

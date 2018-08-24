@@ -1,0 +1,99 @@
+﻿@model DLSM.Models.Topic
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Topic</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Subject)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subject)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Symptom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Symptom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cause)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cause)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Solving)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Solving)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TgID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TgID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LocationID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LocationID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Issue.Subject)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Issue.Subject)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TopicGroup.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TopicGroup.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

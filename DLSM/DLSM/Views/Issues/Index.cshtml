@@ -1,0 +1,136 @@
+﻿@model IEnumerable<DLSM.Models.Issue>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+<link href="~/Content/datepicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker-thai.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.th.js"></script>
+
+<script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+
+        $('#SeachFromDate').datepicker({
+            autoclose: true
+        });
+
+        $('#SeachToDate').datepicker({
+            autoclose: true
+        });
+
+        $("#btnSearchW").click(function () {
+            var searchFromDate = formatDate($("#SeachFromDate").val());
+            var searchToDate = formatDate($("#SeachToDate").val());
+            var searchtext = $("#SeachW").val();
+          
+            debugger
+            $.ajax({
+                type: "Post",
+                url: "/Issues/Search?SearchFromDate=" + searchFromDate + "&SearchToDate=" + searchToDate + "&SearchText=" + searchtext ,
+                contentType: "html",
+                success: function (response) {
+                    $("#SearchRow").html(response);
+                }
+            })
+        })
+
+        function formatDate(date) {
+            var res = date.split("/");
+            return parseInt(res[2]) - 543 + '-' + res[1] + '-' + res[0];
+        }
+
+    })
+ </script>
+<h2>แจ้งปัญหา</h2>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-right:1px solid #777;height:400px;">
+            <div class="search">
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">จากวันที่</p>
+                    <input type="text" class="form-control input-medium" data-provide="datepicker" data-date-language="th-th" id="SeachFromDate" style="width:220px;margin-left:30px;" placeholder="DD/MM/YYYY">
+                </div>
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">ถึงวันที่</p>
+                    <input type="text" class="form-control input-medium" data-provide="datepicker" data-date-language="th-th" id="SeachToDate" style="width:220px;margin-left:30px;" placeholder="DD/MM/YYYY">
+                </div>
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">ค้นหา</p>
+                    <input class="find" name="SeachW" id="SeachW" style="width:220px;">
+                </div>
+               
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;">
+                    <li class="menu-item" style="padding-top:10px;">
+                        <button class="btn btn-primary" id="btnSearchW" style="width:130px;" type="submit">สืบค้น</button>
+                    </li>
+
+                    <li class="menu-item" style="padding-top:10px;">
+                        @*<button class="btn btn-success" type="submit" style="width:130px;"></button>*@
+                        <a href="/Issues/Create" style="color:white;width:130px;cursor:pointer;" class="btn btn-primary">เพิ่มรายการ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-9">
+        <table class="table table-hover">
+            <tbody id="SearchRow">
+                <tr>
+                    <th>
+                        วันที่
+                    </th>
+                    <th>
+                        หัวเรื่อง
+                    </th>
+                    <th>
+                        หน่วยงาน
+                    </th>
+                    
+                    <th>ผู้แจ้ง</th>
+                    <th>
+                        สถานะ
+                    </th>
+                    <th></th>
+                </tr>
+
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreateDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Subject)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WhName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.CreateName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.StatusName)
+                            </td>
+                 
+
+                            <td>
+                                <a href="\Issues\Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

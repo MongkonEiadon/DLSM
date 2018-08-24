@@ -1,0 +1,140 @@
+﻿@model IEnumerable<DLSM.Models.Warehouse>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>*@
+
+<script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+        
+        var table = $('#tbMain').DataTable({
+            "dom": "rtp",
+            "pageLength": 20,
+            "language": {
+                "paginate": {
+                    "next": "ถัดไป",
+                    "previous": "ก่อนหน้า"
+                }
+            }
+        });
+
+        $("#btnSearchW").click(function () {
+            
+            var searchtext = $("#SeachW").val().trim();
+
+            if (searchtext != "") {
+                window.location.href = "/Warehouses/SearchWarehouse?SearchText=" + searchtext;
+            } else {
+                window.location.href = "/Warehouses/Index";
+            }
+            
+
+        });
+    })
+
+
+</script>
+
+<h2>สำนักงานขนส่ง</h2>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-right:1px solid #777;height:400px;">
+            <div class="search">
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">ค้นหา</p>
+                    <input class="find" name="SeachW" id="SeachW" style="width:220px;" value='@Request.QueryString["SearchText"]' />
+                </div>
+                
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;">
+                    <li class="menu-item" style="padding-top:10px;">
+                        <button class="btn btn-primary" id="btnSearchW" style="width:130px;" type="submit">สืบค้น</button>
+                    </li>
+
+                    <li class="menu-item" style="padding-top:10px;">
+                        @*<button class="btn btn-success" type="submit" style="width:130px;"></button>*@
+                        <a href="/Warehouses/Create" style="color:white;width:130px;cursor:pointer;" class="btn btn-primary">เพิ่มรายการ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-9">
+        <table class="table table-hover" id="tbMain">
+            <thead>
+                <tr>
+                    <th>
+                        รหัส
+                    </th>
+                    <th>
+                        ชื่อสำนักงานขนส่ง
+                    </th>
+                    <th>
+                        เบอร์โทรศัพท์
+                    </th>
+                    <th>
+                        e-mail
+                    </th>
+                    <th>
+                        สถานะ
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="SearchWarehRow">
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TelNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+
+                            @if (item.IsMain.Contains("1"))
+                            {
+                                <td>
+                                    คลังหลัก
+                                </td>
+                            }
+                            else if (item.IsMain.Contains("2"))
+                            {
+                                <td>
+                                    คลังทั่วไป
+                                </td>
+                            }
+                            <td>
+                                <a href="\Warehouses\Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                            </td>
+                        </tr>
+                        }
+                    }
+            </tbody>
+        </table>
+        </div>
+    </div>

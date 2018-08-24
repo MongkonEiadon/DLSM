@@ -1,0 +1,83 @@
+﻿@model DLSM.Models.TopicGroup
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+ 
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btnDelete").on("click", function (id) {
+            var trans_id = $(this).attr("trans_id");
+            console.log(trans_id);
+            if (confirm("คุณต้องการจะลบข้อมูลใช่หรือไม่?") == true) {
+                window.location.href = "/TopicGroups/DeleteConfirmed?id=" + trans_id
+
+            }
+        });
+
+    })
+</script>
+
+<h2>กลุ่มปัญหา</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-9">
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ID)
+
+                <div class="form-group">
+                    ชื่อกลุ่ม
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" , maxlength = "255" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger", required = "required" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="search-form" style="border-left:1px solid #777;height:400px;">
+                <div class="search">
+                    <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                        <li class="menu-item" style="padding-top:30px;">
+                            @*<button class="btn btn-warning" type="submit" style="width:130px;"></button>*@
+                            <a href="/TopicGroups/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="submit" style="width:130px;">บันทึก</button>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-danger" type="button" id="btnDelete" trans_id="@Model.ID" value="Delete" style="width:130px;">ลบ</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+         

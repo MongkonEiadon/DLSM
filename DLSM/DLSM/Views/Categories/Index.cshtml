@@ -1,0 +1,107 @@
+﻿@model IEnumerable<DLSM.Models.Category>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+<script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+        $("#btnSearch").click(function () {
+            var searchtext = $("#SeachC").val().trim();
+
+            if (searchtext != "") {
+                window.location.href = "/Categories/SearchCategory?SearchText=" + searchtext;
+            } else {
+                window.location.href = "/Categories/Index";
+            }
+
+
+            //$.ajax({
+            //    type: "Post",
+            //    url: "/Categories/SearchCategory?SearchText=" + searchtext,
+            //    contentType: "html",
+            //    success: function (response) {
+            //        $("#SearchCate").html(response);
+            //    }
+            //});
+        })
+    })
+
+
+</script>
+
+
+<h2>กลุ่มวัสดุ</h2>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-right:1px solid #777;height:400px;">
+            <div class="search" >
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">ค้นหา</p>
+                    <input class="find" name="SeachC" id="SeachC" style="width:220px;">
+                </div>
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;">
+                    <li class="menu-item" style="padding-top:10px;">
+                        <button class="btn btn-primary" id="btnSearch" style="width:130px;" type="submit">สืบค้น</button>
+                    </li>
+                     
+                    <li class="menu-item" style="padding-top:10px;">
+                        @*<button class="btn btn-success" type="submit" style="width:130px;"></button>*@
+                        <a href="/Categories/Create" style="color:white;width:130px;cursor:pointer;" class="btn btn-primary">เพิ่มรายการ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-9">
+        <table class="table table-hover" id="SearchCate">
+            <tbody >
+                <tr>
+                    <th>
+                        รหัส
+                    </th>
+                    <th>
+                        ชื่อกลุ่ม
+                    </th>
+                    <th></th>
+                </tr>
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+
+                                <a href="/Categories/Edit?id=@item.ID" ><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.ID })*@
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

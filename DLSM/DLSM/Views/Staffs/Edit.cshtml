@@ -1,0 +1,1534 @@
+﻿@model DLSM.Models.Staff
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    SelectList UgID = ViewBag.UgID;
+    SelectList WarehouseList = ViewBag.Warehouselist;
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+
+@if (Model.Signature != null)
+{
+    <script>
+        if ('@Model.Signature.ToString()' != "") {
+            $(document).ready(function () {
+                var image = new Image();
+                image.src = 'data:image/jpg;base64,@Model.Signature.ToString()';
+                image.width = "458";
+                image.height = "60";
+                image.id = "imgB64";
+                image.name = "imgB64";
+                $("#divImg").append(image);
+            });
+        }
+    </script>
+
+}
+
+@{
+    var AuthorityType = new SelectList(
+        new List<SelectListItem>
+        {
+                  new SelectListItem() { Value="" ,Text="----กรุณาเลือก----" },
+                  new SelectListItem() { Value="0" ,Text="ใบอนุญาตขับรถ" },
+                  new SelectListItem() { Value ="1",Text ="ใบอนุญาตผู้ประจำรถ" },
+                  new SelectListItem() { Value ="2",Text ="ใบอนุญาตขับรถและใบอนุญาตผู้ประจำรถ" }
+        }, "Value", "Text");
+}
+
+<script src="~/Scripts/jquery.tabletojson.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var table = $('#tbWarehouse').DataTable({
+            "dom": '<"toolbar">frtp',
+            "pageLength": 10,
+            "language": {
+                "paginate": {
+                    "next": "ถัดไป",
+                    "previous": "ก่อนหน้า"
+                },
+                "zeroRecords": "ไม่พบข้อมูล",
+                "searchPlaceholder": "คำค้น",
+                "search": ""
+            },
+            "ordering": false,
+            "stateSave": true
+        });
+
+        var allPages = table.cells().nodes();
+
+
+        // add check all
+        var c = '<input type="checkbox" id="chkAll" name="chkAll" > เลือกทั้งหมด&nbsp;';
+        c = c + '<button id="chkAll1" isManager="1" name="btnChkAll" class="btn btn-info" style="padding:1px;">ผู้จัดการ</button>&nbsp;';
+        c = c + '<button id="chkAll2" isManager="2" name="btnChkAll" class="btn btn-info" style="padding:1px;">เจ้าหน้าที่</button>&nbsp;';
+        c = c + '<button id="chkAll3" isManager="3" name="btnChkAll" class="btn btn-info" style="padding:1px;">ผู้ตรวจสอบ</button>&nbsp;';
+
+        $("div.toolbar").html(c);
+
+        $("#chkAll").on("click", function () {
+            if ($("#chkAll").prop("checked") == true) {
+                $(allPages).find('input[name=chkWH]').prop('checked', true);
+            } else {
+                $(allPages).find('input[name=chkWH]').prop('checked', false);
+                $(allPages).find('select[name=IsManagerWH]').prop('selectedIndex', 0);
+            }
+
+            //console.log(allPages);
+        });
+
+        $("button[name=btnChkAll]").on("click", function () {
+
+            var btnClick = $(this);
+            var isManager = $(this).attr("isManager").toString();
+
+            if ($("#chkAll").prop("checked")) {
+                $(allPages).find('select[name=IsManagerWH]').val(isManager);
+            } else {
+                $(allPages).find('select[name=IsManagerWH]').val(isManager);
+            }
+        });
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+
+        $("#btnAddWarehouse").click(function (e) {
+            $("#mdAddWarehouse").modal("show");
+        });
+
+        $("#searchWarehouseTxt").keyup(function () {
+
+            $("#trNotFound").hide();
+
+            var txtSearch = $(this).val().trim();
+            var found = 0;
+
+            $("#tbWarehouse tbody tr").each(function () {
+
+                if ($(this).id != "trNotFound") {
+
+                    var whTxt = $(this).find("td:eq(1)").text().trim().toString();
+                    //console.log(whTxt);
+
+                    if (whTxt.indexOf(txtSearch) >= 0) {
+                        $(this).show();
+                        found++;
+                    } else {
+                        $(this).hide();
+                    }
+                }
+
+            });
+
+            if (found == 0) {
+                $("#trNotFound").show();
+            } else {
+                $("#trNotFound").hide();
+            }
+
+
+        });
+
+
+        $("#addWHRow").click(function () {
+
+            var canAdd = 1;
+
+            if ($(allPages).find('input[name=chkWH]:checked').length <= 0) {
+                alert("กรุณาเลือกสำนักงานขนส่งที่สามารถปฏิบัติงานได้");
+                return false;
+            }
+
+            // Check validate & duplicate
+            $(allPages).find('input[name=chkWH]:checked').closest("tr").each(function () {
+
+                var chk = $(this).find('input[name=chkWH]:checked');
+
+                if ($(this).id != "trNotFound" && chk.length > 0) {
+
+
+                    var ID = NumID();
+                    var WarehouseID = chk.val().trim();
+                    var WarehouseName = $(this).find("td:eq(1)").text().trim();
+                    var IsManagerID = $(this).find("td:eq(2)").find("select#IsManagerWH").find(":selected").val();
+                    var IsManagerName = $(this).find("td:eq(2)").find("select#IsManagerWH").find(":selected").text().trim();
+
+
+                    if ((WarehouseID == "" || IsManagerID == "") ||
+                        (WarehouseID == null || WarehouseID == undefined) ||
+                        (IsManagerID == null || IsManagerID == undefined)) {
+
+                        if (IsManagerID == "") {
+                            //$("#errMsgIsManager").html("กรุณาเลือกบทบาท");
+                            alert("กรุณาเลือกบทบาท");
+                            canAdd = 0;
+                        } /*else {
+                            //$("#errMsgIsManager").html("");
+                        }*/
+
+
+                        if (WarehouseID == "") {
+                            //$("#errMsgWarehouseList").html("กรุณาเลือกสำนักงานขนส่ง");
+                            alert("กรุณาเลือกสำนักงานขนส่ง");
+                            canAdd = 0;
+                        } /*else {
+                            $("#errMsgWarehouseList").html("");
+                        }*/
+
+                        //$("#btnAddWare").modal("hide");
+                        return false;
+                    }
+
+
+                    //
+                    if ($("#tbMain tbody tr").length <= 0) {
+                        //empty row add only
+                    }
+                    else {
+                        // check data in table before add
+                        $("#tbMain tbody tr").each(function () {
+
+                            var tr = $(this);
+                            var Warehouse = tr.find('td:eq(1)').text().trim();
+                            var IsManager = tr.find('td:eq(3)').text().trim();
+
+                            //console.log(WarehouseID + '|' + Warehouse + '|' + IsManager + '|' + IsManagerID);
+
+                            if (Warehouse == WarehouseID && IsManager == IsManagerID) {
+                                alert("มีสำนักงานขนส่งที่ปฏิบัติงานได้ และ บทบาทแล้ว");
+                                canAdd = 0;
+                            }
+
+                            if (IsManagerID == "3") { // ผู้ตรวจสอบ ต้องไม่มี เจ้าหน้าที่ และผู้จัดการ
+                                if (Warehouse == WarehouseID && (IsManager == "1" || IsManager == "2")) {
+                                    alert("ไม่สามารถเพิ่ม " + IsManagerName + "ได้ เนื่องจากมีตำแหน่ง ผู้จัดการ หรือ เจ้าหน้าที่ในคลังนี้แล้ว");
+                                    canAdd = 0;
+                                }
+                            } else if (IsManagerID == "1" || IsManagerID == "2") {  // เจ้าหน้าที่ หรือ ผู้จัดการ ต้องไม่มี ผู้ตรวจสอบ
+
+                                if (Warehouse == WarehouseID && (IsManager == "3")) {
+                                    alert("ไม่สามารถเพิ่ม " + IsManagerName + "ได้ เนื่องจากมีตำแหน่ง ผู้ตรวจสอบ แล้ว");
+                                    canAdd = 0;
+                                }
+
+                            }
+
+                        });
+                    }
+
+
+                    if (canAdd == 0) {
+                        return false;
+                    }
+                }
+            });
+
+
+            if (canAdd == 0) {
+                return false;
+            }
+
+            // All warehouse can add
+            $(allPages).find('input[name=chkWH]:checked').closest("tr").each(function () {
+
+                var chk = $(this).find('input[name=chkWH]:checked');
+
+                if ($(this).id != "trNotFound" && chk.length > 0) {
+
+                    var ID = NumID();
+                    var WarehouseID = chk.val().trim();
+                    var WarehouseName = $(this).find("td:eq(1)").text().trim();
+                    var IsManagerID = $(this).find("td:eq(2)").find("select#IsManagerWH").find(":selected").val();
+                    var IsManagerName = $(this).find("td:eq(2)").find("select#IsManagerWH").find(":selected").text().trim();
+
+                    var btnEdit = '<a href="#"  data-toggle="modal" data-target="#modalEdit" class="btnEdit"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+                    var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+
+                    var row = "";
+                    row += '<tr>';
+                    row += '<td align="center" style="text-align:center;display:none;">' + ID + '</td>';
+                    row += '<td align="center" style="text-align:center;display:none;">' + WarehouseID + '</td>';
+                    row += '<td align="center" style="text-align:center">' + WarehouseName + '</td>';
+                    row += '<td align= "center" style= "text-align:center;display:none;" >' + IsManagerID + '</td>';
+                    row += '<td align= "center" style= "text-align:center" >' + IsManagerName + '</td>';
+                    row += '<td align="center" style="text-align:center">' + btnEdit + '</td>';
+                    row += '<td align="center" style="text-align:center">' + btnDel + '</td>';
+                    row += '</tr >';
+
+
+
+                    if ($("#tbMain tbody tr").length <= 0) {
+                        //empty row add only
+
+                        $("#tbMain > tbody").last().append(row);
+
+                        $("#WarehouseList").val("");
+                        $("#IsManager").val("");
+
+                    }
+                    else {
+                        if (canAdd == 1) {
+                            // can append row
+                            $("#tbMain > tbody").last().append(row);
+
+                            $("#WarehouseList").val("");
+                            $("#IsManager").val("");
+
+                        }
+                    }
+                }
+
+
+            });
+
+            if (canAdd == 1) {
+
+                $("#tbWarehouse tbody tr").each(function () {
+                    if ($(this).id != "trNotFound") {
+                        $(this).show();
+                    }
+                });
+
+                $("#trNotFound").hide();
+
+                //Close Modal
+                $("#mdAddWarehouse").modal("hide");
+                clear_form_elements("mdAddWarehouse");
+            }
+
+        });
+
+
+        $("#showPass").change(function () {
+            var checked = $(this).is(":checked");
+            if (checked) {
+                $("#NewUserPassword").attr("type", "text");
+            } else {
+                $("#NewUserPassword").attr("type", "password");
+            }
+        });
+
+        $("#btnAddAllWare").click(function (e) {
+
+            e.preventDefault();
+
+            $('#cover').show();
+
+            $("#WarehouseList > option").each(function () {
+                //console.log(this.text + ' ' + this.value);
+
+                if (this.value != "") {
+
+                    var ID = NumID();
+                    var WarehouseID = this.value;
+                    var WarehouseName = this.text;
+                    var IsManagerID = $('#IsManager option[value="2"]').val();
+                    var IsManagerName = $('#IsManager option[value="2"]').text();
+
+                    var btnEdit = '<a href="#"  data-toggle="modal" data-target="#modalEdit" class="btnEdit"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+                    var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+
+                    var row = "";
+                    row += '<tr>';
+                    row += '<td align="center" style="text-align:center;display:none;">' + ID + '</td>';
+                    row += '<td align="center" style="text-align:center;display:none;">' + WarehouseID + '</td>';
+                    row += '<td align="center" style="text-align:center">' + WarehouseName + '</td>';
+                    row += '<td align= "center" style= "text-align:center;display:none;" >' + IsManagerID + '</td>';
+                    row += '<td align= "center" style= "text-align:center" >' + IsManagerName + '</td>';
+                    row += '<td align="center" style="text-align:center">' + btnEdit + '</td>';
+                    row += '<td align="center" style="text-align:center">' + btnDel + '</td>';
+                    row += '</tr >';
+
+                    if ($("#tbMain tbody tr").length <= 0) {
+                        //empty row add only
+
+                        $("#tbMain > tbody").last().append(row);
+
+                        $("#WarehouseList").val("");
+                        $("#IsManager").val("");
+
+
+                        //Close Modal
+                        $("#btnAddWare").modal("hide");
+                    }
+                    else {
+                        var canAdd = 1;
+                        // check data in row before add
+                        $("#tbMain tbody tr").each(function () {
+                            var tr = $(this).closest("tr");
+                            var Warehouse = tr.find('td:eq(1)').text().trim();
+                            var IsManager = tr.find('td:eq(3)').text().trim();
+
+                            if (Warehouse == WarehouseID && IsManager == IsManagerID) {
+                                //alert("มีคลังที่ปฏิบัติงานได้ และ บทบาทแล้ว");
+                                canAdd = 0;
+                            }
+                        });
+
+                        if (canAdd == 1) {
+                            // can append row
+                            $("#tbMain > tbody").last().append(row);
+
+                        }
+                    }
+                }
+
+            });
+
+            $('#cover').fadeOut(500);
+        });
+
+        $("#btnDelAllWare").click(function (e) {
+            e.preventDefault();
+            $("#tbMain tbody").empty();
+        });
+
+        //email validation
+        $('input[name="Email"]').blur(function () {
+            var email = $(this).val();
+            var re = /[A-Z0-9._%+-]+@@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
+            if (re.test(email)) {
+
+            } else {
+                if (email.length != 0) {
+                    alert('กรุณากรอก Email ให้ถูกต้อง');
+                }
+            }
+        });
+
+
+        $("#btnDelete").on("click", function (id) {
+            var trans_id = $(this).attr("trans_id");
+            if (confirm("คุณต้องการจะลบข้อมูลใช่หรือไม่?") == true) {
+                window.location.href = "/Staffs/DeleteConfirmed?id=" + trans_id
+
+            }
+        });
+
+
+        $("#addRow").on("click", function () {
+            var ID = NumID();
+            var WarehouseID = $("#WarehouseList :selected").val().trim();
+            var WarehouseName = $("#WarehouseList :selected").text();
+            var IsManagerID = $("#IsManager :selected").val().trim();
+            var IsManagerName = $("#IsManager :selected").text();
+
+            if (WarehouseID == "" || IsManagerID == "") {
+
+                if (WarehouseID == "" || IsManagerID == "") {
+
+                    if (IsManagerID == "") {
+                        $("#errMsgIsManager").html("กรุณาเลือกบทบาท");
+                    } else {
+                        $("#errMsgIsManager").html("");
+                    }
+
+
+                    if (WarehouseID == "") {
+                        $("#errMsgWarehouseList").html("กรุณาเลือกสำนักงานขนส่ง");
+                    } else {
+                        $("#errMsgWarehouseList").html("");
+                    }
+
+                    //$("#btnAddWare").modal("hide");
+                    return false;
+                }
+
+                //$("#btnAddWare").modal("hide");
+                return false;
+            }
+
+            var btnEdit = '<a href="#"  data-toggle="modal" data-target="#modalEdit" class="btnEdit"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+            var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+
+            var row = "";
+            row += '<tr>';
+            row += '<td align="center" style="text-align:center;display:none;">' + ID + '</td>';
+            row += '<td align="center" style="text-align:center;display:none;">' + WarehouseID + '</td>';
+            row += '<td align="center" style="text-align:center">' + WarehouseName + '</td>';
+            row += '<td align= "center" style= "text-align:center;display:none;" >' + IsManagerID + '</td>';
+            row += '<td align= "center" style= "text-align:center" >' + IsManagerName + '</td>';
+            row += '<td align="center" style="text-align:center">' + btnEdit + '</td>';
+            row += '<td align="center" style="text-align:center">' + btnDel + '</td>';
+            row += '</tr >';
+
+
+
+            if ($("#tbMain tbody tr").length <= 0) {
+                //empty row add only
+
+                $("#tbMain > tbody").last().append(row);
+
+                $("#WarehouseList").val("");
+                $("#IsManager").val("");
+
+
+                //Close Modal
+                $("#btnAddWare").modal("hide");
+            }
+            else {
+                var canAdd = 1;
+                // check data in row before add
+                $("#tbMain tbody tr").each(function () {
+                    var tr = $(this).closest("tr");
+                    var Warehouse = tr.find('td:eq(1)').text().trim();
+                    var IsManager = tr.find('td:eq(3)').text().trim();
+
+                    //console.log(WarehouseID + '|' + Warehouse + '|' + IsManager + '|' + IsManagerID);
+
+                    if (Warehouse == WarehouseID && IsManager == IsManagerID) {
+                        alert("มีสำนักงานขนส่งที่ปฏิบัติงานได้ และ บทบาทแล้ว");
+                        canAdd = 0;
+                    }
+
+
+                    if (IsManagerID == "3") { // ผู้ตรวจสอบ ต้องไม่มี เจ้าหน้าที่ และผู้จัดการ
+                        if (Warehouse == WarehouseID && (IsManager == "1" || IsManager == "2")) {
+                            alert("ไม่สามารถเพิ่ม " + IsManagerName + "ได้ เนื่องจากมีตำแหน่ง ผู้จัดการ หรือ เจ้าหน้าที่ในคลังนี้แล้ว");
+                            canAdd = 0;
+                        }
+                    } else if (IsManagerID == "1" || IsManagerID == "2") {  // เจ้าหน้าที่ หรือ ผู้จัดการ ต้องไม่มี ผู้ตรวจสอบ
+
+                        if (Warehouse == WarehouseID && (IsManager == "3")) {
+                            alert("ไม่สามารถเพิ่ม " + IsManagerName + "ได้ เนื่องจากมีตำแหน่ง ผู้ตรวจสอบ แล้ว");
+                            canAdd = 0;
+                        }
+
+                    }
+
+
+
+                });
+
+
+                if (canAdd == 1) {
+                    // can append row
+                    $("#tbMain > tbody").last().append(row);
+
+                    $("#WarehouseList").val("");
+                    $("#IsManager").val("");
+
+                    //Close Modal
+                    $("#btnAddWare").modal("hide");
+                }
+            }
+        });
+
+
+
+        $("#tbMain").on('click', '.remove', function () {
+            $(this).closest("tr").remove();
+
+        });
+
+        //click edit in edit table pass value to modalEdit
+        $("#tbMain tbody").on('click', '.btnEdit', function () {
+            //When press btn Update assign value from element to parameter
+
+            console.log($(this).closest("tr").index());
+
+            var rowIndex = $(this).closest("tr").index();
+
+            var RowNo = $(this).closest("tr").find('td:eq(0)').text();
+            var WarehouseID = $(this).closest("tr").find('td:eq(1)').text();
+            var WarehouseName = $(this).closest("tr").find('td:eq(2)').text();
+            var IsManagerID = $(this).closest("tr").find('td:eq(3)').text();
+            var IsManagerName = $(this).closest("tr").find('td:eq(4)').text();
+
+            //console.log(WarehouseID + '|' + WarehouseName + '|' + IsManagerID + '|' + IsManagerName);
+
+            $("#editID").val(RowNo);
+            $("#editWarehouseList").val(WarehouseID);
+            $("#editIsManager").val(IsManagerID);
+
+        });
+
+        $("#updateRow").on('click', function () {
+            //console.log($(this));
+
+            //get value from edit form
+            var editRowNo = $("#editID").val().trim();
+            var editWarehouseID = $("#editWarehouseList :selected").val().trim();
+            var editWarehouseName = $("#editWarehouseList :selected").text();
+            var editIsManagerID = $("#editIsManager :selected").val().trim();
+            var editIsManagerName = $("#editIsManager :selected").text();
+
+            if (editWarehouseID == "" && editIsManagerID == "") {
+                $("#modalEdit").modal("hide");
+                return false;
+            }
+
+            //console.log(editRowNo + '|' + editWarehouseID + '|' + editWarehouseName + '|' + editIsManagerID + '|' + editIsManagerName);
+
+            //gen new row
+            var btnEdit = '<a href="#"  data-toggle="modal" data-target="#modalEdit" class="btnEdit"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+            var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+            var rowEdit = "";
+            rowEdit += '<tr>';
+            rowEdit += '<td align="center" style="text-align:center;display:none;">' + editRowNo + '</td>';
+            rowEdit += '<td align="center" style="text-align:center;display:none;">' + editWarehouseID + '</td>';
+            rowEdit += '<td align="center" style="text-align:center">' + editWarehouseName + '</td>';
+            rowEdit += '<td align= "center" style= "text-align:center;display:none;" >' + editIsManagerID + '</td>';
+            rowEdit += '<td align= "center" style= "text-align:center" >' + editIsManagerName + '</td>';
+            rowEdit += '<td align="center" style="text-align:center">' + btnEdit + '</td>';
+            rowEdit += '<td align="center" style="text-align:center">' + btnDel + '</td>';
+            rowEdit += '</tr >';
+
+
+            // find row to update by column ID
+            var rowToEdit = $("#tbMain tbody tr").find("td:eq(0):contains('" + editRowNo + "')").closest("tr");
+            var rowIndex = rowToEdit.index();
+
+            var canAdd = 1;
+            // check duplicate row
+            $("#tbMain tbody tr").each(function () {
+
+                // same row no check
+                if (rowIndex != $(this).closest("tr").index()) {
+
+                    var tr = $(this).closest("tr");
+
+                    var editIndex = tr.index();
+                    var Warehouse = tr.find('td:eq(1)').text().trim();
+                    var IsManager = tr.find('td:eq(3)').text().trim();
+
+                    console.log(rowIndex + '|' + editRowNo + '|' + Warehouse + '|' + editWarehouseID + '|' + IsManager + '|' + editIsManagerID);
+
+                    if (rowIndex != editRowNo && Warehouse == editWarehouseID && IsManager == editIsManagerID) {
+                        alert("มีสำนักงานขนส่งที่ปฏิบัติงานได้ และ บทบาทแล้ว");
+                        canAdd = 0;
+                    }
+
+                    if (editIsManagerID == "3") { // ผู้ตรวจสอบ ต้องไม่มี เจ้าหน้าที่ และผู้จัดการ
+                        if (Warehouse == editWarehouseID && (IsManager == "1" || IsManager == "2")) {
+                            alert("ไม่สามารถเพิ่ม " + editIsManagerName + "ได้ เนื่องจากมีตำแหน่ง ผู้จัดการ หรือ เจ้าหน้าที่ในคลังนี้แล้ว");
+                            canAdd = 0;
+                        }
+                    } else if (editIsManagerID == "1" || editIsManagerID == "2") {  // เจ้าหน้าที่ หรือ ผู้จัดการ ต้องไม่มี ผู้ตรวจสอบ
+
+                        if (Warehouse == editWarehouseID && (IsManager == "3")) {
+                            alert("ไม่สามารถเพิ่ม " + IsManagerName + "ได้ เนื่องจากมีตำแหน่ง ผู้ตรวจสอบ แล้ว");
+                            canAdd = 0;
+                        }
+
+                    }
+                }
+
+            });
+
+
+            // can append row
+            if (canAdd == 1) {
+                // replace old row with new row
+                rowToEdit.replaceWith(rowEdit);
+
+                //clear modal edit
+                $("#editID").val("");
+                $("#editIsManager").val("");
+
+                //Close Modal
+                $("#modalEdit").modal("hide");
+            } else {
+                //clear modal edit
+                $("#editID").val("");
+                $("#editIsManager").val("");
+
+                //Close Modal
+                $("#modalEdit").modal("hide");
+            }
+
+        });
+
+        @*var btnOpenModalClick = function (e) {
+            e.defaultPrevented;
+            //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetAuthorize")",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.length > 0) {
+                        $('#modSelA tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].AuthorizeNameTH + ' ' + response[x].AuthorizeLastNameTH + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelA" ACode="' + response[x].ID + '" ATitleTH="' + response[x].TitleTH + '" ANameTH="' + response[x].AuthorizeNameTH + '" ALastNameTH="' + response[x].AuthorizeLastNameTH + '" ATitleEN="' + response[x].TitleEN + '" ANameEN="' + response[x].AuthorizeNameEN + '" ALastNameEN="' + response[x].AuthorizeLastNameEN + '" AAuthorityType="' + response[x].AuthorityType + '" ASignature="' + response[x].Signature +'" class="fa fa-fw fa-pencil-square fa-2x" onclick="selA(event,this)" ></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#modSelA tbody').append(newRow);
+                        }
+                    }
+                    $("#AModal").modal("show");
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        }
+
+        $("#btnOpenModal").on("click", "", btnOpenModalClick);*@
+
+
+        //Save Data
+        $("#btnSave").on("click", function () {
+            //e.preventDefault();
+            var isValid = true;
+            //Validate form
+            $("#inputDiv :input").each(function () {
+
+                var acceptElement = ["Name", "UgID", "UserLogin","AuthorityType"];
+                // validate element if element in array
+                if ($.inArray($(this).attr("id"), acceptElement) !== -1) {
+                    if ($(this).val() == "") {
+                        var txtRequire = $(this).attr("data-val-required");
+                        var id = $(this).attr("id");
+
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html(txtRequire);
+
+                        isValid = false;
+                    } else {
+                        var id = $(this).attr("id");
+
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html("");
+                    }
+                }
+            });
+
+            if ($("#UgID").val() == "@ViewBag.ConfigAuthorize" && $("#AuthorityType").val() == "") {
+                    alert("กรุณาเลือกสิทธิการออกใบอนุญาต");
+
+                    isValid = false;
+            }
+
+            //Warehouse table
+            if ($("#tbMain tbody tr").length <= 0) {
+                alert("กรุณาเพิ่มสำนักงานขนส่งที่ปฏิบัติงานได้");
+
+                isValid = false;
+            }
+
+            if (!isValid) {
+                return false;
+            }
+
+            // check valid email before save
+            if (!isValidEmail()) {
+                return false;
+            }
+
+            var table = $('#tbMain').tableToJSON(
+                {
+                    headings: ['WhID', 'IsManager'],
+                    ignoreColumns: [0, 2, 4],
+                });
+
+
+            var file;
+            var totalFiles = document.getElementById("SignatureB64").files.length;
+            for (var i = 0; i < totalFiles; i++) {
+                file = document.getElementById("SignatureB64").files[i];
+            }
+
+            var objJson = {
+                ID: @Model.ID,
+                Name: $("#Name").val(),
+                UserLogin: $("#UserLogin").val(),
+                UserPassword: $("#UserPassword").val(),
+                NewUserPassword: $("#NewUserPassword").val(),
+                UgID: $("#UgID :selected").val(),
+                TelNo: $("#TelNo").val(),
+                Email: $("#Email").val(),
+                IdCard: $("#IdCard").val(),
+                RefAuthorize: $("#RefAuthorize").val(),
+                AuthorizeNameTH: $("#AuthorizeNameTH").val(),
+                AuthorizeNameEN: $("#AuthorizeNameEN").val(),
+                AuthorizeLastNameTH: $("#AuthorizeLastNameTH").val(),
+                AuthorizeLastNameEN: $("#AuthorizeLastNameEN").val(),
+                TitleTH: $("#TitleTH").val(),
+                TitleEN: $("#TitleEN").val(),
+                AuthorizeIdCard: $("#AuthorizeIdCard").val(),
+                AuthorityType: $("#AuthorityType :selected").val(),
+                Signature: ($("#imgB64").length == 0 ? null : $("#imgB64").attr('src').replace("data:image/jpg;base64,", "")),
+                "StWh": table
+            }
+
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("EditStaff")",
+                data: JSON.stringify(objJson),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                processData: false,
+                success: function (response) {
+                    console.log(response);
+
+                    if (parseInt(response) > 0) {
+
+                        //Upload Signature
+                        // get file
+                        var formData = new FormData();
+                        var totalFiles = document.getElementById("SignatureB64").files.length;
+
+                        for (var i = 0; i < totalFiles; i++) {
+                            var file = document.getElementById("SignatureB64").files[i];
+                            formData.append("SignatureB64", file);
+                        }
+                        if (totalFiles > 0) {
+                            $.ajax({
+                                url: "UploadSignature?StaffID=" + response,
+                                type: 'POST',
+                                data: formData,
+                                processData: false,  // tell jQuery not to process the data
+                                contentType: false,  // tell jQuery not to set contentType
+                                success: function (data) {
+                                    console.log(data);
+                                    alert("บันทึกข้อมูลเรียบร้อยแล้ว");
+                                    window.location.href = "/Staffs/Index";
+                                    //alert(data);
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        } else {
+                            alert("บันทึกข้อมูลเรียบร้อยแล้ว");
+                            window.location.href = "/Staffs/Index";
+                        }
+
+                    } else {
+                        alert(response);
+                    }
+                },
+                error: function (response) {
+                    alert(response)
+                }
+            });
+        });
+
+        $("#SignatureB64").change(function () {
+            var formData = new FormData();
+            var totalFiles = document.getElementById("SignatureB64").files.length;
+            for (var i = 0; i < totalFiles; i++) {
+                var file = document.getElementById("SignatureB64").files[i];
+
+
+                formData.append("SignatureB64", file);
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UploadImage", "Staffs")',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response == "error") {
+                        console.log("Upload Error");
+                    } else {
+                        //alert('upload succes!!');
+                        console.log(response);
+                        var image = new Image();
+                        image.src = 'data:image/jpg;base64,' + response;
+                        image.width = "458";
+                        image.height = "60";
+                        image.id = "imgB64";
+                        image.name = "imgB64";
+                        $("#divImg").empty();
+                        $("#divImg").append(image)
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        $("#UgID").on("change", function () {
+            if ($("#UgID").val() == "@ViewBag.ConfigAuthorize") {
+                $("#inputAuthor :input").each(function () {
+                    $(this).removeAttr("readonly");
+                    $(this).val('');
+                });
+
+                $("#AuthorityType option").each(function () {
+                    this.disabled = false;
+                });
+
+                $("#AuthorityType").val("");
+                $("#SignatureB64").removeAttr("disabled");
+
+                $("#btnOpenModal").css("background-color", "lightgray");
+                $("#btnOpenModal").css("border-color", "lightgray");
+            } else {
+                $("#inputAuthor :input").each(function () {
+                    $(this).attr("readonly", "readonly");
+                    $(this).val('');
+                });
+
+                $("#AuthorityType option").each(function () {
+                    this.disabled = true;
+                });
+
+                $("#AuthorityType").val("");
+                $("#SignatureB64").attr("disabled", "disabled");
+
+                $("#btnOpenModal").css("background-color", "");
+                $("#btnOpenModal").css("border-color", "");
+            }
+        });
+
+        $("#inputAuthor :input").each(function () {
+            if ($("#UgID").val() != "@ViewBag.ConfigAuthorize" && $("#UgID").val() != null) { //นายทะเบียน
+                $(this).attr("readonly", "readonly");
+                $("#SignatureB64").attr("disabled", "disabled");
+
+                $("#btnOpenModal").css("background-color", "");
+                $("#btnOpenModal").css("border-color", "");
+
+                $("#AuthorityType option").each(function () {
+                    this.disabled = true;
+                });
+            }
+        });
+
+    });
+
+    var n = @Model.StWh.Count();
+
+    function NumID() {
+        n++;
+        return n;
+    }
+
+
+    function isValidEmail() {
+        var ret = false;
+        var email = $('input[name = "Email"]').val();
+        var re = /[A-Z0-9._%+-]+@@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
+
+        if (re.test(email)) {
+            ret = true;
+        } else {
+            if (email.length != 0) {
+                alert('กรุณากรอก Email ให้ถูกต้อง');
+                ret = false;
+            } else {
+                ret = true;
+            }
+        }
+
+        return ret;
+          }
+
+    function clear_form_elements(id_name) {
+        $("#" + id_name).find(':input').each(function () {
+            switch (this.type) {
+                case 'password':
+                case 'text':
+                case 'textarea':
+                case 'file':
+                case 'select-one':
+                    $(this).val('');
+                    break;
+                case 'checkbox':
+                case 'radio':
+                    this.checked = false;
+            }
+        });
+    }
+
+    function selA(event, t) {
+        var ACode = $(t).attr("ACode").trim();
+        var ATitleTH = $(t).attr("ATitleTH").trim();
+        var ANameTH = $(t).attr("ANameTH").trim();
+        var ALastNameTH = $(t).attr("ALastNameTH").trim();
+        var ATitleEN = $(t).attr("ATitleEN").trim();
+        var ANameEN = $(t).attr("ANameEN").trim();
+        var ALastNameEN = $(t).attr("ALastNameEN").trim();
+        var AAuthorityType = $(t).attr("AAuthorityType").trim();
+        var ASignature = $(t).attr("ASignature");
+        var AAuthorizeIdCard = $(t).attr("AAuthorizeIdCard").trim();
+
+        $("#RefAuthorize").val(ACode);
+        $("#TitleTH").val(ATitleTH);
+        $("#AuthorizeNameTH").val(ANameTH);
+        $("#AuthorizeLastNameTH").val(ALastNameTH);
+        $("#TitleEN").val(ATitleEN);
+        $("#AuthorizeNameEN").val(ANameEN);
+        $("#AuthorizeLastNameEN").val(ALastNameEN);
+        $("#AuthorityType").val(AAuthorityType);
+        $("#AuthorizeIdCard").val(AAuthorizeIdCard);
+
+        var image = new Image();
+        image.src = 'data:image/jpg;base64,' + ASignature;
+        image.width = "458";
+        image.height = "60";
+        image.id = "imgB64";
+        image.name = "imgB64";
+        $("#divImg").empty();
+        $("#divImg").append(image);
+
+        $("#AModal").modal("hide");
+    }
+
+    function btnOpenModal() {
+        //Can open when User Group = 5 (นายทะเบียน)
+        console.log("@ViewBag.ConfigAuthorize");
+        if ($("#UgID").val() != "@ViewBag.ConfigAuthorize") {
+            //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetAuthorize")",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.length > 0) {
+                        $('#modSelA tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].AuthorizeNameTH + ' ' + response[x].AuthorizeLastNameTH + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelA" ACode="' + response[x].ID + '" ATitleTH="' + response[x].TitleTH + '" ANameTH="' + response[x].AuthorizeNameTH + '" ALastNameTH="' + response[x].AuthorizeLastNameTH + '" ATitleEN="' + response[x].TitleEN + '" ANameEN="' + response[x].AuthorizeNameEN + '" ALastNameEN="' + response[x].AuthorizeLastNameEN + '" AAuthorityType="' + response[x].AuthorityType + '" ASignature="' + response[x].Signature + '" + AAuthorizeIdCard= "' + response[x].AuthorizeIdCard + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selA(event,this)" ></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#modSelA tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+            $("#AModal").modal("show");
+            //});
+        }
+    }
+
+</script>
+
+<style>
+    .toolbar {
+        float: left;
+    }
+
+    .form-l {
+        max-width: 700px;
+        width: 330px;
+    }
+
+    .form-select {
+        width: 250px;
+        text-align: center;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-9">
+            <div class="form-horizontal">
+                <div id="inputDiv">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><b>เจ้าหน้าที่</b></h3>
+                        </div>
+                        <div class="card-block">
+                            <table class="table" style="min-width:70%">
+                                <tr>
+                                    <td style="padding: 10px;">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        <div class="form-group">
+                                            ชื่อเจ้าหน้าที่
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", maxlength = "100" } }) @*, onkeyup = "onlyThaichar(this.value,this)"*@
+                                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger", required = "required" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            เบอร์โทรศัพท์
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.TelNo, new { htmlAttributes = new { @class = "form-control", maxlength = "20", onkeyup = "onlyNumber(this.value,this)" } })
+                                                @Html.ValidationMessageFor(model => model.TelNo, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px;">
+                                        <div class="form-group">
+                                            e-mail
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", maxlength = "255" } })
+                                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 10px;">
+                                        <div class="form-group">
+                                            เลขบัตรประจำตัวประชาชน
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.IdCard, new { htmlAttributes = new { @class = "form-control", maxlength = "13", onkeyup = "onlyNumber(this.value,this)" } })
+                                                @Html.ValidationMessageFor(model => model.IdCard, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px;" colspan="2">
+                                        <div class="form-group">
+                                            กลุ่มผู้ใช้
+                                            <div class="col-md-10">
+                                                @*@Html.DropDownList("UgID",UgID, new { @class = "form-control" })*@
+                                                @Html.DropDownListFor(model => model.UgID, ViewBag.UgID as List<SelectListItem>, new { name = "UgID", id = "UgID", @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.UgID, "", new { @class = "text-danger", required = "required" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px;">
+                                        <div class="form-group">
+                                            Login
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.UserLogin, new { htmlAttributes = new { @class = "form-control", maxlength = "20", onkeyup = "onlyEngchar(this.value,this)" } })
+                                                @Html.ValidationMessageFor(model => model.UserLogin, "", new { @class = "text-danger", required = "required" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="2">
+                                        <div class="form-group">
+                                            Password
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.UserPassword, new { htmlAttributes = new { @class = "form-control", @style = "display:none;" } })
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <input type="checkbox" class="form-control" id="showPass" style="width:unset;" />
+                                                    </span>
+
+                                                    @Html.EditorFor(model => model.NewUserPassword, new { htmlAttributes = new { @class = "form-control" }, maxlength = "100" })
+                                                </div>
+                                                @Html.ValidationMessageFor(model => model.UserPassword, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    @*นายทะเบียน*@
+                    <div class="card" style="margin-top:50px;">
+                        <div class="card-header">
+                            นายทะเบียน
+                            <a href="#" class="btn btn-info" id="btnOpenModal" data-toggle="modal" onclick="btnOpenModal()"><i class="fa fa-search fa-3"></i></a>
+                            <input type="hidden" id="RefAuthorize" name="RefAuthorize" />
+                        </div>
+                        <div class="card-block" id="inputAuthor" style="padding:0px;">
+                            <table class="table" style="min-width:70%">
+                                <tr>
+                                    <td style="padding: 10px;">
+                                        <div class="form-group">
+                                            คำนำหน้าชื่อ
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.TitleTH, new { htmlAttributes = new { @class = "form-control", @style = "width:100px;", maxlength = "100", onkeyup = "onlyThaichar(this.value,this)" } })
+                                                @Html.ValidationMessageFor(model => model.TitleTH, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 10px;">
+                                        <div class="form-group">
+                                            ชื่อนายทะเบียนภาษาไทย
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.AuthorizeNameTH, new { htmlAttributes = new { @class = "form-control form-l", maxlength = "100", onkeyup = "onlyThaichar(this.value,this)" } })
+                                                @Html.ValidationMessageFor(model => model.AuthorizeNameTH, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 10px;">
+                                        <div class="form-group">
+                                            นามสกุลนายทะเบียนภาษาไทย
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.AuthorizeLastNameTH, new { htmlAttributes = new { @class = "form-control form-l", maxlength = "100", onkeyup = "onlyThaichar(this.value,this)" } })
+                                                @Html.ValidationMessageFor(model => model.AuthorizeLastNameTH, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px;">
+                                        <div class="form-group">
+                                            Prefix
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.TitleEN, new { htmlAttributes = new { @class = "form-control", @style = "width:100px;", maxlength = "100", onkeyup = "onlyEngchar(this.value,this)" } })
+                                                @Html.ValidationMessageFor(model => model.TitleEN, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 10px;">
+                                        <div class="form-group">
+                                            ชื่อนายทะเบียนภาษาอังกฤษ
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.AuthorizeNameEN, new { htmlAttributes = new { @class = "form-control form-l", maxlength = "100", onkeyup = "onlyEngchar(this.value,this)" } })
+                                                @Html.ValidationMessageFor(model => model.AuthorizeNameEN, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 10px;">
+                                        <div class="form-group">
+                                            นามสกุลนายทะเบียนภาษาอังกฤษ
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.AuthorizeLastNameEN, new { htmlAttributes = new { @class = "form-control form-l", maxlength = "100", onkeyup = "onlyEngchar(this.value,this)" } })
+                                                @Html.ValidationMessageFor(model => model.AuthorizeLastNameEN, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px;" colspan="2">
+                                        <div class="form-group">
+                                            รูปลายเซ็นต์
+                                            <div class="col-md-10">
+                                                <input type="file" name="SignatureB64" id="SignatureB64" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div id="divImg" style="position:relative;"></div>
+
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            สิทธิการออกใบอนุญาต
+                                            <div class="col-md-10">
+                                                @Html.DropDownList("AuthorityType", new SelectList(AuthorityType, "Value", "Text", Model.AuthorityType), new { @class = "form-control form-select" })
+                                                @Html.ValidationMessageFor(model => model.AuthorityType, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px;" colspan="2">
+                                        <div class="form-group">
+                                            เลขบัตรประจำตัวประชาชน
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.AuthorizeIdCard, new { htmlAttributes = new { @class = "form-control", maxlength = "13", onkeyup = "onlyNumber(this.value,this)" } })
+                                                @Html.ValidationMessageFor(model => model.AuthorizeIdCard, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:50px;">
+                    <div class="card-header">
+                        <h6 class="card-title">สำนักงานขนส่งที่ปฏิบัติงานได้</h6>
+                    </div>
+                    <div class="card-block">
+                        <a href="#" onclick="javascript: void (0);" class="btn btn-primary" id="btnAddWarehouse">เพิ่มสำนักงานขนส่ง</a>
+                        @*<a href="#" onclick="javascript: void (0);" class="btn btn-primary" data-toggle="modal" id="btnModal" data-target="#btnAddWare">เพิ่มสำนักงานขนส่ง</a>*@
+                        <a href="#" onclick="javascript: void (0);" class="btn btn-info" id="btnAddAllWare">เพิ่มทุกสำนักงานขนส่ง</a>
+                        <a href="#" onclick="javascript: void (0);" class="btn btn-warning" id="btnDelAllWare">ลบทุกสำนักงานขนส่ง</a>
+
+                        <table class="table table-hover" id="tbMain" style="margin-top:10px;">
+                            <thead>
+                                <tr>
+                                    <th style="display:none">index</th>
+                                    <th style="display:none">WhID</th>
+                                    <th align="center" style="text-align:center;">สำนักงานขนส่งที่ปฏิบัติงานได้</th>
+                                    <th style="display:none">IsManager</th>
+                                    <th align="center" style="text-align:center;">ตำแหน่ง</th>
+                                    <th align="center" colspan="2" style="text-align:center;">..</th>
+                                    <th style="display:none">IsManager</th>
+                                    <th style="display:none">edit</th>
+                                    <th style="display:none">del</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.StWh != null)
+                                {
+                                    int n = 0;
+                                    foreach (var i in Model.StWh)
+                                    {
+                                        n++;
+                                        <tr>
+                                            <td style="display:none;">@n</td>
+                                            <td style="display:none;">@i.WhID</td>
+                                            <td style="text-align:center;">@i.WhName</td>
+                                            <td style="display:none;">@i.IsManager</td>
+                                            @if (i.IsManager.Contains("1"))
+                                            {
+                                                <td style="text-align:center;">ผู้จัดการ</td>
+                                            }
+                                            else if (i.IsManager.Contains("2"))
+                                            {
+                                                <td style="text-align:center;">เจ้าหน้าที่</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center;">reviewer</td>
+                                            }
+                                            <td style="text-align:center;"><a href="#" data-toggle="modal" data-target="#modalEdit" class="btnEdit"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a></td>
+                                            <td style="text-align:center;"><a href="javascript:void(0);" class="remove"><i class="fa fa-fw fa-trash-o fa-2x"></i></a></td>
+                                        </tr>
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="search-form" style="border-left:1px solid #777;height:400px;">
+                <div class="search">
+                    <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                        <li class="menu-item" style="padding-top:30px;">
+                            <a href="/Staffs/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="button" value="Create" id="btnSave" style="width:130px;">บันทึก</button>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-danger" type="button" id="btnDelete" trans_id="@Model.ID" value="Delete" style="width:130px;">ลบ</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+@*//PopUp Add List*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="btnAddWare">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+
+                <div class=" modal-header">
+                    <h3 class="modal-title">สำนักงานขนส่งที่สามารถปฏิบัติงานได้</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table">
+
+                        <tr>
+                            <td>
+                                สำนักงานขนส่ง
+                            </td>
+                            <td>
+                                @Html.DropDownList("WarehouseList", WarehouseList, "-----กรุณาเลือก-----", new { @class = "form-control" })
+                                <span id="errMsgWarehouseList" style="color:red;"></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                ตำแหน่ง
+                            </td>
+                            <td>
+                                <select name="IsManager" id="IsManager" style="width:220px;" class="form-control">
+                                    <option value="">----กรุณาเลือก-----</option>
+                                    <option value="1">ผู้จัดการ</option>
+                                    <option value="2">เจ้าหน้าที่</option>
+                                    <option value="3">ผู้ตรวจสอบ</option>
+                                </select>
+                                <span id="errMsgIsManager" style="color:red;"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="addRow" name="addRow" type="submit" data-target="#addRow" class="btn btn-success">ตกลง</button>
+                    <a href="#" class="btn btn-warning" data-dismiss="modal">ยกเลิก</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*//PopUp Edit List*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="modalEdit">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+
+                <div class=" modal-header">
+                    <h3 class="modal-title">สำนักงานขนส่งที่สามารถปฏิบัติงานได้</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+
+                <div class="modal-body" id="mypopupbody2">
+                    <table class="table" id="tbModalEdit">
+                        <input type="hidden" id="editID" name="editID" value="" disabled class="text-center" />
+                        <tr>
+                            <td>
+                                สำนักงานขนส่ง
+                            </td>
+                            <td>
+                                @Html.DropDownList("editWarehouseList", WarehouseList, new { @class = "form-control" })
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                ตำแหน่ง
+                            </td>
+                            <td>
+                                <select name="editIsManager" id="editIsManager" style="width:220px;" class="form-control">
+                                    @*<option value="">----กรุณาเลือก-----</option>*@
+                                    <option value="1">ผู้จัดการ</option>
+                                    <option value="2">เจ้าหน้าที่</option>
+                                    <option value="3">ผู้ตรวจสอบ</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="updateRow" name="updateRow" type="submit" @*data-target="#updateRow"*@ class="btn btn-success">ตกลง</button>
+                    <a href="#" class="btn btn-warning" data-dismiss="modal">ยกเลิก</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*//Popup Add Warehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="mdAddWarehouse">
+        <div class=" modal-dialog" style="max-width:700px;">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h4 class="modal-title">สำนักงานขนส่งที่สามารถปฏิบัติงานได้</h4>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <div class="form-group" style="padding:10px;display:none;">
+                    <input type="text" id="searchWarehouseTxt" name="searchWarehouseTxt" placeholder="คำค้น" class="form-control" />
+                </div>
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="tbWarehouse">
+                        <thead>
+                            <tr>
+                                <th width="10%" style="text-align:center;"></th>
+                                <th width="45%" style="text-align:left;">ชื่อคลังสินค้า</th>
+                                <th width="45%" style="text-align:left;">ตำแหน่ง</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var w in WarehouseList)
+                            {
+                                <tr>
+                                    <td width="10%" style="text-align:center;vertical-align: middle;">
+                                        <input type="checkbox" id="chkWH" name="chkWH" value="@w.Value" />
+                                    </td>
+                                    <td width="45%" style="text-align:left;vertical-align: middle;">
+                                        @w.Text
+                                    </td>
+                                    <td width="45%" style="text-align:left;vertical-align: middle;">
+                                        <select name="IsManagerWH" id="IsManagerWH" style="width:220px;height:30px;" class="form-control">
+                                            <option value="">----กรุณาเลือกตำแหน่ง-----</option>
+                                            <option value="1">ผู้จัดการ</option>
+                                            <option value="2">เจ้าหน้าที่</option>
+                                            <option value="3">ผู้ตรวจสอบ</option>
+                                        </select>
+                                        <span id="errMsgIsManager" style="color:red;"></span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr id="trNotFound" style="display:none;">
+                                <td style="text-align:center;">
+                                    ไม่พบข้อมูล
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="addWHRow" name="addWHRow" type="button" data-target="#addWHRow" class="btn btn-success">ตกลง</button>
+                    <a href="#" class="btn btn-warning" data-dismiss="modal">ยกเลิก</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Popup Authorize*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="AModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">นายทะเบียน</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchAuthorize" name="txtSearch" tb="modSelA" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelA">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    @*<button id="addW" name="addW" type="submit" data-target="#WModal" class="btn btn-success">Submit</button>
+                        <a href="#" class="btn btn-warning" data-dismiss="modal">Cancle</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

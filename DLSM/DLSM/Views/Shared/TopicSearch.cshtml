@@ -1,0 +1,66 @@
+﻿@model IEnumerable<DLSM.Models.Topic>
+@{
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+<table class="table">
+    <tbody id="SearchRow">
+        <tr>
+            <th>
+                วันที่
+            </th>
+            <th>
+                หัวเรื่อง
+            </th>
+            <th>
+                กลุ่มปัญหา
+            </th>
+            <th>
+                ผู้บันทึก
+            </th>
+
+            <th></th>
+        </tr>
+
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TgName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateName)
+                    </td>
+                    <td>
+                        <a href="\Topics\Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" style="text-align:center;">
+                    ไม่พบข้อมูล
+                </td>
+            </tr>
+                <tr>
+                    <td colspan="6" style="text-align:center;">
+                        @Html.ActionLink("Back", "Index", "Topics")
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
+

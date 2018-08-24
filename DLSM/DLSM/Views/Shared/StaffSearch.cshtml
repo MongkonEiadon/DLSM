@@ -1,0 +1,66 @@
+﻿@model IEnumerable<DLSM.Models.Staff>
+@{
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+<table class="table table-hover">
+    <tbody id="SearchStaffRow">
+        <tr>
+            <th>
+                ชื่อเจ้าหน้าที่
+            </th>
+            <th>
+                เบอร์โทรศํพท์
+            </th>
+            <th>
+                e-mail
+            </th>
+           
+
+            <th>
+                คลัง
+            </th>
+            <th></th>
+        </tr>
+
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TelNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WhName)
+                    </td>
+                    <td>
+                        <a href="\Staffs\Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" style="text-align:center;">
+                    ไม่พบข้อมูล
+                </td>
+            </tr>
+                <tr>
+                    <td colspan="6" style="text-align:center;">
+                        @Html.ActionLink("Back", "Index", "Staffs")
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>

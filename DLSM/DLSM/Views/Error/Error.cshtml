@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "Error";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string ErrorMessage = ViewBag.ErrorMessage;
+}
+
+<h2>Error</h2>
+
+<div>
+    @Html.Raw(ErrorMessage)
+</div>

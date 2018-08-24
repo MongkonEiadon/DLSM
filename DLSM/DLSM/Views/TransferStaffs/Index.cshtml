@@ -1,0 +1,233 @@
+﻿@model IEnumerable<DLSM.Models.TransferStaff>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+<script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+        $("#btnSearchW").click(function () {
+            var searchwh = $("#SearchIDW").val();
+            var searchst = $("#SearchSTID").val();
+            console.log(searchwh);
+            console.log(searchst);
+            $.ajax({
+                type: "Get",
+                url: "/TransferStaffs/Search?searchwh=" + searchwh + "&searchst=" + searchst ,
+                contentType: "html",
+                success: function (response) {
+                    $("#SearchRow").html(response);
+                },
+                error: function () {
+                    console.log("error");
+                }
+            })
+        })
+
+        //Select Staff Find
+        $("i[name=SelST]").click(function () {
+            //console.log($(this));
+            var sCode = $(this).attr("sCode");
+            var sName = $(this).attr("sName");
+
+            $("#SearchST").val(sName);
+            $("#SearchSTID").val(sCode);
+
+            $("#STModal").modal("hide");
+        });
+
+        //Select Warehouse Find
+        $("i[name=SelW]").click(function () {
+            //console.log($(this));
+            var whCode = $(this).attr("whCode");
+            var whName = $(this).attr("whName");
+
+            $("#SearchW").val(whName);
+            $("#SearchIDW").val(whCode);
+
+            $("#WModal").modal("hide");
+        });
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+
+    })
+
+
+</script>
+
+<h2>รายการโอนย้ายเจ้าหน้าที่</h2>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-right:1px solid #777;height:400px;">
+            <div class="search">
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">ชื่อเจ้าหน้าที่</p>
+                    <input class="find" name="SearchSTID" id="SearchSTID" style="display:none;">
+                    <input class="find" name="SearchST" id="SearchST" style="width:165px;" disabled>
+                    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#STModal"><i class="fa fa-search fa-3"></i></a>
+                </div>
+
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">สำนักงานขนส่ง</p>
+                    <input class="find" name="SearchIDW" id="SearchIDW" style="display:none;">
+                    <input class="find" name="SearchW" id="SearchW" style="width:165px;" disabled>
+                    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#WModal"><i class="fa fa-search fa-3"></i></a>
+                </div>
+
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;">
+                    <li class="menu-item" style="padding-top:10px;">
+                        <button class="btn btn-primary" id="btnSearchW" style="width:130px;" type="submit">สืบค้น</button>
+                    </li>
+
+                    <li class="menu-item" style="padding-top:10px;">
+                        @*<button class="btn btn-success" type="submit" style="width:130px;"></button>*@
+                        <a href="/TransferStaffs/Create" style="color:white;width:130px;cursor:pointer;" class="btn btn-primary">เพิ่มรายการ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-9">
+        <table class="table table-hover">
+            <tbody id="SearchRow">
+                    <tr>
+                        <th>
+                           วันที่มีผล
+                        </th>
+                        
+                        <th>
+                            ชื่อเจ้าหน้าที่
+                        </th>
+                        <th>
+                            จากสำนักงานขนส่ง
+                        </th>
+                        <th>
+                            ไปสำนักงานขนส่ง
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EffectiveDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FromWhName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ToWhName)
+                                </td>
+                                <td>
+                                    <a href="\TransferStaffs\Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*PopUp Warehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="WModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">จากสำนักงานขนส่ง</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelTWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelTWH">
+                        @foreach (var w in ViewBag.WhID)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelW" whCode="@w.ID" whName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="STModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">เจ้าหน้าที่</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelST" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelST">
+                        @foreach (var w in ViewBag.StID)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelST" sCode="@w.ID" sName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

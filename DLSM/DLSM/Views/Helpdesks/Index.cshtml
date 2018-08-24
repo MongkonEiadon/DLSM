@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+
+    var MenuSettingAccess = ViewBag.MenuSettingAccess;
+}
+
+
+
+<div class="row" style="padding-left:100px;padding-top:50px;">
+    @if (MenuSettingAccess.Contains("Issues"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse card-warning o-hidden h-100 w-100" >
+                <a href="\Issues\Index" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-users"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>แจ้งปัญหา</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("Topics"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse card-primary o-hidden h-100" style="background-color:blueviolet;">
+                <a href="\Topics\Index" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-file-text"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>ฐานความรู้</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+

@@ -1,0 +1,112 @@
+﻿@model IEnumerable<DLSM.Models.Topic>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    SelectList TgList = ViewBag.TgList;
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+<script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+        $("#btnSearchW").click(function () {
+            var searchtext = $("#SeachW").val();
+            var searchtg = $("#TgList :selected").val();
+            debugger
+            $.ajax({
+                type: "Post",
+                url: "/Topics/Search?SearchText=" + searchtext + "&SearchTg=" + searchtg,
+                contentType: "html",
+                success: function (response) {
+                    $("#SearchRow").html(response);
+                }
+            })
+        })
+    })
+
+
+
+
+</script>
+
+<h2>ฐานความรู้</h2>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-right:1px solid #777;height:400px;">
+            <div class="search">
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">กลุ่มปัญหา</p>
+                    @Html.DropDownList("TgList", TgList,"----กรุณาเลือก----", new { @class = "form-control", @style = "width:220px;margin-left:30px;" })
+                </div>
+
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">ค้นหา</p>
+                    <input class="find" name="SeachW" id="SeachW" style="width:220px;">
+                </div>
+
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;">
+                    <li class="menu-item" style="padding-top:10px;">
+                        <button class="btn btn-primary" id="btnSearchW" style="width:130px;" type="submit">สืบค้น</button>
+                    </li>
+
+                    <li class="menu-item" style="padding-top:10px;">
+                        @*<button class="btn btn-success" type="submit" style="width:130px;"></button>*@
+                        <a href="/Topics/Create" style="color:white;width:130px;cursor:pointer;" class="btn btn-primary">เพิ่มรายการ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-9">
+        <table class="table">
+            <tbody id="SearchRow">
+                <tr>
+                    <th>
+                        วันที่
+                    </th>
+                    <th>
+                        หัวเรื่อง
+                    </th>
+                    <th>
+                        กลุ่มปัญหา
+                    </th>
+                    <th>
+                        ผู้บันทึก
+                    </th>
+
+                    <th></th>
+                </tr>
+
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreateDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Subject)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TgName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreateName)
+                            </td>
+                            <td>
+                                <a href="\Topics\Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+   </div>
+    </div>
+

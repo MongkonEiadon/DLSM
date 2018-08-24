@@ -1,0 +1,158 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+
+    var MenuSettingAccess = ViewBag.MenuSettingAccess;
+
+}
+
+
+<div class="row" style="padding-left:50px;padding-right:50px;padding-top:50px;">
+@if (MenuSettingAccess.Contains("Warehouses"))
+{
+    <div class="col-xl-4 col-sm-6 mb-5">
+        <div class="card card-inverse card-primary o-hidden">
+            <a href="\Warehouses\Index" class="card-footer clearfix small z-1">
+                <div class="card-block">
+                    <div class="card-block-icon">
+                        <i class="fa fa-fw fa-home"></i>
+                    </div>
+                    <div class="mr-5">
+                        <h6>สำนักงานขนส่ง</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+}
+    
+@if (MenuSettingAccess.Contains("Categories"))
+{
+    <div class="col-xl-4 col-sm-6 mb-5">
+        <div class="card card-inverse card-success o-hidden h-100">
+            <a href="/Categories/Index" class="card-footer clearfix small z-1">
+                <div class="card-block">
+                    <div class="card-block-icon">
+                        <i class="fa fa-fw fa-linode"></i>
+                    </div>
+                    <div class="mr-5">
+                        <h6>กลุ่มวัสดุ</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+}
+
+@if (MenuSettingAccess.Contains("Products"))
+{
+    <div class="col-xl-4 col-sm-6 mb-5">
+        <div class="card card-inverse card-warning o-hidden h-100">
+            <a href="/Products/Index" class="card-footer clearfix small z-1">
+                <div class="card-block">
+                    <div class="card-block-icon">
+                        <i class="fa fa-fw fa-archive"></i>
+                    </div>
+                    <div class="mr-5">
+                        <h6>วัสดุ</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+}
+
+@if (MenuSettingAccess.Contains("Staffs"))
+{
+    <div class="col-xl-4 col-sm-6 mb-5">
+        <div class="card card-inverse card-info o-hidden h-100 w-100">
+            <a href="\Staffs\Index" class="card-footer clearfix small z-1">
+                <div class="card-block">
+                    <div class="card-block-icon">
+                        <i class="fa fa-fw fa-user-circle"></i>
+                    </div>
+                    <div class="mr-5">
+                        <h6>เจ้าหน้าที่</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+}
+
+@*@if (MenuSettingAccess.Contains("TopicGroups"))
+{
+    <div class="col-xl-4 col-sm-6 mb-5">
+        <div class="card card-inverse card-danger o-hidden h-100">
+            <a href="\TopicGroups\Index" class="card-footer clearfix small z-1">
+                <div class="card-block">
+                    <div class="card-block-icon">
+                        <i class="fa fa-fw fa-question"></i>
+                    </div>
+                    <div class="mr-5">
+                        <h6>กลุ่มปัญหา</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+}*@
+
+@if (MenuSettingAccess.Contains("Suppliers"))
+{
+    <div class="col-xl-4 col-sm-6 mb-5">
+        <div class="card card-inverse o-hidden h-100" style="background-color:blueviolet;">
+            <a href="\Suppliers\Index" class="card-footer clearfix small z-1">
+                <div class="card-block">
+                    <div class="card-block-icon">
+                        <i class="fa fa-fw fa-truck"></i>
+                    </div>
+                    <div class="mr-5">
+                        <h6>ผู้ประกอบการ</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+}
+
+@if (MenuSettingAccess.Contains("TransferStaffs"))
+{
+    <div class="col-xl-4 col-sm-6 mb-5">
+        <div class="card card-inverse o-hidden h-100" style="background-color:burlywood;">
+            <a href="\TransferStaffs\Index" class="card-footer clearfix small z-1">
+                <div class="card-block">
+                    <div class="card-block-icon">
+                        <i class="fa fa-fw fa-user"></i>
+                    </div>
+                    <div class="mr-5">
+                        <h6>โอนย้ายเจ้าหน้าที่</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+}
+@if (MenuSettingAccess.Contains("Permissions"))
+{
+    <div class="col-xl-4 col-sm-6 mb-5">
+        <div class="card card-inverse o-hidden h-100" style="background-color:slateblue;">
+            <a href="\Permissions\Index" class="card-footer clearfix small z-1">
+                <div class="card-block">
+                    <div class="card-block-icon">
+                        <i class="fa fa-fw fa-users"></i>
+                    </div>
+                    <div class="mr-5">
+                        <h6>การจัดการสิทธิ์</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+}
+</div>

@@ -1,0 +1,30 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>RR</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="A:\EffectiveSolution\Code\DLSM\DLSM\Scripts\datepicker\bootstrap-datepicker.min.js"></script>
+    <script src="A:\EffectiveSolution\Code\DLSM\DLSM\Scripts\Scripts\datepicker\bootstrap-datepicker-thai.js"></script>
+    <script src="A:\EffectiveSolution\Code\DLSM\DLSM\Scripts\Scripts\datepicker\locales\bootstrap-datepicker.th.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#FormDate').datepicker({
+            language: "th",
+            autoclose: true,
+            format: 'dd/mm/yyyy',
+        });
+    });
+</script>
+
+</head>
+<body>
+    <div> 
+        <div class="col-md-10">
+            <input type="text" class="form-control" name="FormDate" id="FormDate" placeholder="วว/ดด/ปปปป">
+        </div>
+    </div>
+</body>
+</html>

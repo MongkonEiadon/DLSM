@@ -1,0 +1,1633 @@
+﻿@model DLSM.Models.WorkStation
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+}
+<script src="~/Scripts/jquery.tabletojson.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnOpenModal").click(function (e) {
+            e.defaultPrevented;
+            if ($("#WhID").val().trim() == "") {
+                $("span[data-valmsg-for='WhID']").html("กรุณาเลือกสำนักงานขนส่ง");
+            } else {
+                $("span[data-valmsg-for='WhID']").html("");
+                $("#ListModal").modal("show");
+            }
+        });
+
+        $("#btnDelete").on("click", function (id) {
+            var trans_id = $(this).attr("trans_id");
+            console.log(trans_id);
+            if (confirm("คุณต้องการจะลบข้อมูลใช่หรือไม่?") == true) {
+                window.location.href = "/WorkStations/DeleteConfirmed?id=" + trans_id
+
+            }
+        });
+
+        $("#btnOpenStaffModal").click(function (e) {
+            e.defaultPrevented;
+            if ($("#WhID").val().trim() == "") {
+                $("span[data-valmsg-for='WhID']").html("กรุณาเลือกสำนักงานขนส่ง");
+            } else {
+                $("span[data-valmsg-for='WhID']").html("");
+                var whCode = $("#WhID").val();
+                if (whCode != null)
+                {
+                    // Get Product in warehouse
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("GetProdByWH")" + "?WhID=" + whCode,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            //console.log(response);
+                            if (response.length > 0) {
+                                $('#ProductList').empty().append('<option value="">-----กรุณาเลือก-----</option>');
+                                for (var x = 0; x < response.length; x++){
+                                    $('#ProductList').append($('<option>', {
+                                        value: response[x].ID,
+                                        text: response[x].Name
+                                    }));
+                                }
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response)
+                        }
+                    });
+
+                      //Get Staff in warehouse
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("GetStaffByWH")" + "?WhID=" + whCode,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            //console.log(response);
+                            if (response.length > 0) {
+                                $('#StaffList tbody').empty();
+                                for (var x = 0; x < response.length; x++) {
+                                    var newRow = '<tr>';
+                                    newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                                    newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelSF" SFID="' + response[x].ID + '" SFNAME="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selThisStaff(event,this)"></i></a>' + '</td>';
+                                    newRow = newRow + '</tr>';
+
+                                    $('#StaffList tbody').append(newRow);
+                                }
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response)
+                        }
+                    });
+        }
+                $("#ListStaffModal").modal("show");
+            }
+        });
+
+        var whCode = $("#WhID").val();
+        if (whCode != null)
+        {
+            // Get Product in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetProdByWH")" + "?WhID=" + whCode,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#ProductList').empty().append('<option value="">-----กรุณาเลือก-----</option>');
+                        for (var x = 0; x < response.length; x++){
+                            $('#ProductList').append($('<option>', {
+                                value: response[x].ID,
+                                text: response[x].Name
+                            }));
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+              //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetStaffByWH")" + "?WhID=" + whCode,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#StaffList tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelSF" SFID="' + response[x].ID + '" SFNAME="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selThisStaff(event,this)"></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#StaffList tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        }
+
+        $("i[name=SelW]").click(function () {
+            //console.log($(this));
+            var whCode = $(this).attr("whCode");
+            var whName = $(this).attr("whName");
+
+            $("#WhName").val(whName);
+            $("#WhID").val(whCode);
+
+
+            // Get Product in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetProdByWH")" + "?WhID=" + whCode,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#ProductList').empty().append('<option value="">-----กรุณาเลือก-----</option>');
+                        for (var x = 0; x < response.length; x++){
+                            $('#ProductList').append($('<option>', {
+                                value: response[x].ID,
+                                text: response[x].Name
+                            }));
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+
+            //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetStaffByWH")" + "?WhID=" + whCode,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#StaffList tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelSF" SFID="' + response[x].ID + '" SFNAME="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selThisStaff(event,this)"></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#StaffList tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+
+            $("#WModal").modal("hide");
+        });
+
+        $("#ProductList").on("change", function () {
+            var prdID = $(this).val();
+            var whID = $("#WhID").val();
+
+            if (prdID == "") {
+                $("#PrdErrMsg").html("");
+
+            } else {
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("GetSerialNo")" + "?pdID=" + prdID + "&whID=" + whID,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        //console.log(response);
+                        if (response.length > 0) {
+                            $('#modSelSN tbody').empty();
+                            for (var x = 0; x < response.length; x++) {
+                                var newRow = '<tr>';
+                                newRow = newRow + '<td>' + response[x].SerialBegin + '</td>';
+                                newRow = newRow + '<td>' + '<a href="#"><i name="SelSN" SNID="' + response[x].ID + '" SN="' + response[x].SerialBegin + '" PrdName="' + response[x].Name + '" IP="' + response[x].IpProperty + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selThisSN(event,this)"></i></a>' + '</td>';
+                                newRow = newRow + '</tr>';
+
+                                $("#editSerialNO").val("");
+                                $('#modSelSN tbody').append(newRow);
+                            }
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+
+            }
+        });
+
+        $("#editProductList").on("change", function () {
+            var prdID = $(this).val();
+            var whID = $("#WhID").val();
+
+            if (prdID == "") {
+                $("#mPrdErrMsg").html("");
+
+            } else {
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("GetSerialNo")" + "?pdID=" + prdID + "&whID=" + whID,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        //console.log(response);
+                        if (response.length > 0) {
+                            $('#modSelSN tbody').empty();
+                            for (var x = 0; x < response.length; x++) {
+                                var newRow = '<tr>';
+                                newRow = newRow + '<td>' + response[x].SerialBegin + '</td>';
+                                newRow = newRow + '<td>' + '<a href="#"><i name="SelSN" SNID="' + response[x].ID + '" SN="' + response[x].SerialBegin + '" PrdName="' + response[x].Name + '" IP="' + response[x].IpProperty + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selThisEditSN(event,this)"></i></a>' + '</td>';
+                                newRow = newRow + '</tr>';
+
+                                $('#modSelSN tbody').append(newRow);
+                                $("#editSerialNo").val("");
+                            }
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+
+            }
+        });
+
+
+
+        $("i[name=SelSN]").on("click",function () {
+
+            console.log($(this));
+
+            var SNID = $(this).attr("SNID");
+            var SN = $(this).attr("SN");
+
+            $("#SerialID").val(SNID);
+            $("#SerialNo").val(SN);
+
+
+            $("#SNmodal").modal("hide");
+        });
+
+        $("i[name=SelSNEdit]").on("click", function () {
+
+            console.log($(this));
+
+            var SNID = $(this).attr("snid");
+            var SN = $(this).attr("sn");
+            var IP = ($(this).attr("ip") == "null" ? "" : $(this).attr("ip"));
+            var PrdName = ($(this).attr("prdname") == "null" ? "" : $(this).attr("prdname"));
+
+            $("#editSerialID").val(SNID);
+            $("#editSerialNo").val(SN);
+            $("#editIP").val(IP);
+            $("#editNName").val(PrdName);
+
+            $("#SNmodal").modal("hide");
+        });
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    //console.log($(this).closest("tr").index());
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+
+        var n = @Model.WorkStationStaffList.Count();
+
+        function NumID() {
+            n++;
+            return n;
+        }
+
+        var num = @Model.WorkStationDetailList.Count();
+
+        function Num2ID() {
+            num++;
+            return num;
+        }
+
+        $("#addRow").on('click', function () {
+
+            //get value from modal
+            var ID = NumID(n);
+            var mdToolID = $("#ProductList :selected").val();
+            var mdToolText = $("#ProductList :selected").text();
+            var mdSerialNo = $("#SerialNo").val();
+
+            //log getting value
+            //console.log(mdToolID + '|' + mdToolText + '|' + mdQty + '|' + mdSerialBegin + '|' + mdSerialBegin + '|' + mdSerialEnd + '|' + mdTotalQty);
+
+            // validate data
+            if (!validateAddModal()) {
+                return false;
+            }
+
+
+            // check ID is exists
+            if ($("#emptyRow").length > 0) {
+                $("#tbMain tbody").empty();
+            }
+
+            //setting data as new row
+            var btnEdit = '<a href="#"  data-toggle="modal" data-target="#editModal" class="btnEdit"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+            var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+            //get row index
+            var rowIndex = $('table#tbMain tbody tr:last').index() + 2;
+
+            var row = "";
+            row += '<tr>';
+            row += '<td align="center" style="text-align:center;display:none;">' + ID + '</td>';
+            row += '<td align="center" style="text-align:center;display:none;">' + mdToolID + '</td>';
+            row += '<td align="center" style="text-align:center">' + mdToolText + '</td>';
+            row += '<td align= "center" style= "text-align:center" >' + mdSerialNo + '</td>';
+            row += '<td align="center" style="text-align:center">' + btnEdit + '&nbsp;' + btnDel + '</td>';
+            row += '</tr >';
+
+            //Append new row
+            $("#tbMain > tbody").last().append(row);
+
+            //Clear modal value
+            $("#ProductList").val("");
+            $("#SerialNo").val("");
+            $("#isAsset").val("n");
+
+
+            //Close Modal
+            $("#ListModal").modal("hide");
+        });
+
+        $("#addRowStaff").on('click', function () {
+
+            //get value from modal
+            var ID = Num2ID(num);
+            var mdStID = $("#StID").val();
+            var mdStName = $("#StName").val();
+
+            // validate data
+            if (!validateAddModal()) {
+                return false;
+            }
+
+
+            // check ID is exists
+            if ($("#emptyRow").length > 0) {
+                $("#tbStaff tbody").empty();
+            }
+
+            //setting data as new row
+            var btnEdit = '<a href="#"  data-toggle="modal" data-target="#ListEditStaffModal" class="btnEditStaff"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+            var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+            //get row index
+            var rowIndex = $('table#tbMain tbody tr:last').index() + 2;
+
+            var row = "";
+            row += '<tr>';
+            row += '<td align="center" style="text-align:center;display:none;">' + ID + '</td>';
+            row += '<td align="center" style="text-align:center;display:none;">' + mdStID + '</td>';
+            row += '<td align="center" style="text-align:center">' + mdStName + '</td>';
+            row += '<td align="center" style="text-align:center">' + btnEdit + '&nbsp;' + btnDel + '</td>';
+            row += '</tr >';
+
+            //Append new row
+            $("#tbStaff > tbody").last().append(row);
+
+            //Clear modal value
+
+            $("#StID").val("");
+            $("#StName").val("n");
+
+
+            //Close Modal
+            $("#ListStaffModal").modal("hide");
+        });
+
+
+        $("#addSNRow").on('click', function () {
+
+            //get value from modal
+            var mdProductID = $("#ProductList :selected").val().trim();
+            var mdProduct = $("#ProductList :selected").text().trim();
+            var mdSNID = $("#SerialID").val();
+            var mdSerialNo = $("#SerialNo").val();
+            var mdIP = $("#IP").val();
+            var mdPrdName = $("#NName").val();
+
+            //log getting value
+            //console.log(mdToolID + '|' + mdToolText + '|' + mdQty + '|' + mdSerialBegin + '|' + mdSerialBegin + '|' + mdSerialEnd + '|' + mdTotalQty);
+
+            // validate data
+            if (!validateAddModal()) {
+                return false;
+            }
+
+            // check is exists in table main
+            var isExists = 0;
+            $("#tbMain tbody tr").each(function (i) {
+                var prdid = $(this).closest("tr").find('td:eq(1)').text().trim();
+                var snno = $(this).closest("tr").find('td:eq(4)').text().trim();
+
+                if (mdProductID == prdid && mdSerialNo == snno) {
+                    alert("มีวัสดุ และ เลขคุมนี้แล้ว");
+                    isExists = 1;
+                }
+            });
+
+            if (isExists) {
+                return false;
+            }
+
+
+            // check ID is exists
+            if ($("#emptyRow").length > 0) {
+                $("#tbMain tbody").empty();
+            }
+
+            //setting data as new row
+            var btnEdit = '<a href="#"  data-toggle="modal" data-target="#editModal" class="btnEdit"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+            var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+            //get row index
+            var rowIndex = $('table#tbMain tbody tr:last').index() + 2;
+
+            var row = "";
+            row += '<tr>';
+            row += '<td align="center" style="text-align:center;display:none;">' + rowIndex + '</td>';
+            row += '<td align="center" style="text-align:center;display:none;">' + mdProductID + '</td>';
+            row += '<td align="center" style="text-align:center">' + mdProduct + '</td>';
+            row += '<td align="center" style="text-align:center;display:none;">' + mdSNID + '</td>';
+            row += '<td align= "center" style= "text-align:center" >' + mdSerialNo + '</td>';
+            row += '<td align= "center" style= "text-align:center" >' + mdIP + '</td>';
+            row += '<td align= "center" style= "text-align:center" >' + mdPrdName + '</td>';
+            row += '<td align="center" style="text-align:center">' + btnEdit + '&nbsp;' + btnDel + '</td>';
+            row += '</tr >';
+
+            //Append new row
+            $("#tbMain > tbody").last().append(row);
+
+            //Clear modal value
+            $("#ProductList").val("");
+            $("#SerialID").val("");
+            $("#SerialNo").val("");
+            $("#IP").val("");
+            $("#NName").val("");
+
+
+            //Close Modal
+            $("#ListModal").modal("hide");
+        });
+
+        //click edit in edit table pass value to modalEdit
+        $("#tbMain tbody").on('click', '.btnEdit', function () {
+            //When press btn Update assign value from element to parameter
+            console.log($(this).closest("tr").index());
+
+            var rowIndex = $(this).closest("tr").index();
+
+            var editRowNo = $(this).closest("tr").find('td:eq(0)').text();
+            var editPrdID = $(this).closest("tr").find('td:eq(1)').text();
+            var editPrdName = $(this).closest("tr").find('td:eq(2)').text();
+            var editSNID = $(this).closest("tr").find('td:eq(3)').text();
+            var editSNName = $(this).closest("tr").find('td:eq(4)').text();
+            var editIP = $(this).closest("tr").find('td:eq(5)').text();
+            var editNName = $(this).closest("tr").find('td:eq(6)').text();
+
+            //console.log(editRowNo + '|' + editToolID + '|' + editToolText + '|' + editQty + '|' + editSerialBegin + '|' + editSerialEnd + '|' + editTotalQty);
+
+            var whID = $("#WhID").val();
+
+            // Get Product in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetProdByWH")" + "?WhID=" + whID,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#editProductList').empty().append('<option value="">-----กรุณาเลือก-----</option>');
+                        for (var x = 0; x < response.length; x++){
+                            $('#editProductList').append($('<option>', {
+                                value: response[x].ID,
+                                text: response[x].Name
+                            }));
+                        }
+
+
+                        //assign value edit modal
+                        $("#editRowNo").val(editRowNo);
+                        $("#editProductList").val(editPrdID);
+                        $("#editSerialID").val(editSNID);
+                        $("#editSerialNo").val(editSNName);
+                        $("#editIP").val(editIP);
+                        $("#editNName").val(editNName);
+
+
+                        // get serial from product & warehouse
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("GetSerialNo")" + "?pdID=" + editPrdID + "&whID=" + whID,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                //console.log(response);
+                                if (response.length > 0) {
+                                    $('#modSelSN tbody').empty();
+                                    for (var x = 0; x < response.length; x++) {
+                                        var newRow = '<tr>';
+                                        newRow = newRow + '<td>' + response[x].SerialBegin + '</td>';
+                                        newRow = newRow + '<td>' + '<a href="#"><i name="SelSNEdit" SNID="' + response[x].ID + '" SN="' + response[x].SerialBegin + '" PrdName="' + response[x].Name + '" IP="' + response[x].IpProperty + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selThisEditSN(event,this)"></i></a>' + '</td>';
+                                        newRow = newRow + '</tr>';
+
+                                        $('#modSelSN tbody').append(newRow);
+                                    }
+                                }
+                            },
+                            error: function (response) {
+                                console.log(response)
+                            }
+                        });
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+
+
+        });
+
+
+
+        //click edit in edit table pass value to modalEdit
+        $("#tbStaff tbody").on('click', '.btnEditStaff', function () {
+            //When press btn Update assign value from element to parameter
+            console.log($(this).closest("tr").index());
+
+            var rowIndex = $(this).closest("tr").index();
+
+            var editRowNo = $(this).closest("tr").find('td:eq(0)').text();
+            var editStaffID = $(this).closest("tr").find('td:eq(1)').text();
+            var editStaffName = $(this).closest("tr").find('td:eq(2)').text();
+
+            $("#editStaffID").val(editStaffID);
+
+            //console.log(editRowNo + '|' + editToolID + '|' + editToolText + '|' + editQty + '|' + editSerialBegin + '|' + editSerialEnd + '|' + editTotalQty);
+
+            var whID = $("#WhID").val();
+
+            //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetStaffByWH")" + "?WhID=" + whID,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#StaffList tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelEditSF" SFID="' + response[x].ID + '" SFNAME="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selThisEditStaff(event,this)"></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#StaffList tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+
+
+        });
+
+        $("#tbStaff tbody").on('click', '.btnEdit', function () {
+            //When press btn Update assign value from element to parameter
+            console.log($(this).closest("tr").index());
+
+            var rowIndex = $(this).closest("tr").index();
+
+            var editRowNo = $(this).closest("tr").find('td:eq(0)').text();
+            var editStID = $(this).closest("tr").find('td:eq(1)').text();
+            var editStName = $(this).closest("tr").find('td:eq(2)').text();
+
+
+            //console.log(editRowNo + '|' + editToolID + '|' + editToolText + '|' + editQty + '|' + editSerialBegin + '|' + editSerialEnd + '|' + editTotalQty);
+
+            //assign value edit modal
+            $("#editRowNo").val(editRowNo);
+
+            $("#editStID").val(editStID);
+            $("#editStName").val(editStName);
+
+
+        });
+
+
+        $("#updateRow").on('click', function () {
+            //console.log($(this));
+
+            //get value from edit form
+            var editRowNo = $("#editRowNo").val().trim();
+            //get value from modal
+            var editToolID = $("#editProductList :selected").val().trim();
+            var editToolText = $("#editProductList :selected").text().trim();
+            var editSerialID= $("#editSerialID").val().trim();
+            var editSerialNo = $("#editSerialNo").val().trim();
+            var editIP = $("#editIP").val();
+            var editNName = $("#editNName").val();
+
+
+            //console.log(editRowNo + '|' + editWarehouseID + '|' + editWarehouseName + '|' + editIsManagerID + '|' + editIsManagerName);
+            // validate data
+            if (!validateEditModal()) {
+                return false;
+            }
+
+
+            // check is exists in table main
+            var isExists = 0;
+            $("#tbMain tbody tr").each(function (i) {
+                var rowindex = $(this).closest("tr").find("td:eq(0)").text().trim();
+                var prdid = $(this).closest("tr").find('td:eq(1)').text().trim();
+                var snno = $(this).closest("tr").find('td:eq(4)').text().trim();
+
+                if (editToolID == prdid && editSerialNo == snno && editRowNo != rowindex) {
+                    alert("มีวัสดุ และ เลขคุมนี้แล้ว");
+                    isExists = 1;
+                }
+            });
+
+            if (isExists) {
+                return false;
+            }
+
+            //setting data as new row
+            var btnEdit = '<a href="#"  data-toggle="modal" data-target="#editModal" class="btnEdit"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+            var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+            var editRow = "";
+            editRow += '<tr>';
+            editRow += '<td align="center" style="text-align:center;display:none;">' + editRowNo + '</td>';
+            editRow += '<td align="center" style="text-align:center;display:none;">' + editToolID + '</td>';
+            editRow += '<td align="center" style="text-align:center">' + editToolText + '</td>';
+            editRow += '<td align="center" style="text-align:center;display:none;">' + editSerialID + '</td>';
+            editRow += '<td align="center" style="text-align:center">' + editSerialNo + '</td>';
+            editRow += '<td align= "center" style= "text-align:center" >' + editIP + '</td>';
+            editRow += '<td align= "center" style= "text-align:center" >' + editNName + '</td>';
+            editRow += '<td align="center" style="text-align:center">' + btnEdit + '&nbsp;' + btnDel + '</td>';
+            editRow += '</tr >';
+
+
+            // find row to update by column ID
+            var rowToEdit = $("#tbMain tbody tr").find("td:eq(0):contains('" + editRowNo + "')").closest("tr");
+            var rowIndex = rowToEdit.index();
+
+            // replace old row with new row
+            rowToEdit.replaceWith(editRow);
+
+
+            //Clear modal value
+            $("#editRowNo").val("");
+            $("#editProductList").val("");
+            $("#editSerialID").val("");
+            $("#editSerialNo").val("");
+            $("#editIP").val("");
+            $("#editNName").val("");
+
+
+            //Close Modal
+            $("#editModal").modal("hide");
+        });
+
+        $("#updateRowStaff").on('click', function () {
+            //console.log($(this));
+
+            //get value from edit form
+            var editRowNo = $("#editRowNo").val();
+            //get value from modal
+            var editStID = $("#editStID").val();
+            var editStName = $("#editStName").text();
+
+
+            //console.log(editRowNo + '|' + editWarehouseID + '|' + editWarehouseName + '|' + editIsManagerID + '|' + editIsManagerName);
+            // validate data
+            if (!validateEditModal()) {
+                return false;
+            }
+            //setting data as new row
+            var btnEdit = '<a href="#"  data-toggle="modal" data-target="#editModal" class="btnEdit"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+            var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+
+            var rowEdit = "";
+            rowEdit += '<tr>';
+            rowEdit += '<td align="center" style="text-align:center;display:none;">' + editRowNo + '</td>';
+            rowEdit += '<td align="center" style="text-align:center;display:none;">' + editStID + '</td>';
+            rowEdit += '<td align="center" style="text-align:center">' + editStName + '</td>';
+            rowEdit += '<td align="center" style="text-align:center">' + btnEdit + '&nbsp;' + btnDel + '</td>';
+            rowEdit += '</tr >';
+
+
+            // find row to update by column ID
+            var rowToEdit = $("#tbStaff tbody tr").find("td:eq(0):contains('" + editRowNo + "')").closest("tr");
+            var rowIndex = rowToEdit.index();
+
+            // replace old row with new row
+            rowToEdit.replaceWith(rowEdit);
+
+
+            //Clear modal value
+            $("#editStID").val("");
+            $("#editStName").val("");
+
+
+
+            //Close Modal
+            $("#editModalStaff").modal("hide");
+        });
+
+
+        $("#tbMain").on('click', '.remove', function () {
+            $(this).closest("tr").remove();
+
+            //if not have any row, insert not found row
+            if ($('table#tbMain tbody tr:last').index() < 0) {
+                var row = '<tr id="emptyRow"><td align="center" colspan="6">ไม่พบรายการ</td></tr>';
+                $("#tbMain > tbody").last().append(row);
+            } else {
+                genRowIndex();
+            }
+        });
+
+        $("#tbStaff").on('click', '.remove', function () {
+            $(this).closest("tr").remove();
+
+            //if not have any row, insert not found row
+            if ($('table#tbStaff tbody tr:last').index() < 0) {
+                var row = '<tr id="emptyRow"><td align="center" colspan="3">ไม่พบรายการ</td></tr>';
+                $("#tbStaff > tbody").last().append(row);
+            } else {
+                genRowIndex2();
+            }
+        });
+
+        $("#btnSelWh").click(function (e) {
+            e.defaultPrevented;
+            //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetWH")",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#modSelWH tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelW" whCode="' + response[x].ID + '" whName="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selWH(event,this)" ></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#modSelWH tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+            $("#WModal").modal("show");
+
+        });
+
+         //Save Data
+        $("#btnSave").on("click", function () {
+            //e.preventDefault();
+            var isValid = true;
+            //Validate form
+            $("#inputDiv :input").each(function () {
+
+                var acceptElement = ["Name", "WhID"];
+                // validate element if element in array
+                if ($.inArray($(this).attr("id"), acceptElement) !== -1) {
+                    if ($(this).val() == "") {
+                        var txtRequire = $(this).attr("data-val-required");
+                        var id = $(this).attr("id");
+
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html(txtRequire);
+
+                        isValid = false;
+                    } else {
+                        var id = $(this).attr("id");
+
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html("");
+                    }
+                }
+
+            });
+            //console.log($("#tbMain tbody tr").length);
+            //List Data
+            if ($("#tbMain tbody tr").length <= 0) {
+                alert("กรุณาเพิ่มรายการวัสดุ และ เลขคุม");
+
+                isValid = false;
+            }
+
+            if ($("#tbStaff tbody tr").length <= 0) {
+                alert("กรุณาเพิ่มรายการเจ้าหน้าที่ที่สามารถใช้ WorkStation ");
+
+                isValid = false;
+            }
+            //console.log(isValid);
+            if (!isValid) {
+
+                return false;
+            }
+
+            var tableP = $('#tbMain').tableToJSON(
+                {
+                    headings: ['PdID', 'SerialNo', 'IP', 'Name'],
+                    ignoreColumns: [0, 2, 3],
+                });
+
+            var tableS = $('#tbStaff').tableToJSON(
+                {
+                    headings: ['StID'],
+                    ignoreColumns: [0, 2],
+                });
+            console.log(tableP);
+            console.log(tableS);
+
+
+            var objJson = {
+                                ID: $("#ID").val(),
+                                Name: $("#Name").val(),
+                                WhID: $("#WhID").val(),
+                                Remark: $("#Remark").val(),
+                                WorkStationDetailList: tableP,
+                                WorkStationStaffList: tableS
+                            };
+            console.log(objJson);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Edit")",
+                data: JSON.stringify(objJson),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response == 'success') {
+                        alert("บันทึกข้อมูลเรียบร้อยแล้ว");
+                        window.location.href = "Index";
+                    } else {
+                        alert(response);
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+        });
+
+
+    });
+
+    function selWH(event, t) {
+        var whCode = $(t).attr("whCode").trim();
+        var whName = $(t).attr("whName").trim();
+
+        $("#WhName").val(whName);
+        $("#WhID").val(whCode);
+
+        // Get Product in warehouse
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetProdByWH")" + "?WhID=" + whCode,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                //console.log(response);
+                if (response.length > 0) {
+                    $('#ProductList').empty().append('<option value="">-----กรุณาเลือก-----</option>');
+                    for (var x = 0; x < response.length; x++) {
+                        $('#ProductList').append($('<option>', {
+                            value: response[x].ID,
+                            text: response[x].Name
+                        }));
+                    }
+                }
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        });
+
+
+        //Get Staff in warehouse
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetStaffByWH")" + "?WhID=" + whCode,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                //console.log(response);
+                if (response.length > 0) {
+                    $('#StaffList tbody').empty();
+                    for (var x = 0; x < response.length; x++) {
+                        var newRow = '<tr>';
+                        newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                        newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelSF" SFID="' + response[x].ID + '" SFNAME="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selThisStaff(event,this)"></i></a>' + '</td>';
+                        newRow = newRow + '</tr>';
+
+                        $('#StaffList tbody').append(newRow);
+                    }
+                }
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        });
+
+        $("#WModal").modal("hide");
+    }
+
+    function selThisSN(event,t) {
+        var snid = $(t).attr("snid");
+        var sn = $(t).attr("sn");
+        var ip = ($(t).attr("ip") == "null" ? "" : $(t).attr("ip"));
+        var prdname = ($(t).attr("prdname") == "null" ? "" : $(t).attr("prdname"));
+
+        $("#SerialID").val(snid);
+        $("#SerialNo").val(sn);
+        $("#IP").val(ip);
+        $("#NName").val(prdname);
+
+        //Close Modal
+        $("#SNModal").modal("hide");
+    }
+
+    function selThisEditSN(event, t) {
+        var snid = $(t).attr("snid");
+        var sn = $(t).attr("sn");
+        var ip = ($(t).attr("ip") == "null" ? "" : $(t).attr("ip"));
+        var prdname = ($(t).attr("prdname") == "null" ? "" : $(t).attr("prdname"));
+
+        $("#editSerialID").val(snid);
+        $("#editSerialNo").val(sn);
+        $("#editIP").val(ip);
+        $("#editNName").val(prdname);
+
+        //Close Modal
+        $("#SNModal").modal("hide");
+    }
+
+
+    function selThisStaff(event, t) {
+        var sfid = $(t).attr("sfid");
+        var sfname = $(t).attr("sfname");
+
+        //setting data as new row
+        var btnEdit = '<a href="#"  data-toggle="modal" data-target="#ListEditStaffModal" class="btnEditStaff"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+        var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+        // check is exists in table main
+        var isExists = 0;
+        $("#tbStaff tbody tr").each(function (i) {
+            var stfid = $(this).closest("tr").find('td:eq(1)').text().trim();
+
+            if (sfid == stfid) {
+                alert("มีเจ้าหน้าที่นี้แล้ว");
+                isExists = 1;
+            }
+        });
+
+        if (isExists) {
+            return false;
+        }
+
+        //get row index
+        var rowIndex = $('table#tbStaff tbody tr:last').index() + 2;
+
+        var row = "";
+        row += '<tr>';
+        row += '<td align="center" style="text-align:center;display:none;">' + rowIndex + '</td>';
+        row += '<td align="center" style="text-align:center;display:none;">' + sfid + '</td>';
+        row += '<td align="center" style="text-align:center">' + sfname + '</td>';
+        row += '<td align="center" style="text-align:center">' + btnEdit + '&nbsp;' + btnDel + '</td>';
+        row += '</tr >';
+
+        //Append new row
+        $("#tbStaff > tbody").last().append(row);
+
+        //Close Modal
+        $("#ListStaffModal").modal("hide");
+    }
+
+    function selThisEditStaff(event, t) {
+
+        var staffEditID = $("#editStaffID").val();  //Staff to update
+        var index = $("#tbStaff tbody tr").find("td:eq(1):contains('" + staffEditID + "')").closest("tr").index();
+        var rowNo = $("#tbStaff tbody tr").find("td:eq(1):contains('" + staffEditID + "')").closest("tr").find("td:eq(0)").text();
+        var sfid = $(t).attr("sfid");
+        var sfname = $(t).attr("sfname");
+
+        //console.log(index);
+
+        // check is exists in table main
+        var isExists = 0;
+        $("#tbStaff tbody tr").each(function (i) {
+            var rowind = $(this).closest("tr").find('td:eq(0)').text().trim();
+            var stfid = $(this).closest("tr").find('td:eq(1)').text().trim();
+
+            if (sfid == stfid && rowNo != rowind) {
+                alert("มีเจ้าหน้าที่นี้แล้ว");
+                isExists = 1;
+            }
+        });
+
+        if (isExists) {
+            return false;
+        }
+
+        //setting data as new row
+        var btnEdit = '<a href="#"  data-toggle="modal" data-target="#ListEditStaffModal" class="btnEditStaff"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+        var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+        var rowEdit = "";
+        rowEdit += '<tr>';
+        rowEdit += '<td align="center" style="text-align:center;display:none;">' + (index+1) + '</td>';
+        rowEdit += '<td align="center" style="text-align:center;display:none;">' + sfid + '</td>';
+        rowEdit += '<td align="center" style="text-align:center">' + sfname + '</td>';
+        rowEdit += '<td align="center" style="text-align:center">' + btnEdit + '&nbsp;' + btnDel + '</td>';
+        rowEdit += '</tr >';
+
+        // find row to update by column ID
+        var rowToEdit = $("#tbStaff tbody tr").find("td:eq(1):contains('" + staffEditID + "')").closest("tr");
+        var rowIndex = rowToEdit.index();
+
+        // replace old row with new row
+        rowToEdit.replaceWith(rowEdit);
+
+        //Close Modal
+        $("#ListEditStaffModal").modal("hide");
+    }
+
+    function genRowIndex() {
+        $("#tbMain tbody tr").each(function (i) {
+            $(this).closest("tr").find('td:eq(0)').text(i + 1);
+        });
+    }
+
+    function genRowIndex2() {
+        $("#tbStaff tbody tr").each(function (i) {
+            $(this).closest("tr").find('td:eq(0)').text(i + 1);
+        });
+    }
+
+    function validateEditModal() {
+
+        //get value from modal
+        var mdEditToolID = $("#editProductList :selected").val();
+        var mdEditToolText = $("#editProductList :selected").text();
+        var mdEditSerialNo = $("#editSerialNo").val();
+
+        var valid = true;
+        if (mdEditToolID == "") {
+            $("#mPrdErrMsg").html("กรุณาเลือกวัสดุ");
+            valid = false;
+        } else {
+            $("#mPrdErrMsg").html("");
+        }
+
+        if (mdEditSerialNo.trim() == "") {
+            $("#SNBegErrMsg").html("กรุณาเลือก เลขคุม");
+            valid = false;
+        }
+        else {
+            $("#SNBegErrMsg").html("");
+        }
+
+        // check validate all pass
+        return valid;
+    }
+
+
+    function validateAddModal() {
+
+        //get value from modal
+        var mdToolID = $("#ProductList :selected").val();
+        var mdToolText = $("#ProductList :selected").text();
+        var mdSerialNo = $("#SerialNo").val();
+
+        var valid = true;
+        if (mdToolID == "") {
+            $("#PrdErrMsg").html("กรุณาเลือกวัสดุ");
+            valid = false;
+        } else {
+            $("#PrdErrMsg").html("");
+        }
+
+        if (mdSerialNo.trim() == "") {
+            $("#SNBegErrMsg").html("กรุณาเลือก เลขคุม");
+            valid = false;
+        }
+        else {
+            $("#SNBegErrMsg").html("");
+        }
+
+        // check validate all pass
+        return valid;
+    }
+</script>
+
+<h2>WorkStations</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-xs-12 col-sm-9">
+            <input type="hidden" value="@Model.ID" name="ID" id="ID" />
+            <div class="form-horizontal">
+                <table class="table" style="min-width:70%">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <tr>
+                        <td style="padding: 10px;width:400px;">
+                            <div class="form-group">
+                                ชื่อ
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", value = "@Model.Name", @style = "width:300px;" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger", required = "required" })
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group" style="max-width:600px;">
+                                หมายเหตุ
+                                <div class="col-md-10" style="width:550px;max-width:600px;">
+                                    @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control", @style = "width:500px;max-width:550px;" } })
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;" colspan="2">
+                            <div class="form-group">
+                                สำนักงานขนส่ง
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.WhID, new { htmlAttributes = new { @class = "form-control", @style = "display:none;",value = "@Model.WhID" ,name="WhID",id="WhID"} })
+                                    <input class="form-control" name="WhName" id="WhName" value="@Model.WhName" style="width:500px;max-width:500px;display:unset;" disabled>
+                                    <a href="#" class="btn btn-success" data-toggle="modal" id="btnSelWh" style="vertical-align:unset;"><i class="fa fa-search fa-3"></i></a>
+                                    @Html.ValidationMessageFor(model => model.WhID, "", new { @class = "text-danger", required = "required" })
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;" colspan="2">
+                            <a href="#" class="btn btn-primary" id="btnOpenModal" data-toggle="modal">เพิ่มรายการ</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            @*//List Data*@
+            <table class="table table-hover" id="tbMain">
+
+                <thead>
+                    <tr>
+                        <th align="center" style="text-align:center;display:none;">No</th>
+                        <th align="center" style="text-align:center;display:none;">PdID</th>
+                        <th align="center" style="text-align:center;">วัสดุ</th>
+                        <th align="center" style="text-align:center;display:none;">SerialID</th>
+                        <th align="center" style="text-align:center;">เลขคุม</th>
+                        <th align="center" style="text-align:center;">IP</th>
+                        <th align="center" style="text-align:center;">Name</th>
+                        <th align="center" style="text-align:center;">...</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.WorkStationDetailList != null)
+                    {
+                        int n = 0;
+                        foreach (var i in Model.WorkStationDetailList)
+                        {
+                            n++;
+                            <tr>
+                                <td style="text-align:center;display:none;">@n</td>
+                                <td style="display:none;">@i.PdID</td>
+                                <td style="text-align:center;">@i.PdName</td>
+                                <td style="text-align:center;display:none;"></td>
+                                <td style="text-align:center;">@i.SerialNO</td>    
+                                <td style="text-align:center;">@i.IP</td> 
+                                <td style="text-align:center;">@i.Name</td>  
+                                <td style="text-align:center;"><a href="#" data-toggle="modal" data-target="#editModal" class="btnEdit"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>&nbsp;<a href="javascript:void(0);" class="remove"><i class="fa fa-fw fa-trash-o fa-2x"></i></a> </td>
+                                @*<td style="text-align:center;"><a href="javascript:void(0);" class="remove"><i class="fa fa-fw fa-trash-o fa-2x"></i></a></td>*@
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+
+            </table>
+
+            @*//List Data Staff*@
+            <div style="padding: 10px;">
+                <a href="#" class="btn btn-primary" id="btnOpenStaffModal" data-toggle="ListStaffModal">เพิ่มรายการ</a>
+            </div>
+            <table class="table table-hover" id="tbStaff">
+                <thead>
+                    <tr>
+                        <th align="center" style="text-align:center;display:none;">No</th>
+                        <th align="center" style="text-align:center;display:none;">StID</th>
+                        <th align="center" style="text-align:center;">ชื่อเจ้าหน้าที่</th>
+                        <th align="center" style="text-align:center;">...</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.WorkStationStaffList != null)
+                    {
+                        int n = 0;
+                        foreach (var i in Model.WorkStationStaffList)
+                        {
+                            n++;
+                            <tr>
+                                <td style="text-align:center;display:none;">@n</td>
+                                <td style="display:none;">@i.StID</td>
+                                <td style="text-align:center;">@i.StName</td>                               
+                                <td style="text-align:center;"><a href="#" data-toggle="modal" data-target="#ListEditStaffModal" class="btnEditStaff"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>&nbsp;<a href="javascript:void(0);" class="remove"><i class="fa fa-fw fa-trash-o fa-2x"></i></a></td>
+                                @*<td style="text-align:center;"><a href="javascript:void(0);" class="remove"><i class="fa fa-fw fa-trash-o fa-2x"></i></a></td>*@
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="search-form" style="border-left:1px solid #777;height:400px;">
+                <div class="search">
+                    <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                        <li class="menu-item" style="padding-top:30px;">
+                            <a href="/WorkStations/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="button" value="Create" id="btnSave" style="width:130px;">บันทึก</button>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-danger" type="button" id="btnDelete" trans_id="@Model.ID" value="Delete" style="width:130px;">ลบ</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+
+@*PopUp Warehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="WModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">สำนักงานขนส่ง</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelWH">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//PopUp Add List*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="ListModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">เพิ่มรายการ</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                วัสดุ
+                            </td>
+                            <td>
+                                @Html.DropDownList("ProductList", Enumerable.Empty<SelectListItem>(), "-----กรุณาเลือก-----", new { @class = "form-control" })
+                                <span id="PrdErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                                <input type="hidden" id="isAsset" name="isAsset" value="n" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                เลขคุม
+                            </td>
+                            <td>
+                                <input type="hidden" name="SerialID" id="SerialID" value="" />
+                                <input class="form-control" name="SerialNo" id="SerialNo" style="width:165px;display:inline;" disabled />
+                                <a href="#" class="btn btn-success" data-toggle="modal" data-target="#SNModal"><i class="fa fa-search fa-3"></i></a>
+                                <span id="SNBegErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                IP
+                            </td>
+                            <td>
+                                <input class="form-control" name="IP" id="IP" style="display:inline;" />
+                                <span id="IPErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Name
+                            </td>
+                            <td>
+                                <input class="form-control" name="NName" id="NName" style="display:inline;" />
+                                <span id="NameErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="addSNRow" name="addSNRow" type="submit" data-target="#addSNRow" class="btn btn-success">ตกลง</button>
+                    <a href="#" class="btn btn-warning" data-dismiss="modal">ยกเลิก</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//PopUp Edit List*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="editModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">เพิ่มรายการ</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                RowNo
+                            </td>
+                            <td>
+                                <input class="form-control" name="editRowNo" id="editRowNo" disabled />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                วัสดุ
+                            </td>
+                            <td>
+                                @Html.DropDownList("editProductList", Enumerable.Empty<SelectListItem>(), "-----กรุณาเลือก-----", new { @class = "form-control" })
+                                <span id="mPrdErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                เลขคุม
+                            </td>
+                            <td>
+                                <input type="hidden" name="editSerialID" id="editSerialID" value="" />
+                                <input class="form-control" name="editSerialNo" id="editSerialNo" style="width:165px;display:inline;" disabled />
+                                <a href="#" class="btn btn-success" data-toggle="modal" data-target="#SNModal"><i class="fa fa-search fa-3"></i></a>
+                                <span id="mSNBegErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                IP
+                            </td>
+                            <td>
+                                <input class="form-control" name="editIP" id="editIP" style="display:inline;" />
+                                <span id="editIPErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Name
+                            </td>
+                            <td>
+                                <input class="form-control" name="editNName" id="editNName" style="display:inline;" />
+                                <span id="editNNameErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="updateRow" name="updateRow" type="button" @*data-target="#addRow"*@ class="btn btn-success">ตกลง</button>
+                    <a href="#" class="btn btn-warning" data-dismiss="modal">ยกเลิก</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//PopUp Add Staff List*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="ListStaffModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">รายการเจ้าหน้าที่ประจำ WorkStation </h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br /><br />
+                <input type="text" class="form-control" id="txtSearch" name="txtSearch" tb="StaffList" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="StaffList">
+                        <thead>
+                            <tr>
+                                <td>
+                                    ชื่อเจ้าหน้าที่
+                                </td>
+                                <td>
+                                    <input class="form-control" name="StName" id="StName" type="hidden" />
+                                    <span id="SNBegErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//PopUp Edit Staff List*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="ListEditStaffModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">รายการเจ้าหน้าที่ประจำ WorkStation </h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <input type="hidden" id="editStaffID" name="editStaffID" />
+                </div>
+                <br /><br />
+                <input type="text" class="form-control" id="txtSearch" name="txtSearch" tb="StaffList" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="StaffList">
+                        <thead>
+                            <tr>
+                                <td>
+                                    ชื่อเจ้าหน้าที่
+                                </td>
+                                <td>
+                                    <input class="form-control" name="StName" id="StName" type="hidden"  />
+                                    <span id="SNBegErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//PopUp Edit List*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="editModalStaff">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">รายการเจ้าหน้าที่ประจำ WorkStation</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                RowNo
+                            </td>
+                            <td>
+                                <input class="form-control" name="editRowNo" id="editRowNo" disabled />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ชื่อเจ้าหน้าที่
+                            </td>
+                            <td>
+                                <input class="form-control" name="editStName" id="editStName" />
+                                <span id="SNBegErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+
+
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="updateRow" name="updateRow" type="button" @*data-target="#addRow"*@ class="btn btn-success">ตกลง</button>
+                    <a href="#" class="btn btn-warning" data-dismiss="modal">ยกเลิก</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//PopUp SN List*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="SNModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">เลขคุม</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br /><br />
+                <input type="text" class="form-control" id="txtSearch" name="txtSearch" tb="modSelSN" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelSN">
+                        <thead>
+                        <th>Serial</th>
+                        <th>...</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

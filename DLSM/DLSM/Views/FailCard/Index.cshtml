@@ -1,0 +1,478 @@
+﻿@model IEnumerable<DLSM.Models.StockSerial>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    SelectList PdID = ViewBag.PdID;
+    SelectList Serial = ViewBag.Serial;
+
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+<link href="~/Content/datepicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker-thai.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.th.js"></script>
+<script src="~/Scripts/jquery.tabletojson.js"></script>
+
+<script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+
+        var table = $('#tbMain').DataTable({
+            "dom": "rtp",
+            "pageLength": 20,
+            "language": {
+                "paginate": {
+                    "next": "ถัดไป",
+                    "previous": "ก่อนหน้า"
+                }
+            },
+            "order": [[1, "asc"]]
+        });
+
+        $('#DocDate').datepicker({
+            autoclose: true
+        });
+
+        $('#searchBeginDate').datepicker({
+            autoclose: true
+        });
+
+        $('#searchEndDate').datepicker({
+            autoclose: true
+        });
+
+        $("#btnSearch").click(function (e) {
+
+            if ($("#searchCardNo").val() == "") {
+                $("#searchCardNo").focus();
+                alert("กรุณากรอกเลขคุมเริ่มต้น");
+                return false;
+            }
+
+            if ($("#searchBeginDate").val() == "") {
+                alert("กรุณากรอกช่วงวันที่รับบัตร");
+                return false;
+            }
+
+            if ($("#searchEndDate").val() == "") {
+                alert("กรุณากรอกช่วงวันที่รับบัตร");
+                return false;
+            }
+
+            var url = "/FailCard/SearchCard?";
+            var searchCardNo = "";
+            var searchToCardNo = "";
+            var searchBeginDate = "";
+            var searchEndDate ="";
+
+
+            if ($("#searchCardNo").val().trim() != "") {
+                searchCardNo = "searchCardNo=" + $("#searchCardNo").val().trim();
+                url = url + "&" + searchCardNo;
+            }
+
+            if ($("#searchToCardNo").val().trim() != "") {
+                searchToCardNo = "searchToCardNo=" + $("#searchToCardNo").val().trim();
+                url = url + "&" + searchToCardNo;
+            }
+            if ($("#searchBeginDate").val().trim() != "") {
+                searchBeginDate = "searchBeginDate=" + formatDate($("#searchBeginDate").val().trim());
+                url = url + "&" + searchBeginDate;
+            }
+
+            if ($("#searchEndDate").val().trim() != "") {
+                searchEndDate = "searchEndDate=" + formatDate($("#searchEndDate").val().trim());
+                url = url + "&" + searchEndDate;
+            }
+
+            if (searchCardNo != "" || searchToCardNo != "" || searchBeginDate != "" || searchEndDate != "") {
+                window.location.href = url;
+            } else {
+                window.location.href = "/FailCard/Index";
+            }
+
+        });
+
+
+        var allPages = table.cells().nodes();
+
+        $("#btnCheckAll").on("click", function () {
+            $(allPages).find('input[name=chkCard]').prop('checked', true);
+        });
+
+        $("#btnNonCheckAll").on("click", function () {
+            $(allPages).find('input[name=chkCard]').prop('checked', false);
+        });
+
+        $("#btnSave").on("click", function () {
+
+            if (confirm("คุณต้องการจะบันทึกใช่หรือไม่") == true) {
+
+                if ($("#tbMain tbody tr td").length <= 1) {
+                    alert("กรุณาค้นหารายการบัตรที่ต้องการ");
+
+                    return false;
+                }
+
+                if ($(allPages).find('input[name=chkCard]:checked').closest("tr").length <= 0){
+                    alert("กรุณาเลือกรายการบัตรเสียที่ต้องการ");
+
+                    return false;
+                }
+
+                var cando_date = $(allPages).find('input[name=chkCard]:checked').closest("tr").length;
+                var cando = 0;
+
+                $(allPages).find('input[name=chkCard]:checked').closest("tr").each(function () {
+
+                    if ($(this).find('input[id=DocDate]').val() == "") {
+                        alert("กรุณาเลือกวันที่ที่ต้องการตัดบัตร");
+
+                        $("#tbData > tbody").empty();
+                        return false;
+                    } else {
+                        cando = cando + 1;
+                        var chk = $(this).find('input[name=chkCard]:checked');
+
+                        if ($(this).id != "trNotFound" && chk.length > 0) {
+
+                            var ID = chk.val().trim();
+                            var WhID = $(this).find("td:eq(1)").text().trim();
+                            var CardSerial = $(this).find("td:eq(2)").text().trim();
+                            var CardDate = formatDate($(this).find('input[id=DocDate]').val().trim());
+                            var Remark = $(this).find('input[name=Status]').val().trim();
+
+                            var row = "";
+                            row += '<tr>';
+                            row += '<td align="center" style="text-align:center;display:none;">' + ID + '</td>';
+                            row += '<td align="center" style="text-align:center;display:none;">' + WhID + '</td>';
+                            row += '<td align="center" style="text-align:center;display:none;">' + CardSerial + '</td>';
+                            row += '<td align="center" style="text-align:center;display:none;">' + CardDate + '</td>';
+                            row += '<td align="center" style="text-align:center;display:none;">' + Remark + '</td>';
+                            row += '</tr >';
+
+                            $("#tbData > tbody").last().append(row);
+
+                        }
+                    }
+                });
+
+                if (cando < cando_date) {
+                    //alert("กรุณาเลือกวันที่ที่ต้องการตัดบัตร");
+                    
+                } else {
+                    var table = $('#tbData').tableToJSON(
+                    {
+                        headings: ['ID', 'WhID', 'CardSerial', 'CardDate', 'Remark'],
+                    });
+
+                    var objJson = {
+                        "CardList": table
+                    };
+                    console.log(objJson);
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("InsertFailCard")",
+                        data: JSON.stringify(objJson),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            console.log(response);
+                            if (response == 'success') {
+                                alert("บันทึกเรียบร้อยแล้ว");
+                                window.location.href = "Index";
+                            } else {
+                                alert(response);
+                            }
+
+                        }
+                    });
+                }
+
+            }
+
+
+        });
+
+
+         $("#btnOpenModal").click(function (e) {
+            e.defaultPrevented;
+            //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetWH")",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#modSelWH tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelW" whCode="' + response[x].ID + '" whName="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selWH(event,this)" ></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#modSelWH tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+            $("#WModal").modal("show");
+
+        });
+
+        //Select Warehouse Find
+        //$("i[name=SelW]").click(function () {
+        //    //console.log($(this));
+        //    var whCode = $(this).attr("whCode");
+        //    var whName = $(this).attr("whName");
+
+        //    $("#SearchW").val(whName);
+        //    $("#SearchIDW").val(whCode);
+
+        //    $("#WModal").modal("hide");
+        //});
+
+        //Select Product Find
+        $("i[name=SelP]").click(function () {
+            //console.log($(this));
+            var pCode = $(this).attr("pCode");
+            var pName = $(this).attr("pName");
+
+            $("#SearchP").val(pName);
+            $("#SearchIDP").val(pCode);
+
+            $("#PModal").modal("hide");
+        });
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    //console.log($(this).closest("tr").index());
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+
+        function formatDate(date) {
+            var res = date.split("/");
+            return parseInt(res[2]) - 543 + '-' + res[1] + '-' + res[0];
+        }
+
+
+    })
+
+    function selWH(event, t) {
+        var whCode = $(t).attr("whCode").trim();
+        var whName = $(t).attr("whName").trim();
+
+        $("#SearchW").val(whName);
+        $("#SearchIDW").val(whCode);
+
+        $("#WModal").modal("hide");
+    }
+
+
+</script>
+
+<h2>ตัดบัตรเสีย</h2>
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-9">
+            <div class="form-horizontal">
+                <div id="inputDiv">
+                    <table class="table" style="min-width:70%">
+                        <tr>
+                            <td style="padding: 10px;">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    เลขคุม
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" name="searchCardNo" id="searchCardNo" maxlength="20" />
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 10px;">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    ถึงเลขคุม
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" name="searchToCardNo" id="searchToCardNo" maxlength="20" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    วันที่รับบัตร
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control input-medium" data-provide="datepicker" data-date-language="th-th" id="searchBeginDate" placeholder="วว/ดด/ปปปป" style="width:165px;">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    ถึงวันที่
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control input-medium" data-provide="datepicker" data-date-language="th-th" id="searchEndDate" placeholder="วว/ดด/ปปปป" style="width:165px;">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;" colspan="2">
+                                <button href="#" class="btn btn-warning" type="button" id="btnCheckAll" >เลือกทั้งหมด</button>
+                                <button href="#" class="btn btn-warning" type="button" id="btnNonCheckAll" >ไม่เลือกทั้งหมด</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                @*//List Data*@
+                <table class="table table-hover" id="tbMain">
+                    <thead>
+                        <tr>
+                            <th align="center" style="text-align:center;"></th>
+                            <th align="center" style="text-align:center;" hidden></th>
+                            <th align="center" style="text-align:center;">เลขคุม</th>
+                            <th align="center" style="text-align:center;">วันที่</th>
+                            <th align="center" style="text-align:center;">บัตรเสีย</th>
+                            <th align="center" style="text-align:center;">หมายเหตุ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                         {
+                                foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td style="text-align:center;">
+                                        @Html.DisplayFor(modelItem => item.PdID)
+                                    </td>
+                                    <td style="text-align:center;" hidden>
+                                        @Html.DisplayFor(modelItem => item.WhID)
+                                    </td>
+                                    <td style="text-align:center;">
+                                        @Html.DisplayFor(modelItem => item.SerialBegin)
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <input type="text" class="form-control input-medium" data-provide="datepicker" data-date-language="th-th" id="DocDate"  placeholder="วว/ดด/ปปปป" style="width:165px;">
+                                    </td> 
+                                    <td style="text-align:center;">
+                                        <input type="checkbox" id="chkCard" name="chkCard" value="@Html.DisplayFor(modelItem => item.PdID)" />
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <input class="form-control" value="" name="Status" id="Status" style="width:165px;" >
+                                    </td>
+                                </tr>
+                                }
+                         }
+                    </tbody>
+                </table>
+                <table class="table fade" id="tbData">
+                    <thead>
+                        <tr>
+                            <th align="center" style="text-align:center;"></th>
+                            <th align="center" style="text-align:center;">เลขคุม</th>
+                            <th align="center" style="text-align:center;">วันที่</th>
+                            <th align="center" style="text-align:center;">หมายเหตุ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="search-form" style="border-left:1px solid #777;height:400px;">
+                <div class="search">
+                    <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-primary" type="button" id="btnSearch" style="width:130px;">ค้นหา</button>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-warning" type="button" id="btnExit" style="width:130px;" onclick="javascript:window.location.href='/Transactions/Index'; return false;">ออก</button>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="button" id="btnSave" style="width:130px;">บันทึก</button>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        @*//Popup Add Warehouse*@
+        <div class="container " style="text-align:left">
+            <div class="modal fade" id="mdAddCard">
+                <div class=" modal-dialog" style="max-width:700px;">
+                    <div class=" modal-content">
+                        <div class=" modal-header">
+                            <h4 class="modal-title">รายการบัตร</h4>
+                            <a href="#" class="close" data-dismiss="modal">&times;</a>
+                        </div>
+                        <div class="form-group" style="padding:10px;display:none;">
+                            <input type="text" id="searchWarehouseTxt" name="searchWarehouseTxt" placeholder="คำค้น" class="form-control" />
+                        </div>
+                        <div class="modal-body" id="mypopupbody">
+                            <table class="table" id="tbCard">
+                                <thead>
+                                    <tr>
+                                        <th width="10%" style="text-align:center;"></th>
+                                        <th width="90%" style="text-align:center;">Serial</th>
+                                        @*<th width="45%" style="text-align:left;"></th>*@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                                <tfoot>
+                                    <tr id="trNotFound" style="display:none;">
+                                        <td style="text-align:center;">
+                                            ไม่พบข้อมูล
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="addCardRow" name="addCardRow" type="button" data-target="#addCardRow" class="btn btn-success">ตกลง</button>
+                            <a href="#" class="btn btn-warning" data-dismiss="modal">ยกเลิก</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+

@@ -1,0 +1,1448 @@
+﻿@model DLSM.Models.Document
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    SelectList PdID = ViewBag.PdID;
+
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+<link href="~/Content/datepicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker-thai.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.th.js"></script>
+<script src="~/Scripts/jquery.tabletojson.js"></script>
+
+<script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+        $('#DocDate').datepicker({
+            autoclose: true
+        });
+
+        //Date + time
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+
+        var output =
+            (('' + day).length < 2 ? '0' : '') + day + '/' +
+            (('' + month).length < 2 ? '0' : '') + month + '/' +
+            (parseInt(d.getFullYear()) + 543)
+
+        $("#DocDate").val(output);
+
+       $("#btnOpenModal").click(function (e) {
+            e.defaultPrevented;
+            if ($("#WhID").val().trim() == "") {
+                $("span[data-valmsg-for='WhID']").html("กรุณาเลือกสำนักงานขนส่ง");
+            } else {
+                $("span[data-valmsg-for='WhID']").html("");
+                $("#ListModal").modal("show");
+            }
+
+        });
+
+          $("#btnSelWh").click(function (e) {
+            e.defaultPrevented;
+            //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetWH")",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#modSelWH tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelW" whCode="' + response[x].ID + '" whName="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selWH(event,this)" ></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#modSelWH tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+            $("#WModal").modal("show");
+
+        });
+
+         $("#ProductList").on("change", function () {
+            var prdID = $(this).val();
+            var whID = $("#WhID").val();
+
+            if (prdID == "") {
+                $("#PrdErrMsg").html("");
+
+                $("#Qty").val("");
+                $("#Qty").removeAttr("readonly");
+                $("#Qty").css("background-color", "");
+            } else {
+
+                //check stock available
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("checkQtyByProduct")" + "?WhID=" + whID + "&prdID=" + prdID,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response != "") {
+
+                            $("#RemainQty").val(response);
+                            $("#RemainQty").attr("readonly", "readonly");
+                            $("#RemainQty").css("background-color", "");
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            }
+
+        });
+
+
+         $("#editProductList").on("change", function () {
+            var prdID = $(this).val();
+            var whID = $("#WhID").val();
+
+            if (prdID == "") {
+                $("#mPrdErrMsg").html("");
+
+                $("#editQty").val("");
+                $("#editQty").removeAttr("readonly");
+                $("#editQty").css("background-color", "");
+            } else {
+
+
+                //check stock available
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("checkQtyByProduct")" + "?WhID=" + whID + "&prdID=" + prdID,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+
+                        if (response != "") {
+
+                            $("#editRemainQty").val(response);
+                            $("#editRemainQty").attr("readonly", "readonly");
+                            $("#editRemainQty").css("background-color", "");
+
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            }
+        });
+
+
+
+         //If IsAsset is y has Serialbegin = SerialEnd
+         $("#SerialBegin").on("change", function () {
+             if ($("#isAsset").val() == "y") {
+                 var sbegin = $("#SerialBegin").val();
+                 $("#SerialEnd").val(sbegin);
+                 $("#TotalQty").val("1");
+             } else {
+                 if ($("#SerialEnd").val().trim() != "" && $("#SerialBegin").val().trim() != "") {
+                     var sbegin = $("#SerialEnd").val().substring($("#SerialEnd").val().length - 10);
+                     var send = $("#SerialBegin").val().substring($("#SerialBegin").val().length - 10);
+                     var sum = (sbegin - send) + 1;
+                     $("#TotalQty").val(sum);
+                 }
+             }
+         });
+
+         $("#editSerialBegin").on("change", function () {
+             if ($("#editisAsset").val().trim().toLowerCase() == "y") {
+                 var sbegin = $("#editSerialBegin").val();
+                 $("#editSerialEnd").val(sbegin);
+                 $("#editTotalQty").val("1");
+             } else {
+                 if ($("#editSerialEnd").val().trim() != "" && $("#editSerialBegin").val().trim() != "") {
+                     var sbegin = $("#editSerialEnd").val().substring($("#editSerialEnd").val().length - 10);
+                     var send = $("#editSerialBegin").val().substring($("#editSerialBegin").val().length - 10);
+                     var sum = (sbegin - send) + 1;
+                     $("#editTotalQty").val(sum);
+                 }
+             }
+             //console.log($("#editisAsset"));
+         });
+
+         $("#Qty").on("keyup", function () {
+            var q = $("#Qty").val();
+
+            var msg = "";
+            if (!$.isNumeric(q)) {
+                $("#Qty").val("");
+                $("#QtyErrMsg").html("กรุณากรอกเป็นตัวเลขจำนวนเต็ม");
+                return false;
+            } else {
+                $("#QtyErrMsg").html("");
+            }
+        });
+
+        $("#editQty").on("keyup", function () {
+            var q = $("#editQty").val();
+
+            var msg = "";
+            if (!$.isNumeric(q)) {
+                $("#editQty").val("");
+                $("#mQtyErrMsg").html("กรุณากรอกเป็นตัวเลขจำนวนเต็ม");
+                return false;
+            } else {
+                $("#mQtyErrMsg").html("");
+            }
+        });
+
+        $("#SerialEnd").on("change", function () {
+            var sbegin = $("#SerialEnd").val().substring($("#SerialEnd").val().length - 10);
+            var send = $("#SerialBegin").val().substring($("#SerialBegin").val().length - 10);
+            var sum = (sbegin - send) + 1;
+            $("#TotalQty").val(sum);
+
+        });
+
+        $("#editSerialEnd").on("change", function () {
+            var sbegin = $("#editSerialEnd").val().substring($("#editSerialEnd").val().length - 10);
+            var send = $("#editSerialBegin").val().substring($("#editSerialBegin").val().length - 10);
+            var sum = (sbegin - send) + 1;
+            $("#editTotalQty").val(sum);
+
+        });
+
+
+        //Select Warehouse Find
+        $("i[name=SelW]").click(function () {
+            //console.log($(this));
+            var whCode = $(this).attr("whCode");
+            var whName = $(this).attr("whName");
+
+            $("#WhName").val(whName);
+            $("#WhID").val(whCode);
+
+            $("#WModal").modal("hide");
+        });
+
+
+        //Select ToWarehouse Find
+        $("i[name=SelTW]").click(function () {
+            //console.log($(this));
+            var TowhCode = $(this).attr("TowhCode");
+            var TowhName = $(this).attr("TowhName");
+
+            $("#ToWhID").val(TowhCode);
+            $("#ToWhName").val(TowhName);
+
+            $("#TWModal").modal("hide");
+        });
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    //console.log($(this).closest("tr").index());
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+
+
+        $("#addRow").on('click', function () {
+
+            //get value from modal
+            var mdToolID = $("#ProductList :selected").val();
+            var mdToolText = $("#ProductList :selected").text();
+            var mdQty = $("#Qty").val();
+            var mdRemainQty = $("#RemainQty").val();
+            var mdSerialBegin = $("#SerialBegin").val();
+            var mdSerialEnd = $("#SerialEnd").val();
+            var mdIpProperty = $("#IpProperty").val();
+            var mdTotalQty = $("#TotalQty").val();
+            var mdIsAsset = $("#isAsset").val();
+            var mdIsControlSerial = $("#serialControl").val();
+
+
+            //log getting value
+            console.log(mdToolID + '|' + mdToolText + '|' + mdQty + '|' + mdSerialBegin + '|' + mdSerialBegin + '|' + mdSerialEnd + '|' + mdTotalQty);
+
+            if (!validateAddModal()) {
+                return false;
+            }
+
+            // check ID is exists
+            if ($("#emptyRow").length > 0) {
+                $("#tbMain tbody").empty();
+            }
+
+            // check SN duplicate
+            if (!checkDuplicateSNRow("add")) {
+                return false;
+            }
+
+            //setting data as new row
+            var btnEdit = '<a href="#"  data-toggle="modal" data-target="#editModal" class="btnEdit"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+            var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+            //get row index
+            var rowIndex = $('table#tbMain tbody tr:last').index() + 2;
+
+            var row = "";
+            row += '<tr>';
+            row += '<td align="center" style="text-align:center;">' + rowIndex + '</td>';
+            row += '<td align="center" style="text-align:center;display:none;">' + mdToolID + '</td>';
+            row += '<td align="center" style="text-align:center;">' + mdToolText + '</td>';
+            row += '<td align= "center" style= "text-align:center;" >' + mdRemainQty + '</td>';
+            row += '<td align= "center" style= "text-align:center;" >' + mdQty + '</td>';
+            row += '<td align= "center" style= "text-align:center;display:none;" >' + mdSerialBegin + '</td>';
+            row += '<td align= "center" style= "text-align:center;display:none;" >' + mdSerialEnd + '</td>';
+            row += '<td align= "center" style= "text-align:center;display:none;" >' + mdIpProperty + '</td>';
+            row += '<td align= "center" style= "text-align:center;display:none;" >' + mdTotalQty + '</td>';
+            row += '<td align="center" style="text-align:center;">' + btnEdit  + '</td>';
+            row += '<td align="center" style="text-align:center;">' + btnDel + '</td>';
+            row += '<td align="center" style="text-align:center;display:none;">' + mdIsAsset + '</td>';
+            row += '<td align="center" style="text-align:center;display:none;">' + mdIsControlSerial + '</td>';
+            row += '</tr >';
+
+            //Append new row
+            $("#tbMain > tbody").last().append(row);
+
+            //Clear modal value
+            $("#ProductList").val("");
+            $("#Qty").val("");
+            $("#RemainQty").val("");
+            $("#SerialBegin").val("");
+            $("#SerialEnd").val("");
+            $("#IpProperty").val("");
+            $("#TotalQty").val("");
+            $("#isAsset").val("n");
+            $("#serialControl").val("n");
+
+
+            //Close Modal
+            $("#ListModal").modal("hide");
+        });
+
+        //click edit in edit table pass value to modalEdit
+        $("#tbMain tbody").on('click', '.btnEdit', function () {
+            //When press btn Update assign value from element to parameter
+            console.log($(this).closest("tr").index());
+
+            var rowIndex = $(this).closest("tr").index();
+
+            var editRowNo = $(this).closest("tr").find('td:eq(0)').text();
+            var editToolID = $(this).closest("tr").find('td:eq(1)').text();
+            var editToolText = $(this).closest("tr").find('td:eq(2)').text();
+            var editRemainQty = $(this).closest("tr").find('td:eq(3)').text();
+            var editQty = $(this).closest("tr").find('td:eq(4)').text();
+            var editSerialBegin = $(this).closest("tr").find('td:eq(5)').text();
+            var editSerialEnd = $(this).closest("tr").find('td:eq(6)').text();
+            var editIpProperty = $(this).closest("tr").find('td:eq(7)').text();
+            var editTotalQty = $(this).closest("tr").find('td:eq(8)').text();
+            var editIsAsset = $(this).closest("tr").find('td:eq(11)').text();
+            var editIsControlSerial = $(this).closest("tr").find('td:eq(12)').text();
+
+            console.log(editRowNo + '|' + editToolID + '|' + editToolText + '|' + editQty + '|' + editSerialBegin + '|' + editSerialEnd + '|' + editTotalQty);
+
+            //assign value edit modal
+            $("#editRowNo").val(editRowNo);
+            $("#editProductList").val(editToolID);
+            $("#editQty").val(editQty);
+            $("#editRemainQty").val(editRemainQty);
+            $("#editSerialBegin").val(editSerialBegin);
+            $("#editSerialEnd").val(editSerialEnd);
+            $("#editIpProperty").val(editIpProperty);
+            $("#editTotalQty").val(editTotalQty);
+            $("#editisAsset").val(editIsAsset);
+            $("#editserialControl").val(editIsControlSerial);
+
+
+            $("#editRemainQty").attr("readonly", "readonly");
+
+
+        });
+
+
+        $("#updateRow").on('click', function () {
+            //console.log($(this));
+
+            //get value from edit form
+            var editRowNo = $("#editRowNo").val();
+            //get value from modal
+            var editToolID = $("#editProductList :selected").val();
+            var editToolText = $("#editProductList :selected").text();
+            var editQty = $("#editQty").val();
+            var editRemainQty = $("#editRemainQty").val();
+            var editSerialBegin = $("#editSerialBegin").val();
+            var editSerialEnd = $("#editSerialEnd").val();
+            var editIpProperty = $("#editIpProperty").val();
+            var editTotalQty = $("#editTotalQty").val();
+            var editIsAsset = $("#editisAsset").val();
+            var editIsControlSerial = $("#editserialControl").val();
+
+            //console.log(editRowNo + '|' + editWarehouseID + '|' + editWarehouseName + '|' + editIsManagerID + '|' + editIsManagerName);
+            if (!validateEditModal()) {
+                return false;
+            }
+
+            // check SN duplicate
+            if (!checkDuplicateSNRow("edit")) {
+                return false;
+            }
+
+            //setting data as new row
+            var btnEdit = '<a href="#"  data-toggle="modal" data-target="#editModal" class="btnEdit"><i  class="fa fa-fw fa-pencil-square fa-2x"></i></a>';
+            var btnDel = '<a href="javascript:void(0);"  class="remove"><i  class="fa fa-fw fa-trash-o fa-2x"></i></a>';
+
+
+            var rowEdit = "";
+            rowEdit += '<tr>';
+            rowEdit += '<td align="center" style="text-align:center;">' + editRowNo + '</td>';
+            rowEdit += '<td align="center" style="text-align:center;display:none;">' + editToolID + '</td>';
+            rowEdit += '<td align="center" style="text-align:center">' + editToolText + '</td>';
+            rowEdit += '<td align= "center" style= "text-align:center;" >' + editRemainQty + '</td>';
+            rowEdit += '<td align= "center" style= "text-align:center;" >' + editQty + '</td>';
+            rowEdit += '<td align= "center" style= "text-align:center;display:none;" >' + editSerialBegin + '</td>';
+            rowEdit += '<td align= "center" style= "text-align:center;display:none;" >' + editSerialEnd + '</td>';
+            rowEdit += '<td align= "center" style= "text-align:center;display:none;" >' + editIpProperty + '</td>';
+            rowEdit += '<td align= "center" style= "text-align:center;display:none;" >' + editTotalQty + '</td>';
+            rowEdit += '<td align="center" style="text-align:center;">' + btnEdit  + '</td>';
+            rowEdit += '<td align="center" style="text-align:center;">' + btnDel + '</td>';
+            rowEdit += '<td align="center" style="text-align:center;display:none;">' + editIsAsset + '</td>';
+            rowEdit += '<td align="center" style="text-align:center;display:none;">' + editIsControlSerial + '</td>';
+            rowEdit += '</tr >';
+
+
+            // find row to update by column ID
+            var rowToEdit = $("#tbMain tbody tr").find("td:eq(0):contains('" + editRowNo + "')").closest("tr");
+            var rowIndex = rowToEdit.index();
+
+            // replace old row with new row
+            rowToEdit.replaceWith(rowEdit);
+
+
+            //Clear modal value
+            $("#ProductList").val("");
+            $("#Qty").val("");
+            $("#RemainQty").val("");
+            $("#SerialBegin").val("");
+            $("#SerialEnd").val("");
+            $("#IpProperty").val("");
+            $("#TotalQty").val("");
+            $("#editisAsset").val("n");
+            $("#editserialControl").val("n");
+
+
+            //Close Modal
+            $("#editModal").modal("hide");
+        });
+
+
+        $("#tbMain").on('click', '.remove', function () {
+            $(this).closest("tr").remove();
+
+            //if not have any row, insert not found row
+            if ($('table#tbMain tbody tr:last').index() < 0) {
+                var row = '<tr id="emptyRow"><td align="center" colspan="8">ไม่พบรายการ</td></tr>';
+                $("#tbMain > tbody").last().append(row);
+            } else {
+                genRowIndex();
+            }
+        });
+
+        //Save Data
+        $("#btnSave").on("click", function () {
+            if (confirm("คุณต้องการจะบันทึกข้อมูลใช่หรือไม่") == true) {
+                //e.preventDefault();
+                var isValid = true;
+                //Validate form
+                $("#inputDiv :input").each(function () {
+
+                    var acceptElement = ["DocNo", "WhID"];
+                    // validate element if element in array
+                    if ($.inArray($(this).attr("id"), acceptElement) !== -1) {
+                        if ($(this).val() == "") {
+                            var txtRequire = $(this).attr("data-val-required");
+                            var id = $(this).attr("id");
+
+                            $("#inputDiv").find("[data-valmsg-for=" + id + "]").html(txtRequire);
+
+                            isValid = false;
+                        } else {
+                            var id = $(this).attr("id");
+
+                            $("#inputDiv").find("[data-valmsg-for=" + id + "]").html("");
+                        }
+                    }
+
+                });
+                console.log($("#tbMain tbody tr").length);
+                //List Data
+                if ($("#tbMain tbody tr").length <= 0) {
+                    alert("กรุณาเพิ่มรายการที่ต้องการตรวจนับ");
+
+                    isValid = false;
+                }
+                console.log(isValid);
+                if (!isValid) {
+
+                    return false;
+                }
+                var table = $('#tbMain').tableToJSON(
+                    {
+                        headings: ['PdID', 'RemainQty', 'Qty', 'SerialBegin', 'SerialEnd', 'IpProperty'],
+                        ignoreColumns: [0, 2, 9],
+                    });
+
+                var DocDate = formatDate($("#DocDate").val());
+
+                var objJson = {
+                    DocNo: $("#DocNo").val(),
+                    DocDate: DocDate,
+                    CreateBy: @Session["UserID"].ToString(),
+                    DocType: "6",
+                    WhID: $("#WhID").val(),
+                    ToWhID: $("#ToWhID").val(),
+                    SpID: null,
+                    Remark: $("#Remark").val(),
+                    Status: "1",
+                    ApproveDate: null,
+                    ApproveBy: null,
+                    ProcessDate: null,
+                    ProcessBy: null,
+                    DocDetailList: table
+                };
+                console.log(objJson);
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Insert")",
+                    data: JSON.stringify(objJson),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response == 'success') {
+                            alert("บันทึกเรียบร้อยแล้ว");
+                            window.location.href = "Index";
+                        } else {
+                            alert(response);
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            }
+        });
+
+
+          //Save Data and send approve
+        $("#btnSendApproveBFSave").on("click", function () {
+            //e.preventDefault();
+            if (confirm("คุณต้องการจะส่งอนุมัติใช่หรือไม่") == true) {
+                var isValid = true;
+                //Validate form
+                $("#inputDiv :input").each(function () {
+
+                    var acceptElement = ["DocNo", "WhID"];
+                    // validate element if element in array
+                    if ($.inArray($(this).attr("id"), acceptElement) !== -1) {
+                        if ($(this).val() == "") {
+                            var txtRequire = $(this).attr("data-val-required");
+                            var id = $(this).attr("id");
+
+                            $("#inputDiv").find("[data-valmsg-for=" + id + "]").html(txtRequire);
+
+                            isValid = false;
+                        } else {
+                            var id = $(this).attr("id");
+
+                            $("#inputDiv").find("[data-valmsg-for=" + id + "]").html("");
+                        }
+                    }
+
+                });
+                console.log($("#tbMain tbody tr").length);
+                //List Data
+                if ($("#tbMain tbody tr").length <= 0) {
+                    alert("กรุณาเพิ่มรายการที่ต้องการตรวจนับ");
+
+                    isValid = false;
+                }
+                console.log(isValid);
+                if (!isValid) {
+
+                    return false;
+                }
+                var table = $('#tbMain').tableToJSON(
+                    {
+                        headings: ['PdID', 'RemainQty', 'Qty', 'SerialBegin', 'SerialEnd', 'IpProperty'],
+                        ignoreColumns: [0, 2, 9],
+                    });
+
+                var DocDate = formatDate($("#DocDate").val());
+                var ProcessDate = formatDate(output);
+
+                var objJson = {
+                    DocNo: $("#DocNo").val(),
+                    DocDate: DocDate,
+                    CreateBy: @Session["UserID"].ToString(),
+                    DocType: "6",
+                    WhID: $("#WhID").val(),
+                    ToWhID: $("#ToWhID").val(),
+                    SpID: null,
+                    Remark: $("#Remark").val(),
+                    Status: "2",
+                    ApproveDate: null,
+                    ApproveBy: null,
+                    ProcessDate: ProcessDate,
+                    ProcessBy: @Session["UserID"].ToString(),
+                    DocDetailList: table
+                };
+                console.log(objJson);
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("InsertSendApp")",
+                    data: JSON.stringify(objJson),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response == 'success') {
+                            alert("ส่งอนุมัติเรียบร้อยแล้ว");
+                            window.location.href = "Index";
+                        } else {
+                            alert(response);
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            }
+        });
+
+
+        //Save Data
+        $("#btnSaveandAppr").on("click", function () {
+            if (confirm("คุณต้องการจะบันทึกและอนุมัติใช่หรือไม่") == true) {
+                //e.preventDefault();
+                var isValid = true;
+                //Validate form
+                $("#inputDiv :input").each(function () {
+
+                    var acceptElement = ["DocNo", "WhID"];
+                    // validate element if element in array
+                    if ($.inArray($(this).attr("id"), acceptElement) !== -1) {
+                        if ($(this).val() == "") {
+                            var txtRequire = $(this).attr("data-val-required");
+                            var id = $(this).attr("id");
+
+                            $("#inputDiv").find("[data-valmsg-for=" + id + "]").html(txtRequire);
+
+                            isValid = false;
+                        } else {
+                            var id = $(this).attr("id");
+
+                            $("#inputDiv").find("[data-valmsg-for=" + id + "]").html("");
+                        }
+                    }
+
+
+                });
+                console.log($("#tbMain tbody tr").length);
+                //List Data
+                if ($("#tbMain tbody tr").length <= 0) {
+                    alert("กรุณาเพิ่มรายการที่ต้องการตรวจนับ");
+
+                    isValid = false;
+                }
+                console.log(isValid);
+                if (!isValid) {
+
+                    return false;
+                }
+                var table = $('#tbMain').tableToJSON(
+                    {
+                        headings: ['PdID', 'RemainQty', 'Qty', 'SerialBegin', 'SerialEnd', 'IpProperty'],
+                        ignoreColumns: [0, 2, 9],
+                    });
+
+                var DocDate = formatDate($("#DocDate").val());
+
+                var objJson = {
+                    DocNo: $("#DocNo").val(),
+                    DocDate: DocDate,
+                    CreateBy: @Session["UserID"].ToString(),
+                    DocType: "6",
+                    WhID: $("#WhID").val(),
+                    ToWhID: $("#ToWhID").val(),
+                    SpID: null,
+                    Remark: $("#Remark").val(),
+                    Status: "3",
+                    ApproveDate: DocDate,
+                    ApproveBy: @Session["UserID"].ToString(),
+                    ProcessDate: DocDate,
+                    ProcessBy: @Session["UserID"].ToString(),
+                    DocDetailList: table
+                };
+                console.log(objJson);
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("InsertAndAppr")",
+                    data: JSON.stringify(objJson),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response == 'success') {
+                            alert("บันทึกและอนุมัติเรียบร้อยแล้ว");
+                            window.location.href = "Index";
+                        } else {
+                            alert(response);
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            }
+        });
+
+
+         // default button by warehouse
+        $.ajax({
+            type: "Post",
+            url: "/CheckStocks/IsWarehouseManager?whcode=" + @Session["UserWhID"].ToString(),
+            contentType: "html",
+            success: function (res) {
+                btnControl(res);
+            },
+            error: function (res) {
+                console.log(res)
+            }
+        });
+
+    });
+
+
+    function genRowIndex() {
+        $("#tbMain tbody tr").each(function (i) {
+            $(this).closest("tr").find('td:eq(0)').text(i + 1);
+        });
+    }
+
+
+    function formatDate(date) {
+        var res = date.split("/");
+        var d = new Date();
+        var datetime = " " + d.getHours() + ":"
+            + d.getMinutes() + ":"
+            + d.getSeconds();
+        return parseInt(res[2]) - 543 + '-' + res[1] + '-' + res[0] + datetime;
+    }
+
+    function validateAddModal() {
+        //get value from modal
+        var mdToolID = $("#ProductList :selected").val();
+        var mdToolText = $("#ProductList :selected").text();
+        var mdQty = $("#Qty").val();
+        var mdRemainQty = $("#RemainQty").val();
+        var mdSerialBegin = $("#SerialBegin").val();
+        var mdSerialEnd = $("#SerialEnd").val();
+        var mdTotalQty = $("#TotalQty").val();
+        var mdIP = $("#IpProperty").val();
+        var isAsset = $("#isAsset").val();
+        var serialControl = $("#serialControl").val();
+
+        var valid = true;
+        if (mdToolID == "") {
+            $("#PrdErrMsg").html("กรุณาเลือกวัสดุ");
+            valid = false;
+        } else {
+            $("#PrdErrMsg").html("");
+        }
+
+        //if (mdQty == "") {
+        //    $("#QtyErrMsg").html("กรุณากรอกจำนวน");
+        //    valid = false;
+        //}
+        //else {
+        //    $("#QtyErrMsg").html("");
+        //}
+
+        //if (serialControl.toLowerCase() == "y"){
+        //    if (mdRemainQty == "") {
+        //        $("#RemainQtyErrMsg").html("กรุณากรอกจำนวนตรวจรับ");
+        //        valid = false;
+        //    }
+        //    else {
+        //        $("#QtyErrMsg").html("");
+        //    }
+
+        //    if (mdSerialBegin == "") {
+        //        $("#SNBegErrMsg").html("กรุณากรอกเลขคุมเริ่มต้น");
+        //        valid = false;
+        //    }
+        //    else {
+        //        $("#SNBegErrMsg").html("");
+        //    }
+
+        //    if (mdSerialEnd == "") {
+        //        $("#SNEndErrMsg").html("กรุณากรอกเลขคุมสุดท้าย");
+        //        valid = false;
+        //    } else {
+        //        $("#SNEndErrMsg").html("");
+        //    }
+
+        //    if (mdRemainQty > mdTotalQty || mdRemainQty < mdTotalQty) {
+        //        $("#SNTotalErrMsg").html("จำนวนนับของ เลขคุม ไม่ตรงกับจำนวนที่ท่านกรอก");
+        //        valid = false;
+        //    } else {
+        //        $("#SNTotalErrMsg").html("");
+        //    }
+        //}
+
+
+        //if (isAsset.toLowerCase() == "y" && mdIP.trim() == "") {
+        //    $("#SNIpPropertyErrMsg").html("กรุณากรอก IP");
+        //    valid = false;
+        //} else {
+        //    $("#SNIpPropertyErrMsg").html("");
+        //}
+
+
+
+        // check validate all pass
+        return valid;
+    }
+
+    function validateEditModal() {
+
+        //get value from modal
+        var meditRowNo = $("#editRowNo").val();
+        //get value from modal
+        var meditToolID = $("#editProductList :selected").val();
+        var meditToolText = $("#editProductList :selected").text();
+        var meditQty = $("#editQty").val();
+        var meditRemainQty = $("#editRemainQty").val();
+        var meditSerialBegin = $("#editSerialBegin").val();
+        var meditSerialEnd = $("#editSerialEnd").val();
+        var meditTotalQty = $("#editTotalQty").val();
+        var meditIP = $("#editIpProperty").val();
+        var meditisAsset = $("#editisAsset").val();
+        var meditserialControl = $("#editserialControl").val();
+
+        var valid = true;
+        if (meditToolID == "") {
+            $("#mPrdErrMsg").html("กรุณาเลือกวัสดุ");
+            valid = false;
+        } else {
+            $("#mPrdErrMsg").html("");
+        }
+
+        //if (meditQty == "") {
+        //    $("#mQtyErrMsg").html("กรุณากรอกจำนวน");
+        //    valid = false;
+        //}
+        //else {
+        //    $("#mQtyErrMsg").html("");
+        //}
+
+        //if (meditRemainQty == "") {
+        //    $("#mRemainQtyErrMsg").html("กรุณากรอกจำนวนตรวจรับ");
+        //    valid = false;
+        //}
+        //else {
+        //    $("#QtyErrMsg").html("");
+        //}
+
+        //if (meditserialControl.toLowerCase() == "y"){
+        //    if (meditSerialBegin == "") {
+        //        $("#mSNBegErrMsg").html("กรุณากรอกเลขคุมเริ่มต้น");
+        //        valid = false;
+        //    }
+        //    else {
+        //        $("#mSNBegErrMsg").html("");
+        //    }
+
+        //    if (meditSerialEnd == "") {
+        //        $("#mSNEndErrMsg").html("กรุณากรอกเลขคุมสุดท้าย");
+        //        valid = false;
+        //    } else {
+        //        $("#mSNEndErrMsg").html("");
+        //    }
+
+        //    if (meditRemainQty > meditTotalQty || meditRemainQty < meditTotalQty) {
+        //        $("#mSNTotalErrMsg").html("จำนวนนับของ เลขคุม ไม่ตรงกับจำนวนที่ท่านกรอก");
+        //        valid = false;
+        //    } else {
+        //        $("#mSNTotalErrMsg").html("");
+        //    }
+
+        //}
+
+
+        //if (meditisAsset.toLowerCase() == "y" && meditIP.trim() == "") {
+        //    $("#mSNIpPropertyErrMsg").html("กรุณากรอก IP");
+        //    valid = false;
+        //} else {
+        //    $("#mSNIpPropertyErrMsg").html("");
+        //}
+
+
+        // check validate all pass
+        return valid;
+    }
+
+    function selWH(event, t) {
+        var whCode = $(t).attr("whCode").trim();
+        var whName = $(t).attr("whName").trim();
+
+          
+        $.ajax({
+            type: "Post",
+            url: "/CheckStocks/IsWarehouseManager?whcode=" + whCode,
+            contentType: "html",
+            success: function (res) {
+                btnControl(res);
+            },
+            error: function (res) {
+                console.log(res)
+            }
+        });
+
+        $("#WhName").val(whName);
+        $("#WhID").val(whCode);
+
+        $("#WModal").modal("hide");
+    }
+
+    function btnControl(isManager) {
+        if (isManager == "1") {
+            $("#btnSaveandAppr").closest("li").css("display", "");
+            $("#btnSave").closest("li").css("display", "none");
+            $("#btnSendApproveBFSave").closest("li").css("display", "none");
+        } else if (isManager == "2") {
+
+            $("#btnSave").closest("li").css("display", "");
+            $("#btnSendApproveBFSave").closest("li").css("display", "");
+            $("#btnSaveandAppr").closest("li").css("display", "none");
+        } else if (isManager == "3") {
+            $("#btnSave").closest("li").css("display", "none");
+            $("#btnSendApproveBFSave").closest("li").css("display", "none");
+            $("#btnSaveandAppr").closest("li").css("display", "none");
+        }
+        else if (isManager == "4") { //both
+            $("#btnSave").closest("li").css("display", "");
+            $("#btnSendApproveBFSave").closest("li").css("display", "");
+            $("#btnSaveandAppr").closest("li").css("display", "");
+        }
+    }
+
+    function checkDuplicateSNRow(modalType) {
+
+        var ret = true;
+
+        var RowNo = "";
+        var PrdID = "";
+        var SNBeg = "";
+        var SNEnd = "";
+
+        // get new detail
+        if (modalType == "add") {
+            RowNo = $("#RowNo").val();
+            PrdID = $("#ProductList :selected").val();
+            SNBeg = $("#SerialBegin").val();
+            SNEnd = $("#SerialEnd").val();
+        } else {
+            RowNo = $("#editRowNo").val();
+            PrdID = $("#editProductList :selected").val();
+            SNBeg = $("#editSerialBegin").val();
+            SNEnd = $("#editSerialEnd").val();
+        }
+
+
+        // prepare data
+        var begSNPrefix = SNBeg.replace(/\d/g, '');
+        var begSNNo = SNBeg.replace(/\D/g, '');
+        var endSNPrefix = SNEnd.replace(/\d/g, '');
+        var endSNNo = SNEnd.replace(/\D/g, '');
+
+        // Find other row
+        $("#tbMain tbody tr").each(function () {
+
+            // get row detail
+            var chkRowNo = $(this).closest("tr").find("td:eq(0)").text().trim();
+            var chkPrdID = $(this).closest("tr").find("td:eq(1)").text().trim();
+            var chkSNBeg = $(this).closest("tr").find("td:eq(5)").text().trim();
+            var chkSNEnd = $(this).closest("tr").find("td:eq(6)").text().trim();
+
+            // prepare data
+            var chkbegSNPrefix = chkSNBeg.replace(/\d/g, '');
+            var chkbegSNNo = chkSNBeg.replace(/\D/g, '');
+            var chkendSNPrefix = chkSNEnd.replace(/\d/g, '');
+            var chkendSNNo = chkSNEnd.replace(/\D/g, '');
+
+            // -- End  Current Row -- //
+
+            console.log($(this).closest("tr").index());
+
+            if (RowNo != chkRowNo) {
+                //check ProductID
+                if (PrdID == chkPrdID) {
+                    // check prefix serial
+                    if (begSNPrefix == chkbegSNPrefix && endSNPrefix == chkendSNPrefix) {
+
+                        if ((parseInt(begSNNo) >= parseInt(chkbegSNNo)) && (parseInt(begSNNo) <= parseInt(chkendSNNo))
+                            || (parseInt(endSNNo) >= parseInt(chkbegSNNo)) && (parseInt(endSNNo) <= parseInt(chkendSNNo))) {
+
+                            alert("Serial Is Exists");
+                            ret = false;
+
+                            return false;
+
+                        } else {
+                            // can use this serial
+                            ret = true;
+                        }
+                    }
+                } else {
+                    // can use this serial
+                    ret = true;
+                }
+                
+            }
+        });
+
+
+        //check exist loop
+        if (ret == false) {
+            return false;
+        }
+
+        return ret;
+    }
+
+</script>
+
+<h2>ตรวจนับ</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-9">
+            <div class="form-horizontal">
+                <table class="table" style="min-width:70%">
+                    <tr>
+                        <td style="padding: 10px;">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                เลขที่เอกสาร
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control" , maxlength = "20" } })
+                                    @Html.ValidationMessageFor(model => model.DocNo, "", new { @class = "text-danger",required= "required" })
+                                </div>
+                            </div>
+                        </td>
+                        <td style="padding: 10px;">
+                            <div class="form-group">
+                                วันที่
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control input-medium" data-provide="datepicker" data-date-language="th-th" id="DocDate" placeholder="วว/ดด/ปปปป" style="width:165px;">
+                                    @Html.ValidationMessageFor(model => model.DocDate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;width:900px;max-width:900px;" colspan="2">
+                            <div class="form-group">
+                                สำนักงานขนส่ง
+                                <div class="col-md-10" style="width:900px;max-width:900px;">
+                                    @Html.EditorFor(model => model.WhID, new { htmlAttributes = new { @class = "form-control", @style = "display:none;" } })
+                                    <input class="form-control" name="WhName" id="WhName" style="width:685px;display:unset;max-width:900px;" disabled>
+                                    <a href="#" class="btn btn-success" data-toggle="modal" id="btnSelWh" style="vertical-align:unset;"><i class="fa fa-search fa-3"></i></a>
+                                    @Html.ValidationMessageFor(model => model.WhID, "", new { @class = "text-danger", required = "required" })
+                                </div>
+                            </div>
+                        </td>
+                        <td style="padding: 10px;display:none;" >
+                            <div class="form-group">
+                                หน่วยงานผู้ยืม
+                                <div class="col-md-10">
+                                    <input class="find" name="ToWhID" id="ToWhID" style="display:none;">
+                                    <input class="find" name="ToWhName" id="ToWhName" style="width:165px;" disabled>
+                                    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#TWModal"><i class="fa fa-search fa-3"></i></a>
+                                    @Html.ValidationMessageFor(model => model.ToWhID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;width:520px;">
+                            <div class="form-group">
+                                ผู้บันทึก
+                                <div class="col-md-10">
+                                    <input id="Name" class="form-control" value="@Session["UserName"].ToString()" style="max-width:450px;width:450px;" disabled />
+                                </div>
+                            </div>
+                        </td>
+                        <td style="padding: 10px;">
+                            <div class="form-group">
+                                สถานะ
+                                <div class="col-md-10">
+                                    <input class="form-control" value="กำลังดำเนินการ" name="Status" id="Status" style="width:165px;" disabled>
+                                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="form-group">
+                                หมายเหตุ
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control", @style = "width:685px;max-width:685px;" } })
+                                    @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;" colspan="2">
+                            <a href="#" class="btn btn-primary" id="btnOpenModal" data-toggle="modal" >เพิ่มรายการ</a>
+                        </td>
+                    </tr>
+                </table>
+
+
+                @*//List Data*@
+                <table class="table table-hover" id="tbMain">
+
+                    <thead>
+                        <tr>
+                            <th align="center" style="text-align:center;">No</th>
+                            <th align="center" style="text-align:center;display:none;">ToolID</th>
+                            <th align="center" style="text-align:center;">วัสดุ</th>
+                            <th align="center" style="text-align:center;">จำนวนคงเหลือ</th>   
+                            <th align="center" style="text-align:center;">ผลการตรวจนับ</th>
+                            <th align="center" style="text-align:center;display:none;">เลขคุมเริ่มต้น</th>
+                            <th align="center" style="text-align:center;display:none;">เลขคุมสุดท้าย</th>
+                            <th align="center" style="text-align:center;display:none;">IP</th>
+                            <th align="center" style="text-align:center;display:none;">รวมเลขคุม</th>
+                            <th align="center" style="text-align:center;" colspan="2">...</th>
+                            <th align="center" style="text-align:center;display:none;">Is Assets</th>
+                            <th align="center" style="text-align:center;display:none;">SerialControl</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="search-form" style="border-left:1px solid #777;height:400px;">
+                <div class="search">
+                    <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                        <li class="menu-item" style="padding-top:30px;">
+                            <a href="/CheckStocks/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="button" id="btnSave" style="width:130px;">บันทึก</button>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="button" id="btnSendApproveBFSave" style="width:130px;">ส่งอนุมัติ</button>
+                        </li>
+                        
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="button" id="btnSaveandAppr" name="btnSaveandAppr" style="width:130px;">บันทึกและอนุมัติ</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}
+
+
+@*//PopUp Add List*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="ListModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">รายการตรวจนับ</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                วัสดุ
+                            </td>
+                            <td>
+                                @Html.DropDownList("ProductList", PdID, "-----กรุณาเลือก-----", new { @class = "form-control" })
+                                <span id="PrdErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                                <input type="hidden" id="isAsset" name="isAsset" value="n" />
+                                <input type="hidden" id="serialControl" name="serialControl" value="n" />
+                            </td>
+                        </tr>
+                       
+                        <tr>
+                            <td>
+                                จำนวนคงเหลือ
+                            </td>
+                            <td>
+                                <input class="form-control" name="RemainQty" id="RemainQty" onkeyup = "onlyNumber(this.value,this)"/>
+                                <span id="RemainQtyErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ผลตรวจนับ
+                            </td>
+                            <td>
+                                <input class="form-control" name="Qty" id="Qty" onkeyup="onlyNumber(this.value,this)" />
+                                <span id="QtyErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td>
+                                เลขคุมเริ่มต้น
+                            </td>
+                            <td>
+                                <input class="form-control" name="SerialBegin" id="SerialBegin"  maxlength="40"/>
+                                <span id="SNBegErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td>
+                                เลขคุมสุดท้าย
+                            </td>
+                            <td>
+                                <input class="form-control" name="SerialEnd" id="SerialEnd"  maxlength="40"/>
+                                <span id="SNEndErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td>
+                                IP
+                            </td>
+                            <td>
+                                <input class="form-control" name="IpProperty" id="IpProperty"  maxlength="100"/>
+                                <span id="SNIpPropertyErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td>
+                                รวมเลขคุม
+                            </td>
+                            <td>
+                                <input class="form-control" name="TotalQty" id="TotalQty" disabled />
+                                <span id="SNTotalErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="addRow" name="addRow" type="submit" data-target="#addRow" class="btn btn-success">ตกลง</button>
+                    <a href="#" class="btn btn-warning" data-dismiss="modal">ยกเลิก</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*PopUp Warehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="WModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">สำนักงานขนส่ง</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelWH">
+                        <thead></thead>
+                        <tbody></tbody>
+                        @*@foreach (var w in ViewBag.WhID)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelW" whCode="@w.ID" whName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }*@
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//PopUp Edit List*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="editModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">รายการตรวจนับ</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                RowNo
+                            </td>
+                            <td>
+                                <input class="form-control" name="editRowNo" id="editRowNo" disabled />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                วัสดุ
+                            </td>
+                            <td>
+                                @Html.DropDownList("editProductList", PdID, "-----กรุณาเลือก-----", new { @class = "form-control" })
+                                <span id="mPrdErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                                <input type="hidden" id="editisAsset" name="editisAsset" value="n" />
+                                <input type="hidden" id="editserialControl" name="editserialControl" value="n" />
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                จำนวนคงเหลือ
+                            </td>
+                            <td>
+                                <input class="form-control" name="editRemainQty" id="editRemainQty" onkeyup = "onlyNumber(this.value,this)"/>
+                                <span id="mRemainQtyErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ผลตรวจนับ
+                            </td>
+                            <td>
+                                <input class="form-control" name="editQty" id="editQty" onkeyup="onlyNumber(this.value,this)" />
+                                <span id="mQtyErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td>
+                                เลขคุมเริ่มต้น
+                            </td>
+                            <td>
+                                <input class="form-control" name="editSerialBegin" id="editSerialBegin"  maxlength="40"/>
+                                <span id="mSNBegErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td>
+                                เลขคุมสุดท้าย
+                            </td>
+                            <td>
+                                <input class="form-control" name="editSerialEnd" id="editSerialEnd"  maxlength="40"/>
+                                <span id="mSNEndErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td>
+                                IP
+                            </td>
+                            <td>
+                                <input class="form-control" name="editIpProperty" id="editIpProperty" maxlength="100"/>
+                                <span id="mSNIpPropertyErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td>
+                                รวมเลขคุม
+                            </td>
+                            <td>
+                                <input class="form-control" name="editTotalQty" id="editTotalQty" disabled />
+                                <span id="mSNTotalErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="updateRow" name="updateRow" type="button" @*data-target="#addRow"*@ class="btn btn-success">ตกลง</button>
+                    <a href="#" class="btn btn-warning" data-dismiss="modal">ยกเลิก</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*PopUp ToWarehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="TWModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">สำนักงานขนส่ง</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelToWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelToWH">
+                        @foreach (var w in ViewBag.WhID)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelTW" TowhCode="@w.ID" TowhName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

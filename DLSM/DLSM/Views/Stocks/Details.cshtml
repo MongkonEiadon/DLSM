@@ -1,0 +1,132 @@
+﻿@model IEnumerable<DLSM.Models.Stock>
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    
+    $(document).ready(function () {
+
+
+        //sort column
+        var table = $('#tbMain').DataTable({
+            "dom": "frtp",
+            "pageLength": 20,
+            "language": {
+                "paginate": {
+                    "next": "ถัดไป",
+                    "previous": "ก่อนหน้า"
+                },
+                "search": "กรองข้มูล:",
+            },
+
+        });
+
+      
+
+    });
+</script>
+
+<h2>รายละเอียดของยอดคงเหลือวัสดุ</h2>
+<br />
+<div class="row">
+    <div class="col-xs-12 col-sm-9">
+
+        <span>
+            <label><b>สำนักงานขนส่ง :</b>   @ViewData["WhName"]</label>
+            &nbsp;&nbsp;
+        </span>
+        <span>
+            &nbsp;&nbsp;
+            <label><b>วัสดุ :</b>  @ViewData["ProductName"]</label>
+        </span>
+
+        <div class="form-horizontal">
+            <table class="table table-hover" id="tbMain">
+                <thead>
+                    <tr>
+                        <th style="display:none;">
+                            &nbsp;
+                        </th>
+
+                        <th style="text-align:center;">
+                            เลขคุมเริ่มต้น
+                        </th>
+                        <th style="text-align:center;">
+                            เลขคุมสุดท้าย
+                        </th>
+                        <th style="text-align:center;">
+                            IP
+                        </th>
+                        <th style="text-align:center;">
+                            จำนวน
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align:center;font-size:medium;"><b>@ViewData["TotalQty"]</b></td>
+                    </tr>
+                </tfoot>
+                <tbody id="SearchRow">
+                    @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="display:none;">
+                            <input type="hidden" name="WhID" id="WhID" value="@item.WhID" />
+                            <input type="hidden" name="PdID" id="PdID" value="@item.PdID" />
+                            <input type="hidden" name="IsAsset" id="IsAsset" value="@item.IsAsset" />
+                        </td>
+
+                        @if (@item.IsAsset.ToLower() == "y")
+                    {
+                        <td style="text-align:center;font-size:smaller;">
+                            @Html.DisplayFor(modelItem => item.SerialBegin)
+                        </td>
+                        <td style="text-align:center;font-size:smaller;">
+                            -
+                        </td>
+                }
+                else
+                {
+                    <td style="text-align:center;font-size:smaller;">
+                        @Html.DisplayFor(modelItem => item.SerialBegin)
+                    </td>
+                    <td style="text-align:center;font-size:smaller;">
+                        @Html.DisplayFor(modelItem => item.SerialEnd)
+                    </td>
+                }
+
+                        <td style="text-align:center;font-size:smaller;">
+                            @Html.DisplayFor(modelItem => item.IpProperty)
+                        </td>
+                        <td style="text-align:center;">
+                            @Html.DisplayFor(modelItem => item.Qty)
+                        </td>
+                    </tr>
+            }
+                </tbody>
+            </table>
+        </div>       
+    </div>
+
+    
+
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-left:1px solid #777;height:400px;">
+            <div class="search">
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                    <li class="menu-item" style="padding-top:30px;">
+                        <a href="/Stocks/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

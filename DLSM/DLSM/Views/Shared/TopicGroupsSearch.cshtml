@@ -1,0 +1,50 @@
+﻿@model IEnumerable<DLSM.Models.TopicGroup>
+@{
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+<table class="table">
+    <tbody id="SearchTopicGRow">
+        <tr>
+            <th>
+                ชื่อกลุ่ม
+            </th>
+
+            <th></th>
+        </tr>
+        @if (Model != null)
+        {
+            if(Model.Count() > 0)
+            { 
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+
+                        <td>
+                            <a href="/TopicGroups/Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2" style="text-align:center;">
+                        ไม่พบข้อมูล
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align:center;">
+                        @Html.ActionLink("Back", "Index", "TopicGroups")
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

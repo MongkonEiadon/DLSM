@@ -1,0 +1,85 @@
+﻿@model IEnumerable<DLSM.Models.Document>
+
+@{
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+
+    <table class="table table-hover">
+        <tbody id="SearchRow">
+            <tr>
+                <th>
+                    เลขที่เอกสาร
+                </th>
+                <th>
+                    วันที่
+                </th>
+                <th>
+                    จากคลัง
+                </th>
+                <th>
+                    ไปคลัง
+                </th>
+                <th>วัสดุอุปกรณ์</th>
+                <th>จำนวน</th>
+                <th>
+                    สถานะ
+                </th>
+                <th></th>
+            </tr>
+
+            @if (Model != null)
+            {
+                if (Model.Count() > 0)
+                { 
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DocNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DocDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.WarehouseName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ToWarehouseName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ProductName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Qty)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.StatusName)
+                        </td>
+
+                        <td>
+                            <a href="\Transfers\Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                        </td>
+                    </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9" style="text-align:center;">
+                            ไม่พบข้อมูล
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="9" style="text-align:center;">
+                            @Html.ActionLink("Back", "Index", "Transfers")
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+
+</table>

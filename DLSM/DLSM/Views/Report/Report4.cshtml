@@ -1,0 +1,414 @@
+﻿
+@{
+    ViewBag.Title = "Report4";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+<link href="~/Content/datepicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker-thai.js"></script>
+<script src="~/Scripts/datepicker2/bootstrap-datepicker.th.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //Date + time
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+
+        var pOutput1 = (parseInt(d.getFullYear()) + 543);
+
+        $("#FormDate").val(pOutput1 - 1);
+        $("#ToDate").val(pOutput1);
+
+        $('#FormDate').datepicker({
+            minViewMode: 2,
+            format: 'yyyy',
+            autoclose: true
+        });
+
+        $('#ToDate').datepicker({
+            minViewMode: 2,
+            format: 'yyyy',
+            autoclose: true
+        });
+
+        //Select Warehouse Find
+        $("i[name=SelW]").click(function () {
+            //console.log($(this));
+            var whCode = $(this).attr("whCode");
+            var whName = $(this).attr("whName");
+
+            $("#WhName").val(whName);
+            $("#WhCode").val(whCode);
+
+            $("#WModal").modal("hide");
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetST")" + "?WhID=" + whCode,
+                contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response != "failed") {
+                        $('#modSelST tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelST" stCode="' + response[x].ID + '" stName="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="SelST(this)" ></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#modSelST tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        });
+
+        //Select Product Find
+        $("i[name=SelP]").click(function () {
+            //console.log($(this));
+            var pCode = $(this).attr("PCode");
+            var pName = $(this).attr("PName");
+
+            $("#PdName").val(pName);
+            $("#PdCode").val(pCode);
+
+            $("#PModal").modal("hide");
+        });
+
+        //Select Staff Find
+        $("i[name=SelST]").click(function () {
+            //console.log($(this));
+            var stCode = $(this).attr("stCode");
+            var stName = $(this).attr("stName");
+
+            $("#StName").val(stName);
+            $("#StCode").val(stCode);
+
+            $("#STModal").modal("hide");
+        });
+
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    //console.log($(this).closest("tr").index());
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+
+
+        $("#btnSave").on("click", function (e) {
+
+            if (confirm("คุณต้องการออกรายงานหรือไม่ ?") == true) {
+
+                if ($("#FormDate").val().trim() != "") {
+                    $("#FormDate").val(formatDate($("#FormDate").val(), "from"));
+                }
+                if ($("#ToDate").val().trim() != "") {
+                    $("#ToDate").val(formatDate($("#ToDate").val(), "to"));
+                }
+                console.log($("#FormDate").val());
+                console.log($("#ToDate").val());
+
+                $("#Report4").attr("action", "/Report/Report4");
+                $("#Report4").submit();
+
+                //Set format from yyyy-mm-dd To dd/mm/yyyy
+                if ($("#FormDate").val().trim() != "") {
+                    $("#FormDate").val(toSearchFormat($("#FormDate").val(), "from"));
+                }
+                //Set format from yyyy-mm-dd To dd/mm/yyyy
+                if ($("#ToDate").val().trim() != "") {
+                    $("#ToDate").val(toSearchFormat($("#ToDate").val(), "to"));
+                }                
+                console.log($("#FormDate").val());
+                console.log($("#ToDate").val());
+            }
+
+        });
+
+        $("#btnclearWH").on("click", function () {
+            $("#WhCode").val("");
+            $("#WhName").val("");
+        });
+
+        $("#btnclearPD").on("click", function () {
+            $("#PdCode").val("");
+            $("#PdName").val("");
+        });
+
+        $("#btnclearST").on("click", function () {
+            $("#StCode").val("");
+            $("#StName").val("");
+        });
+
+    });
+
+    function SelST(o) {
+
+        var stCode = o.getAttribute('stCode');
+        var stName = o.getAttribute('stName');
+
+        $("#StName").val(stName);
+        $("#StCode").val(stCode);
+
+        $("#STModal").modal("hide");
+    }
+
+    function toSearchFormat(date,c) {
+        var res = date.split("-");
+        var nDate = null;
+
+        if (c == "from") {
+            nDate = ((parseInt(res[0]) + 1) + 543); 
+        }
+        else if (c == "to") {
+            nDate = (parseInt(res[0]) + 543); 
+        }
+        return nDate;
+        //return (parseInt(res[0]) + 543);
+    }
+
+    function formatDate(date, c) {
+        var res = date.split("/");
+        var nDate = null;
+
+        if (c == "from") {
+            nDate = new Date(parseInt((res[0]-1) - 543), 9, 1); // YYYY-10-01
+        }
+        else if (c == "to") {
+            nDate = new Date(parseInt(res[0] - 543), 8, 30); // YYYY-09-30
+        }
+
+        return nDate.getFullYear() + '-' + (nDate.getMonth() + 1) + '-' + nDate.getDate();
+
+    }
+</script>
+
+<style>
+    input[readonly] {
+        background-color: #eee;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+</style>
+
+<h2>รายงานรายการรับวัสดุ(รายปี)</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "Report4", target = "_blank" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-9">
+            <div class="form-horizontal">
+                <div id="inputDiv">
+                    <table class="table" style="min-width:70%">
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    สำนักงานขนส่ง
+                                    <div class="col-md-10">
+                                        <input class="find" name="WhCode" id="WhCode" style="width:165px;display:none;">
+                                        <input class="find" name="WhName" id="WhName" style="width:350px;max-width:600px;" readonly>
+                                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#WModal"><i class="fa fa-search fa-3"></i></a>
+                                        <button type="button" class="btn btn-warning" name="btnclearWH" id="btnclearWH" style="text-align:center;">ล้าง</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    วัสดุ
+                                    <div class="col-md-10">
+                                        <input class="find" name="PdCode" id="PdCode" style="width:165px;display:none;">
+                                        <input class="find" name="PdName" id="PdName" style="width:350px;max-width:600px;" readonly>
+                                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#PModal"><i class="fa fa-search fa-3"></i></a>
+                                        <button type="button" class="btn btn-warning" name="btnclearPD" id="btnclearPD" style="text-align:center;">ล้าง</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    เจ้าหน้าที่
+                                    <div class="col-md-10">
+                                        <input class="find" name="StCode" id="StCode" style="width:165px;display:none;">
+                                        <input class="find" name="StName" id="StName" style="width:350px;max-width:600px;" readonly>
+                                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#STModal"><i class="fa fa-search fa-3"></i></a>
+                                        <button type="button" class="btn btn-warning" name="btnclearST" id="btnclearST" style="text-align:center;">ล้าง</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    ปีงบประมาณ
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control input-medium datepicker" data-provide="datepicker" data-date-language="th-th" name="FormDate" id="FormDate" style="width:165px;" placeholder="วว/ดด/ปปปป" readonly />
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    ถึง
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control input-medium datepicker" data-provide="datepicker" data-date-language="th-th" name="ToDate" id="ToDate" style="width:165px;" placeholder="วว/ดด/ปปปป" readonly />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="search-form" style="border-left:1px solid #777;height:400px;">
+                <div class="search">
+                    <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                        <li class="menu-item" style="padding-top:30px;">
+                            @*<button class="btn btn-warning" type="submit" style="width:130px;"></button>*@
+                            <a href="/Report/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                        </li>
+                        <li class="menu-item" style="padding-top:30px;">
+                            <button class="btn btn-success" type="button" id="btnSave" style="width:130px;">รายงาน</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}
+
+@*PopUp Warehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="WModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">สำนักงานขนส่ง</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelWH">
+                        @foreach (var w in ViewBag.WhID)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelW" whCode="@w.ID" whName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*PopUp Product*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="PModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">วัสดุ</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelP" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelP">
+                        @foreach (var w in ViewBag.PdID)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelP" PCode="@w.ID" PName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*PopUp Staff*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="STModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">เจ้าหน้าที่</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelST" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelST">
+                        <thead></thead>
+                        <tbody></tbody>
+                        @*@foreach (var w in ViewBag.StID)
+                        {
+                            <tr>
+                                <td>
+                                    @w.Name
+                                </td>
+                                <td>
+                                    <a href="#"><i name="SelST" stCode="@w.ID" stName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                </td>
+                            </tr>
+                        }*@
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+

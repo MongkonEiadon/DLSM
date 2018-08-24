@@ -1,0 +1,224 @@
+﻿@model DLSM.Models.Topic
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //SelectList TgID = ViewBag.TgList;
+    if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Login/Index");
+    }
+}
+
+<link href="~/Content/datepicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/datepicker/bootstrap-datepicker.min.js"></script>
+<script src="~/Scripts/datepicker/locales/bootstrap-datepicker.th.min.js"></script>
+<script src="~/Scripts/jquery.tabletojson.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$('#CreateDate').datepicker({
+        //    language: "th",
+        //    autoclose: true,
+        //    format: 'dd/mm/yyyy',
+        //    startDate: '+543y'
+        //});
+
+        var btnClick;
+
+        $("button").on('click', function () {
+            btnClick = $(this).attr("id");
+        });
+
+        $("#EditTopic").on("submit", function (e) {
+            console.log(btnClick);
+            var isValid = true;
+
+            //Validate form
+            $("#inputDiv :input").each(function () {
+
+                var acceptElement = ["Subject", "TgID"];
+                // validate element if element in array 
+                if ($.inArray($(this).attr("id"), acceptElement) !== -1) {
+                    if ($(this).val() == "") {
+                        var txtRequire = $(this).attr("data-val-required");
+                        var id = $(this).attr("id");
+
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html(txtRequire);
+
+                        isValid = false;
+                    } else {
+                        var id = $(this).attr("id");
+
+                        $("#inputDiv").find("[data-valmsg-for=" + id + "]").html("");
+                    }
+                }
+            });
+
+            console.log(isValid);
+            if (!isValid) {
+                return false;
+            }
+
+            if (btnClick == "btnSave") {
+                $("#CreateDate").val(formatDate($("#CreateDate").val()));
+                $("#EditTopic").attr("action", "/Topics/Edit");
+            }
+
+            console.log($("#CreateDate").val());
+            
+        });
+
+
+    });
+   
+
+    function formatDate(date) {
+        var res = date.split("/");
+        return parseInt($.trim(res[2])) - 543 + '-' + $.trim(res[1]) + '-' + $.trim(res[0]);
+    }
+
+</script>
+
+
+<h2>ฐานความรู้</h2>
+@using (Html.BeginForm("EditData", "Topics", FormMethod.Post, new { id = "EditTopic" }))
+{
+@Html.AntiForgeryToken()
+
+<div class="row">
+    <div class="col-xs-12 col-sm-9">
+        <div class="form-horizontal">
+            <div id="inputDiv">
+                <table class="table" style="min-width:70%">
+                    <tr>
+                        <td style="padding: 10px;">
+                            @Html.HiddenFor(model => model.ID)
+                            <div class="form-group">
+                                วันที่
+                                <div class="col-md-10">
+                                    <input name="CreateDate" type="text" class="form-control" style="cursor:not-allowed;" id="CreateDate" value="@Html.DisplayFor(m => m.CreateDate, "{0:dd/MM/yyyy}")" placeholder="วว/ดด/ปปปป" readonly />
+                                    @Html.ValidationMessageFor(model => model.CreateDate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </td>
+                        <td style="padding: 10px;">
+                            <div class="form-group">
+                                ผู้บันทึก
+                                <div class="col-md-10">
+                                    <input name="CreateBy" id="CreateBy" class="form-control" value="@Model.CreateBy" style="display:none;" />
+                                    <input name="CreateName" id="CreateName" class="form-control" value="@Model.CreateName" disabled />
+                                    @*<input id="Name" class="form-control" value="@Session["UserName"].ToString()" disabled />*@
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">
+                            <div class="form-group">
+                                หัวเรื่อง
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control", required = "required" , maxlength = "255" } })
+                                    @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger", required = "required" })
+                                </div>
+                            </div>
+                        </td>
+                        <td style="padding: 10px;">
+                            <div class="form-group">
+                                กลุ่มปัญหา
+                                <div class="col-md-10">
+                                    @*@Html.DropDownList("TgID", TgID, new { @class = "form-control", required = "required" })*@
+                                    @Html.DropDownListFor(model => model.TgID, new SelectList(ViewBag.TgList, "ID", "Name", Model.TgID ), new {  @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.TgID, "", new { @class = "text-danger", required = "required" })
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 10px;" colspan="2">
+                            <div class="form-group">
+                                ลักษณะปัญหา
+                                <div class="col-md-10">
+
+                                    <textarea class="form-control" name="Symptom" id="Symptom" cols="50" rows="5" style="max-width:none;">@Model.Symptom</textarea>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 10px;" colspan="2">
+                            <div class="form-group">
+                                สาเหตุ
+                                <div class="col-md-10">
+                                    <textarea class="form-control" name="Cause" id="Cause" cols="50" rows="5" style="max-width:none;">@Model.Cause</textarea>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 10px;" colspan="2">
+                            <div class="form-group">
+                                วิธีแก้ปัญหา
+                                <div class="col-md-10">
+                                    <textarea class="form-control" name="Solving" id="Solving" cols="50" rows="5" style="max-width:none;">@Model.Solving</textarea>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+            @*//List Data*@
+            <h6>ปัญหาในอดีต</h6>
+            <table class="table table-hover" id="tbMain">
+                <thead>
+                    <tr>
+                        <th align="left" style="text-align:left;">วันที่</th>
+                        <th align="left" style="text-align:left;">หัวเรื่อง</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.OldList.Count() > 0 && Model.OldList != null)
+                    {
+                        foreach (var i in Model.OldList)
+                        {
+                            <tr>
+                                <td align="left" style="text-align:left;">@Html.DisplayFor(m => i.OldCreateDate)</td>
+                                <td align="left" style="text-align:left;">@Html.DisplayFor(m => i.OldSubject)</td>
+                            </tr>
+                        }
+
+                    }
+                    else
+                    {
+                        <tr id="emptyRow">
+                            <td align="center" colspan="4">ไม่พบรายการ</td>
+                        </tr>
+                    }
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-left:1px solid #777;height:400px;">
+            <div class="search">
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;padding-bottom:10px;">
+                    <li class="menu-item" style="padding-top:30px;">
+                        @*<button class="btn btn-warning" type="submit" style="width:130px;"></button>*@
+                        <a href="/Topics/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
+                    </li>
+                    <li class="menu-item" style="padding-top:30px;">
+                        <button class="btn btn-success" type="submit"  value="Edit" id="btnSave" style="width:130px;">บันทึก</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+}

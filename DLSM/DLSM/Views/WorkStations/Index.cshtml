@@ -1,0 +1,212 @@
+﻿@model IEnumerable<DLSM.Models.WorkStation>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (null != ViewBag.Msg)
+    {
+        <script type="text/javascript">
+            alert("@ViewBag.Msg");
+        </script>
+    }
+}
+        <script type="text/javascript">
+    //Search
+    $(document).ready(function () {
+        var table = $('#tbMain').DataTable({
+            "dom": "rtp",
+            "pageLength": 20,
+            "language": {
+                "paginate": {
+                    "next": "ถัดไป",
+                    "previous": "ก่อนหน้า"
+                }
+            }
+        });
+
+
+        //Select Warehouse Find
+        $("i[name=SelW]").click(function () {
+            //console.log($(this));
+            var whCode = $(this).attr("whCode");
+            var whName = $(this).attr("whName");
+
+            $("#SearchW").val(whName);
+            $("#SearchIDW").val(whCode);
+
+            $("#WModal").modal("hide");
+        });
+
+        //Search in modal
+        $("input[name=txtSearch]").on("keyup", function () {
+            var tbData = $(this).attr("tb");
+            var txtSearch = $(this).val().trim();
+
+            $("#" + tbData + " tr").each(function () {
+                if ($(this).closest("tr").find("td:eq(0)").text().trim().toLocaleLowerCase().indexOf(txtSearch.toLocaleLowerCase()) >= 0) {  // search not found
+                    //console.log($(this).closest("tr").index());
+                    $(this).closest("tr").show();
+                } else {
+                    $(this).closest("tr").hide();
+                }
+            });
+        });
+
+        $("#btnSearchW").click(function () {
+            var url = "/WorkStations/Search?";
+            var searchWare = "";
+
+            if ($("#SearchIDW").val().trim() != "") {
+                searchWare = "searchWare=" + $("#SearchIDW").val().trim();
+                url = url + "&" + searchWare;
+            }
+
+            if (searchWare != "") {
+                window.location.href = url;
+            } else {
+                window.location.href = "/WorkStations/Index";
+            }
+
+        });
+
+        $("#btnOpenModal").click(function (e) {
+            e.defaultPrevented;
+            //Get Staff in warehouse
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetWH")",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.length > 0) {
+                        $('#modSelWH tbody').empty();
+                        for (var x = 0; x < response.length; x++) {
+                            var newRow = '<tr>';
+                            newRow = newRow + '<td align="left">' + response[x].Name + '</td>';
+                            newRow = newRow + '<td align="right">' + '<a href="#"><i name="SelW" whCode="' + response[x].ID + '" whName="' + response[x].Name + '" class="fa fa-fw fa-pencil-square fa-2x" onclick="selWH(event,this)" ></i></a>' + '</td>';
+                            newRow = newRow + '</tr>';
+
+                            $('#modSelWH tbody').append(newRow);
+                        }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+
+            $("#WModal").modal("show");
+
+        });
+
+    });
+
+        function selWH(event, t) {
+            var whCode = $(t).attr("whCode").trim();
+            var whName = $(t).attr("whName").trim();
+
+            $("#SearchW").val(whName);
+            $("#SearchIDW").val(whCode);
+
+            $("#WModal").modal("hide");
+        }
+        </script>
+
+<h2>WorkStations</h2>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-3">
+        <div class="search-form" style="border-right:1px solid #777;height:400px;">
+            <div class="search">
+                <div class="menu-search" style="text-align:center;">
+                    <p style="margin-bottom: 0;text-align:left;padding-left:30px;">สำนักงานขนส่ง</p>
+                    <input class="find" name="SearchIDW" id="SearchIDW" style="display:none;">
+                    <input class="find" name="SearchW" id="SearchW" style="width:165px;" disabled>
+                    <a href="#" class="btn btn-success" id="btnOpenModal" data-toggle="modal" ><i class="fa fa-search fa-3"></i></a>
+                </div>
+
+                <ul class="menu-items" style="list-style: none;margin: 0;padding:0;text-align:center;">
+                    <li class="menu-item" style="padding-top:10px;">
+                        <button class="btn btn-primary" id="btnSearchW" style="width:130px;" type="submit">สืบค้น</button>
+                    </li>
+
+                    <li class="menu-item" style="padding-top:10px;">
+                        @*<button class="btn btn-success" type="submit" style="width:130px;"></button>*@
+                        <a href="/WorkStations/Create" style="color:white;width:130px;cursor:pointer;" class="btn btn-primary">เพิ่มรายการ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</div>
+
+    <div class="col-xs-12 col-sm-9">
+        <table class="table table-hover" id="tbMain">
+            <thead>
+                <tr>
+                    <th>
+                        ชื่อ
+                    </th>
+                    <th>
+                        ชื่อเครื่องพิมพ์
+                    </th>
+                    <th>
+                        หมายเหตุ
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="SearchWarehRow">
+                @if(Model != null)
+                {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PrinterName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Remark)
+                        </td>
+
+                        <td>
+                            <a href="\WorkStations\Edit?id=@item.ID"><i class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                        </td>
+                    </tr>
+                    }
+                }
+            </tbody>
+</table>
+    </div>
+</div>
+
+@*Popup Warehouse*@
+<div class="container " style="text-align:left">
+    <div class="modal fade" id="WModal">
+        <div class=" modal-dialog">
+            <div class=" modal-content">
+                <div class=" modal-header">
+                    <h3 class="modal-title">สำนักงานขนส่ง</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <br />
+                <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
+
+                <div class="modal-body" id="mypopupbody">
+                    <table class="table" id="modSelWH">
+                        <thead></thead>
+                        <tbody></tbody>
+                        
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    @*<button id="addW" name="addW" type="submit" data-target="#WModal" class="btn btn-success">Submit</button>
+                        <a href="#" class="btn btn-warning" data-dismiss="modal">Cancle</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
