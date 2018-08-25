@@ -53,15 +53,8 @@
         });
 
         $("#btnSearch").click(function (e) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
->>>>>>> 1-failcard-create-filter-optional-optional
             /* remove field validation
-=======
-            /*
->>>>>>> 1-failcard-create-filter-optional-optional
             if ($("#searchCardNo").val() == "") {
                 $("#searchCardNo").focus();
                 alert("กรุณากรอกเลขคุมเริ่มต้น");
@@ -78,13 +71,7 @@
                 return false;
             }
             */
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-            
->>>>>>> 1-failcard-create-filter-optional-optional
-=======
->>>>>>> 1-failcard-create-filter-optional-optional
+
             var url = "/FailCard/SearchCard?";
             var searchCardNo = "";
             var searchToCardNo = "";
@@ -114,15 +101,8 @@
             if ($("#searchEndDate").val().trim() != "") {
                 searchEndDate = "searchEndDate=" + formatDate($("#searchEndDate").val().trim());
                 url = url + "&" + searchEndDate;
-<<<<<<< HEAD
-            }
-<<<<<<< HEAD
-=======
             }          
 
->>>>>>> 1-failcard-create-filter-optional-optional
-=======
->>>>>>> 1-failcard-create-filter-optional-optional
             window.location.href = url;
             /*
             if (searchCardNo != "" || searchToCardNo != "" || searchBeginDate != "" || searchEndDate != "") {
