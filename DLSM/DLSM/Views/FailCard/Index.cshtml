@@ -37,7 +37,7 @@
                     "previous": "ก่อนหน้า"
                 }
             },
-            "order": [[1, "asc"]]
+            "order": [[0, "asc"]]
         });
 
         $('#DocDate').datepicker({
@@ -54,6 +54,7 @@
 
         $("#btnSearch").click(function (e) {
 
+            /* remove field validation
             if ($("#searchCardNo").val() == "") {
                 $("#searchCardNo").focus();
                 alert("กรุณากรอกเลขคุมเริ่มต้น");
@@ -69,7 +70,8 @@
                 alert("กรุณากรอกช่วงวันที่รับบัตร");
                 return false;
             }
-
+            */
+            
             var url = "/FailCard/SearchCard?";
             var searchCardNo = "";
             var searchToCardNo = "";
@@ -81,27 +83,34 @@
                 searchCardNo = "searchCardNo=" + $("#searchCardNo").val().trim();
                 url = url + "&" + searchCardNo;
             }
+            
 
             if ($("#searchToCardNo").val().trim() != "") {
                 searchToCardNo = "searchToCardNo=" + $("#searchToCardNo").val().trim();
                 url = url + "&" + searchToCardNo;
             }
+           
+
             if ($("#searchBeginDate").val().trim() != "") {
                 searchBeginDate = "searchBeginDate=" + formatDate($("#searchBeginDate").val().trim());
                 url = url + "&" + searchBeginDate;
             }
+            
+
 
             if ($("#searchEndDate").val().trim() != "") {
                 searchEndDate = "searchEndDate=" + formatDate($("#searchEndDate").val().trim());
                 url = url + "&" + searchEndDate;
-            }
+            }          
 
+            window.location.href = url;
+            /*
             if (searchCardNo != "" || searchToCardNo != "" || searchBeginDate != "" || searchEndDate != "") {
                 window.location.href = url;
             } else {
                 window.location.href = "/FailCard/Index";
             }
-
+            */
         });
 
 
