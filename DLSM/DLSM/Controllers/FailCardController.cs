@@ -30,13 +30,16 @@ namespace DLSM.Controllers
             return View();
         }
 
-        
-        public ActionResult SearchCard(string searchCardNo, string searchToCardNo, DateTime searchBeginDate, DateTime searchEndDate)
+
+        public ActionResult SearchCard(string searchCardNo
+                                   , string searchToCardNo
+                                   , DateTime? searchBeginDate
+                                   , DateTime? searchEndDate)
         {
             var context = new DLSMEntities();
             int Userid = Convert.ToInt32(Session["UserID"]);
             List<StockSerial> list = new List<StockSerial>();
-            var listdata = context.sp_SearchCard(Convert.ToString(searchCardNo), Convert.ToString(searchToCardNo), searchBeginDate, searchEndDate).ToList();
+            var listdata = context.sp_SearchCard(Convert.ToString(searchCardNo), Convert.ToString(searchToCardNo), searchBeginDate, searchEndDate).ToList().OrderBy(a => a.id);
             if (listdata.Count() > 0)
             {
                 foreach (var i in listdata)
