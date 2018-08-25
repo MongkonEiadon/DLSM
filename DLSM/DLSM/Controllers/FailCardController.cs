@@ -31,6 +31,7 @@ namespace DLSM.Controllers
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         public ActionResult SearchCard(string searchCardNo
                                    , string searchToCardNo
@@ -43,11 +44,22 @@ namespace DLSM.Controllers
                                     , DateTime? searchBeginDate
                                     , DateTime? searchEndDate)
 >>>>>>> 1-failcard-create-filter-optional-optional
+=======
+
+        public ActionResult SearchCard(string searchCardNo
+                                     , string searchToCardNo
+                                     , DateTime? searchBeginDate
+                                     , DateTime? searchEndDate)
+>>>>>>> 1-failcard-create-filter-optional-optional
         {
             var context = new DLSMEntities();
             int Userid = Convert.ToInt32(Session["UserID"]);
             List<StockSerial> list = new List<StockSerial>();
+<<<<<<< HEAD
             var listdata = context.sp_SearchCard(Convert.ToString(searchCardNo), Convert.ToString(searchToCardNo), searchBeginDate, searchEndDate).ToList().OrderBy(a => a.id);
+=======
+            var listdata = context.sp_SearchCard(Convert.ToString(searchCardNo), Convert.ToString(searchToCardNo), searchBeginDate, searchEndDate).ToList().OrderBy(a=>a.id);
+>>>>>>> 1-failcard-create-filter-optional-optional
             if (listdata.Count() > 0)
             {
                 foreach (var i in listdata)
