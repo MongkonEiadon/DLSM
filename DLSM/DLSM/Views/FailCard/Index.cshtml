@@ -37,7 +37,7 @@
                     "previous": "ก่อนหน้า"
                 }
             },
-            "order": [[1, "asc"]]
+            "order": [[0, "asc"]]
         });
 
         $('#DocDate').datepicker({
@@ -53,6 +53,10 @@
         });
 
         $("#btnSearch").click(function (e) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1-failcard-create-filter-optional-optional
             /* remove field validation
             if ($("#searchCardNo").val() == "") {
                 $("#searchCardNo").focus();
@@ -70,6 +74,10 @@
                 return false;
             }
             */
+<<<<<<< HEAD
+=======
+            
+>>>>>>> 1-failcard-create-filter-optional-optional
             var url = "/FailCard/SearchCard?";
             var searchCardNo = "";
             var searchToCardNo = "";
@@ -81,20 +89,30 @@
                 searchCardNo = "searchCardNo=" + $("#searchCardNo").val().trim();
                 url = url + "&" + searchCardNo;
             }
+            
 
             if ($("#searchToCardNo").val().trim() != "") {
                 searchToCardNo = "searchToCardNo=" + $("#searchToCardNo").val().trim();
                 url = url + "&" + searchToCardNo;
             }
+           
+
             if ($("#searchBeginDate").val().trim() != "") {
                 searchBeginDate = "searchBeginDate=" + formatDate($("#searchBeginDate").val().trim());
                 url = url + "&" + searchBeginDate;
             }
+            
+
 
             if ($("#searchEndDate").val().trim() != "") {
                 searchEndDate = "searchEndDate=" + formatDate($("#searchEndDate").val().trim());
                 url = url + "&" + searchEndDate;
+<<<<<<< HEAD
             }
+=======
+            }          
+
+>>>>>>> 1-failcard-create-filter-optional-optional
             window.location.href = url;
             /*
             if (searchCardNo != "" || searchToCardNo != "" || searchBeginDate != "" || searchEndDate != "") {

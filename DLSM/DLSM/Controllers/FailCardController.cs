@@ -30,11 +30,19 @@ namespace DLSM.Controllers
             return View();
         }
 
+<<<<<<< HEAD
 
         public ActionResult SearchCard(string searchCardNo
                                    , string searchToCardNo
                                    , DateTime? searchBeginDate
                                    , DateTime? searchEndDate)
+=======
+        
+        public ActionResult SearchCard(string searchCardNo
+                                    , string searchToCardNo
+                                    , DateTime? searchBeginDate
+                                    , DateTime? searchEndDate)
+>>>>>>> 1-failcard-create-filter-optional-optional
         {
             var context = new DLSMEntities();
             int Userid = Convert.ToInt32(Session["UserID"]);
