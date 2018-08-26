@@ -27,3 +27,15 @@ D:\Work\Project\DLSM\Code\Programe Report\DLSM_CHANG\64bit\NReportManager\NRepor
 D:\Work\Project\DLSM\Code\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\bin\Debug\NReportManager.pdb
 D:\Work\Project\DLSM\Code\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\obj\Debug\NReportManager.exe
 D:\Work\Project\DLSM\Code\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\obj\Debug\NReportManager.pdb
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\bin\Debug\NReportManager.exe.config
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\bin\Debug\NReportManager.exe
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\bin\Debug\NReportManager.pdb
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\bin\Debug\stdole.dll
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\obj\Debug\NReportManager.csprojAssemblyReference.cache
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\obj\Debug\NReportManager.csproj.CoreCompileInputs.cache
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\obj\Debug\NReportManager.csproj.CopyComplete
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\obj\Debug\NReportManager.exe
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\obj\Debug\NReportManager.pdb
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\bin\Debug\CrystalDecisions.CrystalReports.Engine.dll
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\bin\Debug\CrystalDecisions.ReportSource.dll
+D:\projects\driver-license-stock-management\Programe Report\DLSM_CHANG\64bit\NReportManager\NReportManager\bin\Debug\CrystalDecisions.Shared.dll

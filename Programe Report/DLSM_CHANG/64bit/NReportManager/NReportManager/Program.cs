@@ -17,6 +17,7 @@ namespace NReportManager
         static string RootReport = "";
         static string RootXml = "";
         static string RootPdf = "";
+
         static List<String> workList = new List<string>();
         static int CountReport = 0;
 
@@ -34,6 +35,7 @@ namespace NReportManager
                 RootXml = ConfigurationManager.AppSettings["ROOT_XML"];
                 RootPdf = ConfigurationManager.AppSettings["ROOT_PDF"];
 
+
                 if (RootReport == null) throw new Exception("Configuration Error: require ROOT_REPORT");
                 if (RootXml == null) throw new Exception("Configuration Error: require ROOT_XML");
                 if (RootPdf == null) throw new Exception("Configuration Error: require ROOT_PDF");
@@ -41,6 +43,7 @@ namespace NReportManager
                 if (!RootReport.EndsWith("\\")) RootReport += "\\";
                 if (!RootXml.EndsWith("\\")) RootXml += "\\";
                 if (!RootPdf.EndsWith("\\")) RootPdf += "\\";
+
 
                 while (true)
                 {
@@ -118,26 +121,64 @@ namespace NReportManager
                     Console.WriteLine("{0}:{1}", DateTime.Now, "Set connection " + strServer + "/" + strDatabase + "/" + strUserID);
                 }
 
-                XmlNodeList parameters = xdoc.DocumentElement.SelectSingleNode("Parameters").SelectNodes("Item");
-                foreach (XmlNode item in parameters)
-                {
-                    string pname = item.Attributes["Name"].Value;
-                    string ptype = item.Attributes["Type"].Value;
-                    string pvalue = item.Attributes["Value"].Value;
+              
 
-                    if (ptype == "Integer")
-                        report.SetParameterValue(pname, Convert.ToInt32(pvalue));
-                    else if (ptype == "DateTime")
-                        report.SetParameterValue(pname, Convert.ToDateTime(pvalue));
-                    else if (ptype == "Double")
-                        report.SetParameterValue(pname, Convert.ToDouble(pvalue));
-                    else if (ptype == "Decimal")
-                        report.SetParameterValue(pname, Convert.ToDecimal(pvalue));
-                    else
-                        report.SetParameterValue(pname, pvalue);
 
-                    Console.WriteLine("{0}:{1}", DateTime.Now, "Parameter " + pname + "/" + ptype + "/" + pvalue);
-                }
+                    ParameterDiscreteValue discreteVal = new ParameterDiscreteValue();
+
+
+                
+                    XmlNodeList parameters = xdoc.DocumentElement.SelectSingleNode("Parameters").SelectNodes("Item");
+                    foreach (XmlNode item in parameters)
+                    {
+                        string pname = item.Attributes["Name"].Value;
+                        string ptype = item.Attributes["Type"].Value;
+                        string pvalue = item.Attributes["Value"].Value;
+
+
+                      /***************** Not Use  ********************
+                        if (ptype == "Integer")
+                            report.SetParameterValue(pname, Convert.ToInt32(pvalue));
+                        else if (ptype == "DateTime")
+                            report.SetParameterValue(pname, Convert.ToDateTime(pvalue));
+                        else if (ptype == "Double")
+                            report.SetParameterValue(pname, Convert.ToDouble(pvalue));
+                        else if (ptype == "Decimal")
+                            report.SetParameterValue(pname, Convert.ToDecimal(pvalue));
+                        else
+                            report.SetParameterValue(pname, pvalue);
+                       ********************************************************/
+                   
+                        /**
+                         * For make sure parameter is fill
+                         * Or only parameter is has in report
+                         ***/
+                        foreach (ParameterFieldDefinition parafld in report.DataDefinition.ParameterFields)
+                        {
+                            if (parafld.Name == pname)
+                            {
+                                if (ptype == "Integer")                               
+                                    report.SetParameterValue(pname, Convert.ToInt32(pvalue));
+                                else if (ptype == "DateTime")
+                                    report.SetParameterValue(pname, Convert.ToDateTime(pvalue));
+                                else if (ptype == "Double")
+                                    report.SetParameterValue(pname, Convert.ToDouble(pvalue));
+                                else if (ptype == "Decimal")
+                                    report.SetParameterValue(pname, Convert.ToDecimal(pvalue));
+                                else
+                                    report.SetParameterValue(pname, pvalue);
+
+                            break;
+                            }
+                        }
+                        
+                        Console.WriteLine("{0}:{1}", DateTime.Now, "Parameter " + pname + "/" + ptype + "/" + pvalue);
+                    }
+
+
+                Console.WriteLine("{0}:{1}", DateTime.Now, "Starting Save Report...");
+
+
                 if (outputName.ToLower().EndsWith("pdf"))
                 {
                     report.ExportToDisk(ExportFormatType.PortableDocFormat, outputName);
@@ -153,7 +194,11 @@ namespace NReportManager
                     report.ExportToDisk(ExportFormatType.WordForWindows, outputName);
                     Console.WriteLine("{0}:{1}", DateTime.Now, "WORD:" + xdoc.DocumentElement.SelectSingleNode("Output").InnerText);
                 }
-
+                else if (outputName.ToLower().EndsWith("xls"))
+                {
+                    report.ExportToDisk(ExportFormatType.Excel, outputName);
+                    Console.WriteLine("{0}:{1}", DateTime.Now, "Excel:" + xdoc.DocumentElement.SelectSingleNode("Output").InnerText);
+                }
                 finfo.Delete();
                 Console.WriteLine("{0}:FINISH:{1}:{2}", DateTime.Now, finfo.Name, "Deleted");
                 CountReport++;

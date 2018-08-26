@@ -10,6 +10,7 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace DLSM.Controllers
 {
@@ -57,8 +58,47 @@ namespace DLSM.Controllers
             return View();
         }
 
+        public async Task<ActionResult> ViewOrDownload(Reports model, string name)
+        {
+            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            string output_type = ".pdf";
+            switch (model.OutputType)
+            {
+                case Class.output_type.excel:
+                    output_type = ".xls";
+
+                    var memory = new MemoryStream();
+                    string filename = Path.Combine(path, name + output_type);
+                    Thread.Sleep(2000);
+                    if (System.IO.File.Exists(filename))
+                    {
+
+                        using (var stream = new FileStream(filename, FileMode.Open))
+                        {
+                            await stream.CopyToAsync(memory);
+                        }
+                    }
+                    memory.Position = 0;
+                    return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", name + output_type);
+
+                default:
+                    output_type = ".pdf";
+                    if (isReportExists(path + "\\" + name + output_type))
+                    {
+
+                        TempData["Name"] = name;
+                        return RedirectToAction("ViewReport");
+                    }
+                    else
+                    {
+                        ViewBag.Msg = "Load Report Fail !";
+                        return View("ReportFail");
+                    }
+            }
+        }
+
         [HttpPost]
-        public ActionResult Report1(Reports model)
+        public async Task<ActionResult> Report1(Reports model)
         {
             int PdCode = model.PdCode;
             string name;
@@ -71,20 +111,12 @@ namespace DLSM.Controllers
                 name = CreateXML(model, "report1_Choose");
             }
 
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            return await ViewOrDownload(model, name);
 
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+
+
         }
-
+       
         public ActionResult Report2()
         {
             var SessionUserID = Session["UserID"].ToString();
@@ -122,7 +154,7 @@ namespace DLSM.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Report2(Reports model)
+        public async Task<ActionResult> Report2(Reports model)
         {
             int PdCode = model.PdCode;
             string name;
@@ -134,18 +166,18 @@ namespace DLSM.Controllers
             {
                 name = CreateXML(model, "report2_Choose");
             }
-
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult Report3()
@@ -164,20 +196,22 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report3(Reports model)
+        public async Task<ActionResult> Report3(Reports model)
         {
             string name = CreateXML(model, "report3");
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult Report4()
@@ -196,20 +230,21 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report4(Reports model)
+        public async Task<ActionResult> Report4(Reports model)
         {
             string name =CreateXML(model, "report4");
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
 
@@ -229,20 +264,21 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report5(Reports model)
+        public async Task<ActionResult> Report5(Reports model)
         {
             string name = CreateXML(model, "report5");
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult Report6()
@@ -261,20 +297,21 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report6(Reports model)
+        public async Task<ActionResult> Report6(Reports model)
         {
             string name =CreateXML(model, "report6");
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult Report7()
@@ -293,21 +330,21 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report7(Reports model)
+        public async Task<ActionResult> Report7(Reports model)
         {
             string name =CreateXML(model, "report7");
-            
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult Report8()
@@ -326,20 +363,21 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report8(Reports model)
+        public async Task<ActionResult> Report8(Reports model)
         {
             string name =CreateXML(model, "report8");
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult Report9()
@@ -358,20 +396,21 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report9(Reports model)
+        public async Task<ActionResult> Report9(Reports model)
         {
             string name =CreateXML(model, "report9");
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult Report10()
@@ -390,20 +429,21 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report10(Reports model)
+        public async Task<ActionResult> Report10(Reports model)
         {
             string name = CreateXML(model, "report10");
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult Report11()
@@ -422,21 +462,21 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report11(Reports model)
+        public async Task<ActionResult> Report11(Reports model)
         {
             string name = CreateXML(model, "report11");
-
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult ViewReport()
@@ -490,20 +530,21 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report12(Reports model)
+        public async Task<ActionResult> Report12(Reports model)
         {
             string name = CreateXML(model, "report12");
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult Report13()
@@ -522,20 +563,21 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report13(Reports model)
+        public async Task<ActionResult> Report13(Reports model)
         {
             string name = CreateXML(model, "report13");
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult ViewExcelReport()
@@ -589,20 +631,21 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report14(Reports model)
+        public async Task<ActionResult> Report14(Reports model)
         {
             string name = CreateXML(model, "report14");
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
         }
 
         public ActionResult Report15()
@@ -621,7 +664,7 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report15(Reports model)
+        public async Task<ActionResult> Report15(Reports model)
         {
             int PdCode = model.PdCode;
             string name;
@@ -633,17 +676,19 @@ namespace DLSM.Controllers
             {
                 name = CreateXML(model, "report15_Choose");
             }
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
 
         }
 
@@ -663,7 +708,7 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report16(Reports model)
+        public async Task<ActionResult> Report16(Reports model)
         {
             int PdCode = model.PdCode;
             string name;
@@ -675,17 +720,19 @@ namespace DLSM.Controllers
             {
                 name = CreateXML(model, "report16_Choose");
             }
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
 
         }
 
@@ -705,7 +752,7 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report17(Reports model)
+        public async Task<ActionResult> Report17(Reports model)
         {
             int PdCode = model.PdCode;
             string name;
@@ -717,17 +764,18 @@ namespace DLSM.Controllers
             {
                 name = CreateXML(model, "report17_Choose");
             }
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
 
         }
 
@@ -747,7 +795,7 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report18(Reports model)
+        public async Task<ActionResult> Report18(Reports model)
         {
             int PdCode = model.PdCode;
             string name;
@@ -759,17 +807,19 @@ namespace DLSM.Controllers
             {
                 name = CreateXML(model, "report18_Choose");
             }
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
 
         }
 
@@ -789,21 +839,22 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report19(Reports model)
+        public async Task<ActionResult> Report19(Reports model)
         {
             int PdCode = model.PdCode;
             string name = CreateXML(model, "report19");
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
 
         }
 
@@ -823,7 +874,7 @@ namespace DLSM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Report20(Reports model)
+        public async Task<ActionResult> Report20(Reports model)
         {
             int PdCode = model.PdCode;
             string name;
@@ -835,17 +886,18 @@ namespace DLSM.Controllers
             {
                 name = CreateXML(model, "report20_Choose");
             }
-            string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
-            if (isReportExists(path + "\\" + name + ".pdf"))
-            {
-                TempData["Name"] = name;
-                return RedirectToAction("ViewReport");
-            }
-            else
-            {
-                ViewBag.Msg = "Load Report Fail !";
-                return View("ReportFail");
-            }
+            return await ViewOrDownload(model, name);
+            //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
+            //if (isReportExists(path + "\\" + name + ".pdf"))
+            //{
+            //    TempData["Name"] = name;
+            //    return RedirectToAction("ViewReport");
+            //}
+            //else
+            //{
+            //    ViewBag.Msg = "Load Report Fail !";
+            //    return View("ReportFail");
+            //}
 
         }
 
@@ -1390,7 +1442,14 @@ namespace DLSM.Controllers
             string pass = ConfigurationManager.AppSettings.Get("PASSWORDDB") ;
 
             string returnName = reportname + "_" + rand.ToString();
+            string output_ext = ".pdf";
 
+            switch (model.OutputType)
+            {
+                case output_type.excel: output_ext = ".xls"; break;
+                case output_type.pdf: output_ext = ".pdf"; break;
+                default: output_ext = ".pdf"; break;
+            }
             var itm = GenItem(model, reportname);
             string strname = GetReportName(reportname);
             try
@@ -1401,7 +1460,7 @@ namespace DLSM.Controllers
                     xmlwriter.WriteStartElement("ReportCommand");
 
                     xmlwriter.WriteElementString("Report", strname);
-                    xmlwriter.WriteElementString("Output", returnName + ".pdf");
+                    xmlwriter.WriteElementString("Output", returnName + output_ext);
                     xmlwriter.WriteElementString("Server", server);
                     xmlwriter.WriteElementString("Database", database);
                     xmlwriter.WriteElementString("User", user);

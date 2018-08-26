@@ -16,8 +16,10 @@ namespace DLSM.Class
         public DateTime FormDate { get; set; }
         public DateTime ToDate { get; set; }
 
-       
+        public output_type OutputType { get; set; } 
     }
+
+    
     public class ReportList
     {
         public string Name { get; set; }
@@ -30,5 +32,11 @@ namespace DLSM.Class
     {
         public List<ReportList> ListRR { get; set; }
     }
+
+    public enum output_type
+    {
+        pdf, excel
+    }
+
 
 }
