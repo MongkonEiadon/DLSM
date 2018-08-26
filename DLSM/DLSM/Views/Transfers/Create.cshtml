@@ -965,16 +965,16 @@
             $("#QtyErrMsg").html("");
         }
 
-        if (mdSerialBegin != "" && mdSerialBegin.length < 12) {
-            $("#SNBegErrMsg").html("กรุณากรอกเลขคุมเริ่มต้นให้ครบ 13 หลัก");
+        if (mdSerialBegin != "" && mdSerialBegin.length != 12) {
+            $("#SNBegErrMsg").html("กรุณากรอกเลขคุมเริ่มต้นให้ครบ 12 หลัก");
             valid = false;
         }
         else {
             $("#SNBegErrMsg").html("");
         }
 
-        if (mdSerialEnd != "" && mdSerialEnd.length < 12) {
-            $("#SNEndErrMsg").html("กรุณากรอกเลขคุมสุดท้ายให้ครบ 13 หลัก");
+        if (mdSerialEnd != "" && mdSerialEnd.length != 12) {
+            $("#SNEndErrMsg").html("กรุณากรอกเลขคุมสุดท้ายให้ครบ 12 หลัก");
             valid = false;
         }
         else {
@@ -990,7 +990,8 @@
         if ($.inArray(parseInt(ToWareHouse), WarehouseAccess) < 0) {
 
             if (serialControl.toLowerCase() == "y") {
-                if (mdSerialBegin == "") {
+             //Change to Optional Issue#6
+              /*  if (mdSerialBegin == "") {
                     $("#SNBegErrMsg").html("กรุณากรอกเลขคุมเริ่มต้น");
                     valid = false;
                 }
@@ -1003,6 +1004,20 @@
                     valid = false;
                 } else {
                     $("#SNEndErrMsg").html("");
+                }*/
+                 //Issue 6 the serial value must be 2 value
+
+                if(mdSerialBegin != "" && mdSerialEnd == ""){
+                    $("#SNEndErrMsg").html("กรุณากรอกเลขคุมสุดท้าย");
+                    valid = false;
+                }else{
+                    $("#SNEndErrMsg").html("");
+                }
+                if(mdSerialEnd != "" && mdSerialBegin == ""){
+                    $("#SNBegErrMsg").html("กรุณากรอกเลขคุมเริ่มต้น");
+                    valid = false;
+                }else{
+                    $("#SNBegErrMsg").html("");
                 }
 
                 if (mdQty > mdTotalQty || mdQty < mdTotalQty) {
