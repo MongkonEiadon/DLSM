@@ -13,8 +13,11 @@ namespace DLSM.Models
     
     public partial class sp_SearchCard_Result
     {
-        public Nullable<int> id { get; set; }
+        public int id { get; set; }
         public string SerialBegin { get; set; }
         public Nullable<int> whid { get; set; }
+        public string SerialEnd { get; set; }
+        public Nullable<int> SerialCount { get; set; }
+        public Nullable<System.DateTime> DocDate { get; set; }
     }
 }

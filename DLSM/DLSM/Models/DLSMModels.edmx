@@ -2951,9 +2951,12 @@ warning 6002: The table/view 'DLSM.dbo.Configure' does not have a primary key de
           <Property Type="String" Name="IsManager" Nullable="true" MaxLength="1" />
         </ComplexType>
         <ComplexType Name="sp_SearchCard_Result">
-          <Property Type="Int32" Name="id" Nullable="true" />
+          <Property Type="Int32" Name="id" Nullable="false" />
           <Property Type="String" Name="SerialBegin" Nullable="true" MaxLength="40" />
           <Property Type="Int32" Name="whid" Nullable="true" />
+          <Property Type="String" Name="SerialEnd" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="SerialCount" Nullable="true" />
+          <Property Type="DateTime" Name="DocDate" Nullable="true" Precision="23" />
         </ComplexType>
         <ComplexType Name="sp_SaveCardManual_Result">
           <Property Type="Int32" Name="seqno" Nullable="true" />
@@ -3945,6 +3948,9 @@ warning 6002: The table/view 'DLSM.dbo.Configure' does not have a primary key de
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="SerialBegin" ColumnName="SerialBegin" />
                 <ScalarProperty Name="whid" ColumnName="whid" />
+                <ScalarProperty Name="SerialEnd" ColumnName="SerialEnd" />
+                <ScalarProperty Name="SerialCount" ColumnName="SerialCount" />
+                <ScalarProperty Name="DocDate" ColumnName="DocDate" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

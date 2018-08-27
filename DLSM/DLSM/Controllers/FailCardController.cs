@@ -39,20 +39,30 @@ namespace DLSM.Controllers
             var context = new DLSMEntities();
             int Userid = Convert.ToInt32(Session["UserID"]);
             List<StockSerial> list = new List<StockSerial>();
-
+            //change store to get only stock serial
             var listdata = context.sp_SearchCard(Convert.ToString(searchCardNo), Convert.ToString(searchToCardNo), searchBeginDate, searchEndDate).ToList().OrderBy(a=>a.id);
-
+            int sarch_card_limit = 500;
             if (listdata.Count() > 0)
             {
+                //using loop from stock serial begin to end
                 foreach (var i in listdata)
                 {
-                    StockSerial s = new StockSerial();
-
-                    s.PdID = i.id.Value;
-                    s.SerialBegin = i.SerialBegin;
-                    s.WhID = i.whid;
-                    
-                    list.Add(s);
+                    string sbegin = i.SerialBegin;
+                    UInt64 card_serialno = Convert.ToUInt64(sbegin);
+                    for (int n=0; n<i.SerialCount; n++)
+                    {
+                        StockSerial s = new StockSerial();
+                        s.PdID = n+1;
+                        s.SerialBegin = card_serialno.ToString();
+                        s.WhID = i.whid;
+                        
+                        list.Add(s);
+                        card_serialno++;
+                        //check item not over limit
+                        if (n > sarch_card_limit)
+                            break;
+                    }
+                   
                 }
             }
 
