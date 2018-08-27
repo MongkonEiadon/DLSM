@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -10,9 +10,27 @@ using DLSM.Models;
 using System.Data.SqlClient;
 using DLSM.Class;
 using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace DLSM.Controllers
 {
+    public class StockSerialNum
+    {
+        public StockSerialNum() { }
+        public StockSerialNum(int ID, int PdID, int SerialBegin, int SerialCount, int SerialEnd) {
+            this.ID = ID;
+            this.PdID = PdID;
+            this.SerialBegin = SerialBegin;
+            this.SerialCount = SerialCount;
+            this.SerialEnd = SerialEnd;
+
+        }
+        public int ID;
+        public int PdID;
+        public long SerialBegin;
+        public int SerialCount;
+        public long SerialEnd;
+    }
     [SessionCheck]
     public class TransfersController : Controller
     {
@@ -338,6 +356,16 @@ namespace DLSM.Controllers
             {
                 return Json("เลขที่เอกสาร นี้มีอยู่แล้วในระบบ");
             }
+
+
+            var chkResults = this.chk_Stock(model.ID, db);
+            var chkOk = (bool)chkResults[0];
+            var chkMsg = (string)chkResults[1];
+            if (!chkOk)
+            {
+                return Json(chkMsg);
+            }
+
             model.DocDate = model.DocDate.Value.AddYears(-543);
             db.Entry(model).State = EntityState.Modified;
             db.SaveChanges();
@@ -364,6 +392,115 @@ namespace DLSM.Controllers
             db.SaveChanges();
             return Json("success");
         }
+
+
+
+        public object[] chk_Stock(int DocID, DLSMEntities _context)
+        {
+
+            bool chkOk = true;
+            string strError = "";
+            _context = null;
+            using (DLSMEntities context = _context != null ? _context : new DLSMEntities())
+            {
+                var docid = DocID;
+                var Doc = context.Documents.SingleOrDefault(a => a.ID == DocID);
+                if (Doc == null)
+                {
+                    return new object[] { false, "data not found." };
+                }
+                /*
+                var isCard = (from docdet in context.DocumentDetails
+                              join ss in context.StockSerials on docdet.PdID equals ss.PdID
+                              join p in context.Products on docdet.PdID equals p.ID
+                              join c in context.Configures on p.Code equals c.Value
+                              where docdet.DocID == DocID && docdet.Document.WhID == Doc.WhID
+                              && c.Code == "PRD-CARD"
+                              select p).FirstOrDefault() != null;*/
+                var dd = (from docdet in context.DocumentDetails
+                          join p in context.Products on docdet.PdID equals p.ID
+                          join c in context.Configures on p.Code equals c.Value
+                          where docdet.DocID == Doc.ID && docdet.TrnType == "O"  && docdet.Document.WhID == Doc.WhID
+                          select new { docdet.DocID,docdet.PdID,docdet.Qty,docdet.SerialBegin,docdet.SerialEnd,c.Code,docdet.Product});
+
+                var ss_grp = (from docdet in context.DocumentDetails
+                              join ss in context.StockSerials on docdet.PdID equals ss.PdID
+                              join p in context.Products on docdet.PdID equals p.ID
+                              where docdet.TrnType == "0" && p.SerialControl == "Y" && docdet.Document.WhID == Doc.WhID
+                              group ss by new { ss.ID, ss.PdID, ss.SerialBegin, ss.SerialCount, ss.SerialEnd } into g
+                              select g).AsEnumerable().Select(g =>
+                               new StockSerialNum()
+                               {
+                                   ID = g.Key.ID,
+                                   PdID = g.Key.PdID.HasValue ? g.Key.PdID.Value : 0,
+                                   SerialBegin = Convert.ToInt64(g.Key.SerialBegin),
+                                   SerialCount = g.Key.SerialCount.HasValue ? g.Key.SerialCount.Value : 0,
+                                   SerialEnd = Convert.ToInt64(g.Key.SerialEnd)
+                               });
+
+
+                var htb = new Hashtable();
+                if (dd.Count() == 0) { return new object[] { false, "data not found.." }; }
+                foreach (var docdet in dd)
+                {
+                    bool isCard = docdet.Code == "PRD-CARD";
+                    if (isCard)
+                    {
+                        var ddBegin = long.Parse(docdet.SerialBegin);
+                        var ddEnd = long.Parse(docdet.SerialEnd);
+                        var objExist = ss_grp.SingleOrDefault(a => a.PdID == docdet.PdID && ddBegin >= a.SerialBegin && ddEnd <= a.SerialEnd);
+                        if (objExist != null)
+                        {
+                            strError = docdet.Product.Name + " serial ที่ระบุไม่มีอยู่ในคลัง";
+                            chkOk = false;
+                            break;
+                        }
+                        #region comment  for support chk multi record
+                        //else
+                        //{
+
+                        /*
+                        var objBegin = new StockSerialInt(-99, objExist.PdID, objExist.SerialBegin, -99, objExist.SerialEnd);
+                        var objEnd = new StockSerialInt(-99, objExist.PdID, objExist.SerialBegin, -99, objExist.SerialEnd);
+                        objExist.SerialBegin 
+                        ss_grp.Remove(objExist);
+                        */
+                        //}
+                        #endregion
+                    }
+                    else {
+                        #region not isCard                    
+                            if (!htb.ContainsKey(docdet.PdID)) { htb.Add(docdet.PdID, 0); }
+                            int lastSumQty = Convert.ToInt32(htb[docdet.PdID]);
+                            var existObj = context.Stocks.FirstOrDefault(a => a.WhID == Doc.WhID && a.PdID == docdet.PdID && a.Qty >= (lastSumQty + docdet.Qty));
+                            if (existObj != null)
+                            {
+                                htb[docdet.PdID] = Convert.ToInt32(htb[docdet.PdID]) + docdet.Qty;
+                            }
+                            else
+                            {
+                                strError = docdet.Product.Name + " serial ที่ระบุไม่มีอยู่ในคลัง";
+                                break;
+                            }
+
+                     
+                        #endregion
+                    }
+                }
+
+              
+             
+
+            }
+
+
+            return new object[] { chkOk, strError };
+
+        }
+
+
+
+
 
         // GET: Transfers/Delete/5
         public ActionResult Delete(int? id)
@@ -468,7 +605,15 @@ namespace DLSM.Controllers
             {
                 return Json("เลขที่เอกสาร นี้มีอยู่แล้วในระบบ");
             }
-            //Update Status
+
+            var chkResults = this.chk_Stock(model.ID, db);
+            var chkOk = (bool)chkResults[0];
+            var chkMsg = (string)chkResults[1];
+            if (!chkOk)
+            {
+                return Json(chkMsg);
+            }
+
             var context = new DLSMEntities();
             var upd = (from d in context.Documents
                        where d.ID == model.ID
