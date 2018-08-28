@@ -1,4 +1,4 @@
-﻿using DLSM.Class;
+using DLSM.Class;
 using DLSM.Models;
 using System;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace DLSM.Controllers
         {
             //Sort menu in setting
             //Same name in table Module
-            List<string> SortMenu = new List<string> { "Receives", "Transfers", "Requisitions", "Borrows", "CheckStocks","FailCard"};
+            List<string> SortMenu = new List<string> { "Receives", "Transfers", "Requisitions", "Borrows", "CheckStocks","FailCard", "TransferAuto" };
 
             var SortedMenu = SortMenu.Intersect(menuList);
 
