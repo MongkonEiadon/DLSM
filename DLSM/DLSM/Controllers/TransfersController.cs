@@ -426,7 +426,7 @@ namespace DLSM.Controllers
                 var ss_grp = (from docdet in context.DocumentDetails
                               join ss in context.StockSerials on docdet.PdID equals ss.PdID
                               join p in context.Products on docdet.PdID equals p.ID
-                              where docdet.TrnType == "0" && p.SerialControl == "Y" && docdet.Document.WhID == Doc.WhID
+                              where docdet.TrnType == "O" && p.SerialControl == "Y" && docdet.Document.WhID == Doc.WhID
                               group ss by new { ss.ID, ss.PdID, ss.SerialBegin, ss.SerialCount, ss.SerialEnd } into g
                               select g).AsEnumerable().Select(g =>
                                new StockSerialNum()
