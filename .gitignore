@@ -199,5 +199,5 @@ project.lock.json
 *.vc.vc.opendb
 *.vc.db
 
-
-
+#remove .vs folder
+/.vs
