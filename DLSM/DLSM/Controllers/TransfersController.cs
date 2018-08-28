@@ -53,7 +53,7 @@ namespace DLSM.Controllers
                         join p in context.Products on du.PdID equals p.ID
                         join s in context.Staffs on d.CreateBy equals s.ID
                         orderby d.DocDate descending
-                        where d.DocType == "3" && (d.WhID == Userwhid  || d.ToWhID == Userwhid)  //Transfer 
+                        where d.DocType == "3"&&d.SubType != 10 && (d.WhID == Userwhid  || d.ToWhID == Userwhid)  //Transfer  
                         select new
                         {
                             ID = d.ID,
