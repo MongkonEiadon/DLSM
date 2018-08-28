@@ -115,7 +115,7 @@ namespace DLSM.Controllers
             var context = new DLSMEntities();
             int Userid = Convert.ToInt32(Session["UserID"]);
             List<Document> list = new List<Document>();
-            var listdata = context.sp_SearchDocument(searchSN, searchFromDate, searchToDate, searchWare, searchPro, 3, searchStatus,Userid).ToList();
+            var listdata = context.sp_SearchDocument(searchSN, searchFromDate, searchToDate, searchWare, searchPro, 3, searchStatus,Userid).Where(a=>a.SubType!=10).ToList();
 
             if (listdata.Count() > 0)
             {
