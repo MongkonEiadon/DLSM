@@ -1,4 +1,4 @@
-﻿
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -111,6 +111,24 @@
                         </div>
                         <div class="mr-5">
                             <h6>บัตรเสีย</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+
+    @if (MenuSettingAccess.Contains("TransferAuto"))
+    {
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card card-inverse card-success o-hidden h-100">
+                <a href="\TransferAuto\Index" class="card-footer clearfix small z-1">
+                    <div class="card-block">
+                        <div class="card-block-icon">
+                            <i class="fa fa-fw fa-linode"></i>
+                        </div>
+                        <div class="mr-5">
+                            <h6>จ่ายอัตโนมัติ</h6>
                         </div>
                     </div>
                 </a>
