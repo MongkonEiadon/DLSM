@@ -249,7 +249,7 @@
                                         <input class="find" name="WhName" id="WhName" style="width:350px;max-width:600px;" readonly>
                                         <a href="#" class="btn btn-success" id="btnSelWh" name="btnSelWh" data-toggle="modal" data-target="#WModal"><i class="fa fa-search fa-3"></i></a>
                                         <button type="button" class="btn btn-warning" name="btnclearWH" id="btnclearWH" style="text-align:center;">ล้าง</button>
-                                    
+
                                     </div>
                                 </div>
                             </td>
@@ -308,6 +308,23 @@
                                 </div>
                             </td>
                         </tr>
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" for="OutputType">รายงาน</label>
+                                    <div class="col-md-8">
+                                        <label class="radio-inline">
+                                            <input checked="checked" data-val="true" id="OutputType" name="OutputType" type="radio" value="0">
+                                            PDF
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input id="OutputType" name="OutputType" type="radio" value="1">
+                                            Excel
+                                        </label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -321,13 +338,7 @@
                         <li class="menu-item" style="padding-top:30px;">
                             @*<button class="btn btn-warning" type="submit" style="width:130px;"></button>*@
                             <a href="/Report/Index" style="color:white;width:130px;cursor:pointer;" class="btn btn-warning">ออก</a>
-                        </li>
-                        <li class="menu-item" style="padding-top:30px; padding-left:1%">
-                            <select id="OutputType" name="OutputType" class="form-control-sm" style="width:130px;">
-                                <option value="0" selected>PDF</option>
-                                <option value="1">EXCEL</option>
-                            </select>
-                        </li>
+                        </li>                        
                         <li class="menu-item" style="padding-top:30px;">
                             <button class="btn btn-success" type="button" id="btnSave" style="width:130px;">รายงาน</button>
                         </li>

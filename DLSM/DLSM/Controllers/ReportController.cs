@@ -18,7 +18,7 @@ namespace DLSM.Controllers
     public class ReportController : Controller
     {
         private DLSMEntities db = new DLSMEntities();
-        
+
         // GET: Report
         public ActionResult Index()
         {
@@ -41,7 +41,7 @@ namespace DLSM.Controllers
             return View();
         }
 
-        
+
         public ActionResult Report1()
         {
 
@@ -66,10 +66,21 @@ namespace DLSM.Controllers
             {
                 case Class.output_type.excel:
                     output_type = ".xls";
-
+                    DateTime now = DateTime.Now;
                     var memory = new MemoryStream();
                     string filename = Path.Combine(path, name + output_type);
-                    Thread.Sleep(2000);
+                    FileInfo finfo = new FileInfo(filename);
+                    Thread.Sleep(1000);
+                    int maxloop = 5;
+                    int l = 0;
+                    while (IsFileInUse(filename))
+                    {
+                        Thread.Sleep(1000);
+                        l++;
+
+                        if (l > maxloop)
+                            break;
+                    }
                     if (System.IO.File.Exists(filename))
                     {
 
@@ -78,6 +89,7 @@ namespace DLSM.Controllers
                             await stream.CopyToAsync(memory);
                         }
                     }
+
                     memory.Position = 0;
                     return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", name + output_type);
 
@@ -96,6 +108,29 @@ namespace DLSM.Controllers
                     }
             }
         }
+        public bool IsFileInUse(string filename)
+        {
+            bool isInUse = true;
+            if (System.IO.File.Exists(filename))
+            {
+                FileInfo fInfo = new FileInfo(filename);
+                if (fInfo.Length == 0 || fInfo.CreationTime == fInfo.LastWriteTime)
+                {
+                    isInUse = true;
+                }
+                else
+                {
+                    isInUse = false;
+                }
+            }
+            else
+            {
+                Thread.Sleep(200);
+                IsFileInUse(filename);
+            }
+            return isInUse;
+        }
+
 
         [HttpPost]
         public async Task<ActionResult> Report1(Reports model)
@@ -116,7 +151,7 @@ namespace DLSM.Controllers
 
 
         }
-       
+
         public ActionResult Report2()
         {
             var SessionUserID = Session["UserID"].ToString();
@@ -147,7 +182,7 @@ namespace DLSM.Controllers
 
                     return Json(stt);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return Json("failed");
                 }
@@ -232,7 +267,7 @@ namespace DLSM.Controllers
         [HttpPost]
         public async Task<ActionResult> Report4(Reports model)
         {
-            string name =CreateXML(model, "report4");
+            string name = CreateXML(model, "report4");
             return await ViewOrDownload(model, name);
             //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
             //if (isReportExists(path + "\\" + name + ".pdf"))
@@ -299,7 +334,7 @@ namespace DLSM.Controllers
         [HttpPost]
         public async Task<ActionResult> Report6(Reports model)
         {
-            string name =CreateXML(model, "report6");
+            string name = CreateXML(model, "report6");
             return await ViewOrDownload(model, name);
             //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
             //if (isReportExists(path + "\\" + name + ".pdf"))
@@ -332,7 +367,7 @@ namespace DLSM.Controllers
         [HttpPost]
         public async Task<ActionResult> Report7(Reports model)
         {
-            string name =CreateXML(model, "report7");
+            string name = CreateXML(model, "report7");
             return await ViewOrDownload(model, name);
             //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
             //if (isReportExists(path + "\\" + name + ".pdf"))
@@ -365,7 +400,7 @@ namespace DLSM.Controllers
         [HttpPost]
         public async Task<ActionResult> Report8(Reports model)
         {
-            string name =CreateXML(model, "report8");
+            string name = CreateXML(model, "report8");
             return await ViewOrDownload(model, name);
             //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
             //if (isReportExists(path + "\\" + name + ".pdf"))
@@ -398,7 +433,7 @@ namespace DLSM.Controllers
         [HttpPost]
         public async Task<ActionResult> Report9(Reports model)
         {
-            string name =CreateXML(model, "report9");
+            string name = CreateXML(model, "report9");
             return await ViewOrDownload(model, name);
             //string path = ConfigurationManager.AppSettings.Get("ROOT_PDF");
             //if (isReportExists(path + "\\" + name + ".pdf"))
@@ -656,7 +691,7 @@ namespace DLSM.Controllers
             ViewBag.WhID = Wh;
             var pd = (from p in db.Products
                       join ct in db.Categories on p.CtID equals ct.ID
-                      where ct.ID.ToString() == "9" 
+                      where ct.ID.ToString() == "9"
                       select p).ToList();
             ViewBag.PdID = pd;
             return View();
@@ -917,14 +952,14 @@ namespace DLSM.Controllers
                 elapsed += 1000;
             }
 
-            EndWhile:
+        EndWhile:
             return success;
         }
 
         private List<ReportList> GenItem(Reports model, string report_no)
         {
             var SessionUserID = Session["UserID"].ToString();
-            List<ReportList> itm = new List<ReportList>() ;
+            List<ReportList> itm = new List<ReportList>();
             ReportList rt = new ReportList();
             if (model != null)
             {
@@ -955,7 +990,7 @@ namespace DLSM.Controllers
                     itm.Add(rt4);
 
                 }
-                else if (report_no == "report2" || report_no == "report2_Choose"  || report_no == "report5" || report_no == "report11")
+                else if (report_no == "report2" || report_no == "report2_Choose" || report_no == "report5" || report_no == "report11")
                 {
                     string fdate = Convert.ToString(model.FormDate.ToString("yyyy-MM-dd HH:mm:ss"));
                     string tdate = Convert.ToString(model.ToDate.ToString("yyyy-MM-dd HH:mm:ss"));
@@ -1230,7 +1265,7 @@ namespace DLSM.Controllers
                     rt11.Value = SessionUserID;
                     itm.Add(rt11);
                 }
-                else if(report_no == "report15" || report_no == "report15_Choose")
+                else if (report_no == "report15" || report_no == "report15_Choose")
                 {
                     ReportList rt1 = new ReportList();
                     rt1.Name = "@whid";
@@ -1423,12 +1458,12 @@ namespace DLSM.Controllers
                     itm.Add(rt5);
                 }
             }
-            
+
 
             return itm;
         }
 
-        private string CreateXML(Reports model,string reportname)
+        private string CreateXML(Reports model, string reportname)
         {
             Random nameout = new Random();
             string rand = nameout.Next(0, 99999999).ToString("00000000");
@@ -1436,10 +1471,10 @@ namespace DLSM.Controllers
             string filename = reportname + "_" + rand.ToString() + ".xml";
             string path = ConfigurationManager.AppSettings.Get("ROOT_XML") + "\\" + filename;
 
-            string server = ConfigurationManager.AppSettings.Get("SERVER") ;
-            string database = ConfigurationManager.AppSettings.Get("DATABASE") ;
-            string user = ConfigurationManager.AppSettings.Get("USERDB") ;
-            string pass = ConfigurationManager.AppSettings.Get("PASSWORDDB") ;
+            string server = ConfigurationManager.AppSettings.Get("SERVER");
+            string database = ConfigurationManager.AppSettings.Get("DATABASE");
+            string user = ConfigurationManager.AppSettings.Get("USERDB");
+            string pass = ConfigurationManager.AppSettings.Get("PASSWORDDB");
 
             string returnName = reportname + "_" + rand.ToString();
             string output_ext = ".pdf";
@@ -1475,18 +1510,18 @@ namespace DLSM.Controllers
                         xmlwriter.WriteAttributeString("Type", i.Type);
                         xmlwriter.WriteAttributeString("Value", i.Value);
                         xmlwriter.WriteEndElement();
-                   
+
                     }
                     xmlwriter.WriteEndElement();
 
                     xmlwriter.WriteEndElement();
                     xmlwriter.WriteEndDocument();
-                    
+
                 }
             }
             catch (Exception ex)
             {
-               
+
                 throw ex.InnerException;
             }
             return returnName;
@@ -1495,7 +1530,7 @@ namespace DLSM.Controllers
         private string GetReportName(string reportno)
         {
             string reportname = "";
-            if(reportno == "report1")
+            if (reportno == "report1")
             {
                 reportname = "NotEnough.rpt";
             }
@@ -1603,7 +1638,7 @@ namespace DLSM.Controllers
             {
                 reportname = "CardByBranch2.rpt";
             }
-            return reportname ;
+            return reportname;
         }
 
         private List<string> sortMenu(List<string> menuList)
