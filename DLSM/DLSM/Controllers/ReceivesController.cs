@@ -268,33 +268,33 @@ namespace DLSM.Controllers
             var context = new DLSMEntities();
 
             Document document = db.Documents.Find(id);
+            
+            var wh = context.Warehouses.SingleOrDefault(u => u.ID == document.WhID);
+
+            document.WhID = wh.ID;
+            document.WhName = wh.Name;
+
+            var s = context.Staffs.SingleOrDefault(u => u.ID == document.CreateBy);
+            document.CreateName = s.Name;
+
+            var spp = context.Suppliers.SingleOrDefault(u => u.ID == document.SpID);
+            document.SupplierName = spp.Name;
+
+            document.DocDate = document.DocDate.Value.AddYears(543);
+            
             if (document == null)
             {
                 return HttpNotFound();
             }
 
-            var wh = context.Warehouses.SingleOrDefault(u => u.ID == document.WhID);
-
-            document.WhID = wh?.ID;
-            document.WhName = wh?.Name ?? string.Empty;
-
-            var s = context.Staffs.SingleOrDefault(u => u.ID == document.CreateBy);
-            document.CreateName = s?.Name ?? string.Empty;
-
-            var spp = context.Suppliers.SingleOrDefault(u => u.ID == document.SpID);
-            document.SupplierName = spp?.Name ?? string.Empty;
-
-            document.DocDate = document.DocDate.Value.AddYears(543);
             document.StatusName = GetStatusName(document.Status);
 
             var list = (from d in context.Documents
                         join du in context.DocumentDetails on d.ID equals du.DocID
                         join w in context.Warehouses on d.WhID equals w.ID
-                        join sp in context.Suppliers on d.SpID equals sp.ID into suppliers
-                        from sp in suppliers.DefaultIfEmpty()
+                        join sp in context.Suppliers on d.SpID equals sp.ID
                         join st in context.Staffs on d.CreateBy equals st.ID
-                        join p in context.Products on du.PdID equals p.ID into products
-                        from p in products.DefaultIfEmpty()
+                        join p in context.Products on du.PdID equals p.ID
                         where du.DocID == document.ID
                         select new {
                             PdID = du.PdID,
