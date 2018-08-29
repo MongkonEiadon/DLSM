@@ -459,7 +459,7 @@ namespace DLSM.Controllers
                     {
                         var ddBegin = long.Parse(docdet.SerialBegin);
                         var ddEnd = long.Parse(docdet.SerialEnd);
-                        var objExist = ss_grp.SingleOrDefault(a => a.PdID == docdet.PdID && ddBegin >= a.SerialBegin && ddEnd <= a.SerialEnd);
+                         var objExist = ss_grp.SingleOrDefault(a => a.PdID == docdet.PdID && a.SerialBegin<=ddBegin &&  a.SerialEnd>= ddEnd);
                         if (objExist == null)
                         {
                             strError = docdet.Product.Name + " serial ที่ระบุไม่มีอยู่ในคลัง";
