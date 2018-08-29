@@ -1134,6 +1134,30 @@ namespace DLSM.Controllers
 
         }
 
+        //Issue 6
+        [HttpGet]
+        public ActionResult checkIsCardProduct(int PrdID)
+        {
+            try
+            {
+                using (DLSMEntities context = new DLSMEntities())
+                {
+                    bool isCard = true;
+                    var allCardDataList = context.Configures.Where(x => x.Code.Equals("PRD-CARD"));
+                    if(allCardDataList != null)
+                    {
+                        isCard = allCardDataList.Any(x => x.Value == PrdID.ToString());
+                    }
+
+                    return this.Json(new { isCardProduct = isCard ? "Y" : "N" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception)
+            {
+                return this.Json(new { isCardProduct = "Y" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         public String GetStatusName(String statusid)
         {
