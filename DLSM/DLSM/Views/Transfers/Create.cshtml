@@ -981,6 +981,19 @@
             $("#SNEndErrMsg").html("");
         }
 
+        if (mdSerialBegin != "" && mdSerialEnd == "") {
+            $("#SNEndErrMsg").html("กรุณากรอกเลขคุมสุดท้าย");
+            valid = false;
+        } else {
+            $("#SNEndErrMsg").html("");
+        }
+        if (mdSerialEnd != "" && mdSerialBegin == "") {
+            $("#SNBegErrMsg").html("กรุณากรอกเลขคุมเริ่มต้น");
+            valid = false;
+        } else {
+            $("#SNBegErrMsg").html("");
+        }
+
         var ToWareHouse = $("#ToWhID").val();
 
 
