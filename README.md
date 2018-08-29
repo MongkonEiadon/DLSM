@@ -15,3 +15,7 @@ password : `12345678`
 แล้ว RDP ไปที่ `192.168.252.109`  
 user : `administrator`  
 password : `P@ssw0rd`
+
+## ไฟล์ฐานข้อมูล
+- เป็นไฟล์ .bak อยู่ที่ [root] ของ project [bak_DLSM20180824.bak](https://gitlab.com/nysiis-solutions/driver-license-stock-management/blob/master/bak_DLSM20180824.bak)
+- หากมีการ update store หรือ sql ให้วางใว้ที่โฟลเดอร์ `driver-license-stock-management > DLSM > DLSM > db_patch`
