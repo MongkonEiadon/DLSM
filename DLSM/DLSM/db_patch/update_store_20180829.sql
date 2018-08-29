@@ -32,7 +32,7 @@ begin
   AND (d.DocDate >= @BeginDate or @BeginDate is null) 
   AND (d.DocDate <= @EndDate or @EndDate is null )
   AND ss.SerialCount>0 
-
+ ORDER BY ss.[SerialBegin] ,ss.[SerialEnd]
 
 end
 GO
