@@ -11,8 +11,8 @@ MSSQL 2017
 - เป็นไฟล์ .bak อยู่ที่ [root] ของ project ชื่อว่าไฟล์ [:paperclip: bak_DLSM20180824.bak](https://gitlab.com/nysiis-solutions/driver-license-stock-management/blob/master/bak_DLSM20180824.bak)
 
 ### การส่งงาน
-- หลังจากทำงานที่ localhost เรียบร้อยแล้ว ให้ push งานเข้ามาที่ GitLab แล้ว build โปรเจ็คไปวางที่ Test Server เพื่อให้เจ้าหน้าที่ตรวจรับ)
-- หากมีการ update store หรือ sql ให้วางใว้ที่โฟลเดอร์ `driver-license-stock-management > DLSM > DLSM > db_patch`
+- หลังจากทำงานที่ localhost เรียบร้อยแล้ว ให้ push งานเข้ามาที่ GitLab
+- แล้ว build โปรเจ็คไปวางที่ Test Server เพื่อให้เจ้าหน้าที่ตรวจรับ)
 
 :paperclip: [HowToUsePptpVpn.docx](https://adiwitcoth.sharepoint.com/:w:/g/ESrmHgXT6qJFtHASaLAVE8kB3UjpN95gduKC0P5eYPt6HA?e=Ug8SOI)
 
@@ -23,6 +23,15 @@ password : `12345678`
 แล้ว RDP ไปที่ `192.168.252.109`  
 user : `administrator`  
 password : `P@ssw0rd`
+
+- หากมีการ update store หรือ sql ให้วางใว้ที่โฟลเดอร์ `driver-license-stock-management > DLSM > DLSM > db_patch`
+- ปรับสถานะของ Issue (ขวามือคำว่า label) จาก `Doing` เป็น `Quality Control (รอตรวจ)`
+- แจ้งเจ้าหน้าที่ทางแช๊ท[อินบ็อก](https://www.facebook.com/jobsforprogrammer/inbox)
+- เจ้าหน้าที่จะเข้ามาตรวจรับงานให้ โดยจะพิมพ์ comments ทิ้งใว้ใต้ issue (สถานะของ issue จะเปลี่ยนกลับไปเป็น `Doing` เหมือนเดิม)
+- เมื่อ developer แก้ไข / ปรับ code ตาม comments เสร็จแล้วให้ปรับสถานะของ Issue กลับมาเป็น `Quality Control (รอตรวจ)` ใหม่อีกครั้ง
+- งานที่ตรวจรับเรียบร้อยแล้วเจ้าหน้าที่จะกดปิด (Close Issue) ถือว่าเสร็จสิ้น ปิด job
+- สามารถใช้ผลงานเป็นส่วนหนึ่งของ portfolio ได้หลังผ่านวันส่งงานไปแล้ว 6 เดือน (T+180 วัน)
+
 
 ## เงื่อนไข และ ข้อกำหนด
 - โปรโมชั่น: *ปิดงานได้ก่อนกำหนดเวลารับ bonus เพิ่ม +2% ค่าส่งงานเร็ว*
