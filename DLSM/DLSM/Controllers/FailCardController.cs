@@ -40,7 +40,7 @@ namespace DLSM.Controllers
             int Userid = Convert.ToInt32(Session["UserID"]);
             List<StockSerial> list = new List<StockSerial>();
             //change store to get only stock serial
-            var listdata = context.sp_SearchCard(Convert.ToString(searchCardNo), Convert.ToString(searchToCardNo), searchBeginDate, searchEndDate).ToList().OrderBy(a=>a.id);
+            var listdata = context.sp_SearchCard(Convert.ToString(searchCardNo), Convert.ToString(searchToCardNo), searchBeginDate, searchEndDate).ToList().OrderBy(a=>a.SerialBegin);
             int sarch_card_limit = 500;
             if (listdata.Count() > 0)
             {
