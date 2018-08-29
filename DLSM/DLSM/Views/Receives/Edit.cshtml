@@ -600,7 +600,7 @@ new List<SelectListItem>
                     ID: $("#ID").val(),
                     DocNo: $("#DocNo").val(),
                     DocDate: $("#DocDate2").val(),
-                    CreateBy: @Session["UserID"].ToString(),
+                    CreateBy: @Session["UserID"]?.ToString(),
                     DocType: "1",
                     WhID: $("#WhID").val(),
                     SpID: $("#SpID").val(),
@@ -725,7 +725,7 @@ new List<SelectListItem>
                     ApproveDate: null,
                     ApproveBy: null,
                     ProcessDate: ProcessDate,
-                    ProcessBy: @Session["UserID"].ToString(),
+                    ProcessBy: @Session["UserID"]?.ToString(),
                     SubType: $("#SubType :selected").val(),
                     DocDetailList: table
                 };
