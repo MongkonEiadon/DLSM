@@ -267,7 +267,37 @@
                                 }
 
 
+                });
+
+                  //Issue 6
+                         $.ajax({
+                                type: "GET",
+                                url: "@Url.Action("checkIsCardProduct")" + "?prdID=" + prdID,
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (response) {
+                                    if (response.isCardProduct == "N") {
+
+                                        $("#editSerialEnd").attr("readonly", "readonly");
+                                        $("#editSerialBegin").attr("readonly", "readonly");
+
+
+                                    } else {
+
+                                        $("#editSerialEnd").removeAttr("readonly");
+                                        $("#editSerialBegin").removeAttr("readonly");
+
+                                    }
+
+                                },
+                                error: function (response) {
+                                    console.log(response)
+                                }
+
+
                             });
+
+
                         }
 
                 //    },
@@ -1169,13 +1199,13 @@
     function btnControl(isManager) {
         if (isManager == "1") {
             $("#btnSave").closest("li").css("display", "");
-           
+
         } else if (isManager == "2") {
             $("#btnSave").closest("li").css("display", "");
-         
+
         } else if (isManager == "3") {
             $("#btnSave").closest("li").css("display", "none");
-         
+
         } else if (isManager == "4") { //both
             $("#btnSave").closest("li").css("display", "");
         }
@@ -1252,7 +1282,7 @@
                 } else {
                     // can use this serial
                     ret = true;
-                }   
+                }
             }
         });
 
@@ -1286,7 +1316,7 @@
                                 <div class="form-group">
                                     เลขที่เอกสาร
                                     <div class="col-md-10">
-                                        @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control" , maxlength = "20" } })
+                                        @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", maxlength = "20" } })
                                         @Html.ValidationMessageFor(model => model.DocNo, "", new { @class = "text-danger", required = "required" })
                                     </div>
                                 </div>
@@ -1308,8 +1338,8 @@
                                     <div class="col-md-10" style="width:900px;max-width:900px;">
                                         @Html.EditorFor(model => model.WhID, new { htmlAttributes = new { @class = "form-control", @style = "display:none;" } })
                                         <input class="form-control" name="WhName" id="WhName" style="width:685px;display:unset;max-width:900px;" disabled>
-                                        <a href="#"  class="btn btn-success" data-toggle="modal"  data-target="#WModal" style="vertical-align:unset;" ><i class="fa fa-search fa-3"></i></a>
-                                        @Html.ValidationMessageFor(model => model.WhID, "", new { @class = "text-danger",required= "required" })
+                                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#WModal" style="vertical-align:unset;"><i class="fa fa-search fa-3"></i></a>
+                                        @Html.ValidationMessageFor(model => model.WhID, "", new { @class = "text-danger", required = "required" })
                                     </div>
                                 </div>
                             </td>
@@ -1321,7 +1351,7 @@
                                     <div class="col-md-10" style="width:900px;max-width:900px;">
                                         <input class="find" name="ToWhID" id="ToWhID" value="@Session["UserWhID"]" style="display:none;">
                                         <input class="form-control" name="ToWhName" id="ToWhName" value="@Session["UserWhName"].ToString()" style="width:685px;display:unset;max-width:900px;" disabled>
-                                        <a href="#"  class="btn btn-success" data-toggle="modal"  id="btnSelWh" style="vertical-align:unset;"><i class="fa fa-search fa-3"></i></a>
+                                        <a href="#" class="btn btn-success" data-toggle="modal" id="btnSelWh" style="vertical-align:unset;"><i class="fa fa-search fa-3"></i></a>
                                         @Html.ValidationMessageFor(model => model.ToWhID, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -1360,7 +1390,7 @@
                         </tr>
                         <tr>
                             <td style="padding: 10px;" colspan="2">
-                                <a href="#" class="btn btn-primary" id="btnOpenModal" data-toggle="modal" >เพิ่มรายการ</a>
+                                <a href="#" class="btn btn-primary" id="btnOpenModal" data-toggle="modal">เพิ่มรายการ</a>
                             </td>
                         </tr>
                     </table>
@@ -1384,8 +1414,7 @@
                             <th align="center" style="text-align:center;display:none;">SerialControl</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -1438,7 +1467,7 @@
                                 จำนวน
                             </td>
                             <td>
-                                <input class="form-control" name="Qty" id="Qty" onkeyup = "onlyNumber(this.value,this)"/>
+                                <input class="form-control" name="Qty" id="Qty" onkeyup="onlyNumber(this.value,this)" />
                                 <span id="QtyErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
                             </td>
                         </tr>
@@ -1447,7 +1476,7 @@
                                 เลขคุมเริ่มต้น
                             </td>
                             <td>
-                                <input class="form-control" name="SerialBegin" id="SerialBegin"  maxlength="12"/>
+                                <input class="form-control" name="SerialBegin" id="SerialBegin" maxlength="12" />
                                 <span id="SNBegErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
                             </td>
                         </tr>
@@ -1456,7 +1485,7 @@
                                 เลขคุมสุดท้าย
                             </td>
                             <td>
-                                <input class="form-control" name="SerialEnd" id="SerialEnd"  maxlength="12"/>
+                                <input class="form-control" name="SerialEnd" id="SerialEnd" maxlength="12" />
                                 <span id="SNEndErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
                             </td>
                         </tr>
@@ -1465,7 +1494,7 @@
                                 IP
                             </td>
                             <td>
-                                <input class="form-control" name="IpProperty" id="IpProperty"  maxlength="100"/>
+                                <input class="form-control" name="IpProperty" id="IpProperty" maxlength="100" />
                                 <span id="SNIpPropertyErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
                             </td>
                         </tr>
@@ -1503,7 +1532,7 @@
                 <input type="text" class="form-control" id="txtSearchStaff" name="txtSearch" tb="modSelWH" style="width:100%;padding-left:10px;padding-right:10px;margin-left:20px;max-width:450px" placeholder="กรองข้อมูล" />
 
                 <div class="modal-body" id="mypopupbody">
-                    <table class="table" id="modSelWH">                      
+                    <table class="table" id="modSelWH">
                         @foreach (var w in ViewBag.WhID)
                         {
                             <tr>
@@ -1542,16 +1571,16 @@
                         <thead></thead>
                         <tbody></tbody>
                         @*@foreach (var w in ViewBag.WhID)
-                        {
-                            <tr>
-                                <td>
-                                    @w.Name
-                                </td>
-                                <td>
-                                    <a href="#"><i name="SelTW" TowhCode="@w.ID" TowhName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
-                                </td>
-                            </tr>
-                        }*@
+                            {
+                                <tr>
+                                    <td>
+                                        @w.Name
+                                    </td>
+                                    <td>
+                                        <a href="#"><i name="SelTW" TowhCode="@w.ID" TowhName="@w.Name" class="fa fa-fw fa-pencil-square fa-2x"></i></a>
+                                    </td>
+                                </tr>
+                            }*@
                     </table>
                 </div>
                 <div class="modal-footer">
@@ -1598,7 +1627,7 @@
                                 จำนวน
                             </td>
                             <td>
-                                <input class="form-control" name="editQty" id="editQty" onkeyup = "onlyNumber(this.value,this)"/>
+                                <input class="form-control" name="editQty" id="editQty" onkeyup="onlyNumber(this.value,this)" />
                                 <span id="mQtyErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
                             </td>
                         </tr>
@@ -1607,7 +1636,7 @@
                                 เลขคุมเริ่มต้น
                             </td>
                             <td>
-                                <input class="form-control" name="editSerialBegin" id="editSerialBegin"  maxlength="12"/>
+                                <input class="form-control" name="editSerialBegin" id="editSerialBegin" maxlength="12" />
                                 <span id="mSNBegErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
                             </td>
                         </tr>
@@ -1616,7 +1645,7 @@
                                 เลขคุมสุดท้าย
                             </td>
                             <td>
-                                <input class="form-control" name="editSerialEnd" id="editSerialEnd" maxlength="12"/>
+                                <input class="form-control" name="editSerialEnd" id="editSerialEnd" maxlength="12" />
                                 <span id="mSNEndErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
                             </td>
                         </tr>
@@ -1625,7 +1654,7 @@
                                 IP
                             </td>
                             <td>
-                                <input class="form-control" name="editIpProperty" id="editIpProperty"  maxlength="100"/>
+                                <input class="form-control" name="editIpProperty" id="editIpProperty" maxlength="100" />
                                 <span id="mSNIpPropertyErrMsg" class="ErrMsg" style="font-size: xx-small;color: red;display: block;"></span>
                             </td>
                         </tr>
