@@ -4,7 +4,7 @@ Web Server IIS version 10
 MSSQL 2017
 
 ## ไฟล์ฐานข้อมูล
-- เป็นไฟล์ .bak อยู่ที่ [root] ของ project [bak_DLSM20180824.bak](https://gitlab.com/nysiis-solutions/driver-license-stock-management/blob/master/bak_DLSM20180824.bak)
+- เป็นไฟล์ .bak อยู่ที่ [root] ของ project ชื่อว่าไฟล์ [:paperclip: bak_DLSM20180824.bak](https://gitlab.com/nysiis-solutions/driver-license-stock-management/blob/master/bak_DLSM20180824.bak)
 
 ## การส่งงาน
 - หลังจากทำงานที่ localhost เรียบร้อยแล้ว ให้ push งานเข้ามาที่ GitLab แล้ว build โปรเจ็คไปวางที่ Test Server เพื่อให้เจ้าหน้าที่ตรวจรับ)
