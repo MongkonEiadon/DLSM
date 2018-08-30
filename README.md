@@ -1,6 +1,3 @@
-# แจ้งปิด (down) เครื่อง Test Server 192.168.252.109 เพื่อ BackUp ไฟล์ VM
-เพิ่มเติม [คลิ๊ก](https://gitlab.com/nysiis-solutions/driver-license-stock-management/issues/14)
-
 ### Production Server Specification
 Windows Server 2016  
 Web Server IIS version 10  
