@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -353,6 +353,7 @@ namespace DLSM.Controllers
             return Json(isCard, JsonRequestBehavior.AllowGet);
         }
 
+
         [HttpPost]
         public ActionResult EditTransfer(Document model)
         {
@@ -363,15 +364,7 @@ namespace DLSM.Controllers
                 return Json("เลขที่เอกสาร นี้มีอยู่แล้วในระบบ");
             }
 
-
-            var chkResults = this.chk_Stock(model.ID, db);
-            var chkOk = (bool)chkResults[0];
-            var chkMsg = (string)chkResults[1];
-            if (!chkOk)
-            {
-                return Json(chkMsg);
-            }
-
+            string oldStatus = db.Documents.AsNoTracking().Single(a => a.ID == model.ID).Status;
             model.DocDate = model.DocDate.Value.AddYears(-543);
             db.Entry(model).State = EntityState.Modified;
             db.SaveChanges();
@@ -394,10 +387,25 @@ namespace DLSM.Controllers
                 dd.TrnType = "O";
                 db.DocumentDetails.Add(dd);
             }
-
             db.SaveChanges();
+
+            if (model.Status != "1")
+            {
+                var chkResults = this.chk_Stock(model.ID, db);
+                var chkOk = (bool)chkResults[0];
+                var chkMsg = (string)chkResults[1];
+                if (!chkOk)
+                {
+
+                    var updateObj = db.Documents.Single(a => a.ID == model.ID);
+                    updateObj.Status = oldStatus;
+                    db.SaveChanges();
+                    return Json(chkMsg);
+                }
+            }
             return Json("success");
         }
+
 
 
 
@@ -425,14 +433,17 @@ namespace DLSM.Controllers
                               select p).FirstOrDefault() != null;*/
                 var dd = (from docdet in context.DocumentDetails
                           join p in context.Products on docdet.PdID equals p.ID
-                          join c in context.Configures on p.Code equals c.Value
-                          where docdet.DocID == Doc.ID && docdet.TrnType == "O"  && docdet.Document.WhID == Doc.WhID 
-                          select new { docdet.DocID,docdet.PdID,docdet.Qty,docdet.SerialBegin,docdet.SerialEnd,c.Code,docdet.Product});
+                          join c in context.Configures on p.Code equals c.Value into ps
+                          from c in ps.DefaultIfEmpty()
+                          where docdet.DocID == Doc.ID && docdet.TrnType == "O" && docdet.Document.WhID == Doc.WhID
+                          select new { docdet.DocID, docdet.PdID, docdet.Qty, docdet.SerialBegin, docdet.SerialEnd, Code = c != null ? c.Code : "", docdet.Product });
+
+
 
                 var ss_grp = (from docdet in context.DocumentDetails
                               join ss in context.StockSerials on docdet.PdID equals ss.PdID
                               join p in context.Products on docdet.PdID equals p.ID
-                              where docdet.DocID==Doc.ID&& docdet.TrnType == "O" && p.SerialControl == "Y" && docdet.Document.WhID == Doc.WhID
+                              where docdet.DocID == Doc.ID && docdet.TrnType == "O" && p.SerialControl == "Y" && docdet.Document.WhID == Doc.WhID
                               group ss by new { ss.ID, ss.PdID, ss.SerialBegin, ss.SerialCount, ss.SerialEnd } into g
                               select g).AsEnumerable().Select(g =>
                                new StockSerialNum()
@@ -443,7 +454,7 @@ namespace DLSM.Controllers
                                    SerialCount = g.Key.SerialCount.HasValue ? g.Key.SerialCount.Value : 0,
                                    SerialEnd = Convert.ToInt64(g.Key.SerialEnd)
                                });
-             
+
 
                 var htb = new Hashtable();
                 if (dd.Count() == 0) { return new object[] { false, "data not found.." }; }
@@ -454,7 +465,7 @@ namespace DLSM.Controllers
                     {
                         var ddBegin = long.Parse(docdet.SerialBegin);
                         var ddEnd = long.Parse(docdet.SerialEnd);
-                        var objExist = ss_grp.SingleOrDefault(a => a.PdID == docdet.PdID && ddBegin >= a.SerialBegin && ddEnd <= a.SerialEnd);
+                        var objExist = ss_grp.FirstOrDefault(a => a.PdID == docdet.PdID && a.SerialBegin <= ddBegin && a.SerialEnd >= ddEnd);
                         if (objExist == null)
                         {
                             strError = docdet.Product.Name + " serial ที่ระบุไม่มีอยู่ในคลัง";
@@ -474,28 +485,30 @@ namespace DLSM.Controllers
                         //}
                         #endregion
                     }
-                    else {
+                    else
+                    {
                         #region not isCard                    
-                            if (!htb.ContainsKey(docdet.PdID)) { htb.Add(docdet.PdID, 0); }
-                            int lastSumQty = Convert.ToInt32(htb[docdet.PdID]);
-                            var existObj = context.Stocks.FirstOrDefault(a => a.WhID == Doc.WhID && a.PdID == docdet.PdID && a.Qty >= (lastSumQty + docdet.Qty));
-                            if (existObj != null)
-                            {
-                                htb[docdet.PdID] = Convert.ToInt32(htb[docdet.PdID]) + docdet.Qty;
-                            }
-                            else
-                            {
-                                strError = docdet.Product.Name + " serial ที่ระบุไม่มีอยู่ในคลัง";
-                                break;
-                            }
+                        if (!htb.ContainsKey(docdet.PdID)) { htb.Add(docdet.PdID, 0); }
+                        int lastSumQty = Convert.ToInt32(htb[docdet.PdID]);
+                        var existObj = context.Stocks.FirstOrDefault(a => a.WhID == Doc.WhID && a.PdID == docdet.PdID && a.Qty >= (lastSumQty + docdet.Qty));
+                        if (existObj != null)
+                        {
+                            htb[docdet.PdID] = Convert.ToInt32(htb[docdet.PdID]) + docdet.Qty;
+                        }
+                        else
+                        {
+                            strError = docdet.Product.Name + " serial ที่ระบุไม่มีอยู่ในคลัง";
+                            chkOk = false;
+                            break;
+                        }
 
-                     
+
                         #endregion
                     }
                 }
 
-              
-             
+
+
 
             }
 
@@ -503,7 +516,6 @@ namespace DLSM.Controllers
             return new object[] { chkOk, strError };
 
         }
-
 
 
 
@@ -602,6 +614,7 @@ namespace DLSM.Controllers
             
         }
 
+
         [HttpPost]
         public ActionResult SendApprove(Document model)
         {
@@ -629,6 +642,7 @@ namespace DLSM.Controllers
 
             return Json("success");
         }
+
 
         //Approve & Insert Stock
         [HttpPost]
