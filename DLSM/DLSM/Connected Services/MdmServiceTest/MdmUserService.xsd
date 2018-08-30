@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xsd:schema xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:bons0="http://ws.esv.dlt.go.th" xmlns:bons1="http://esv.dlt.go.th" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:bons2="http://ws.esv.dlt.go.th" xmlns:tns="http://esv.dlt.go.th" targetNamespace="http://esv.dlt.go.th" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <xsd:import schemaLocation="MdmUserService.xsd2.xsd" namespace="http://ws.esv.dlt.go.th" />
   <xsd:element name="authenUser">
@@ -32,10 +32,10 @@
   <xsd:complexType name="GetUserInfoInput">
     <xsd:sequence>
       <xsd:element minOccurs="0" name="getUserInfoBeanInput" type="bons2:getUserInfoBean" />
-      <xsd:element minOccurs="0" name="authenticationInput" type="tns:AuthenticationInput" />
+      <xsd:element minOccurs="0" name="authenticationInput" type="tns:MdmAuthenticationInput" />
     </xsd:sequence>
   </xsd:complexType>
-  <xsd:complexType name="AuthenticationInput">
+  <xsd:complexType name="MdmAuthenticationInput">
     <xsd:sequence>
       <xsd:element minOccurs="0" name="userId" type="xsd:string" />
       <xsd:element minOccurs="0" name="password" type="xsd:string" />
@@ -54,7 +54,7 @@
   <xsd:complexType name="AuthenUserInput">
     <xsd:sequence>
       <xsd:element minOccurs="0" name="authenUserBeanInput" type="bons2:authenUserBean" />
-      <xsd:element minOccurs="0" name="authenticationInput" type="tns:AuthenticationInput" />
+      <xsd:element minOccurs="0" name="authenticationInput" type="tns:MdmAuthenticationInput" />
     </xsd:sequence>
   </xsd:complexType>
 </xsd:schema>

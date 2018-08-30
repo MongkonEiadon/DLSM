@@ -6,18 +6,28 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Configuration;
+using AutoMapper;
+using DLSM.Infrastructure.API.MdmServices.Interfaces;
 using DLSM.MdmServiceTest;
 
 namespace DLSM.Controllers
 {
     public class LoginController : Controller
     {
+        private readonly IMdmServiceWrapper _mdmServiceWrapper;
+        private readonly IMapper _mapper;
+
         public String uid = ConfigurationManager.AppSettings.Get("uid");
         public String upw = ConfigurationManager.AppSettings.Get("upw");
         public String ip = ConfigurationManager.AppSettings.Get("ip");
         public String authencode = "";
         public String message = "";
         public String passold = "";
+
+        public LoginController(IMdmServiceWrapper mdmServiceWrapper, IMapper mapper) {
+            _mdmServiceWrapper = mdmServiceWrapper;
+            _mapper = mapper;
+        }
         
         // GET: Login
         public ActionResult Index()
@@ -162,15 +172,35 @@ namespace DLSM.Controllers
 
         protected String MdmAuthen(Staff UserDetail)
         {
+
+            var userInfo = _mdmServiceWrapper.GetUserInfoAsync(
+                new Infrastructure.API.MdmServices.Models.MdmAuthenticationInput(UserDetail.UserLogin,
+                    UserDetail.UserPassword)).Result;
+
+
+            if (userInfo != null)
+            {
+                using (var _db = new DLSMEntities()) {
+                    var storeUserInfo = _mapper.Map<GetUserInfo>(userInfo);
+                    _db.GetUserInfoes.Add(storeUserInfo);
+                    _db.SaveChanges();
+                }
+            }
+
+            
+
+            //
+
             string retcode = null;
             using (DLSMEntities db = new DLSMEntities())
             {
                 using (var dbContextTransaction = db.Database.BeginTransaction())
                 {
                     DLSM.MdmServiceTest.MdmUserServiceClient soap = new DLSM.MdmServiceTest.MdmUserServiceClient();
-                    try
-                    {
-                        MdmServiceTest.authenUser client = new MdmServiceTest.authenUser();
+                    try {
+
+
+
 
                         authenUserBean bean = new authenUserBean();
                         bean.userId = UserDetail.UserLogin;

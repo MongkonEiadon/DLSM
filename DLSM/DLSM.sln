@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DLSM", "DLSM\DLSM.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProgram", "TestProgram\TestProgram.csproj", "{9B84ADB4-401B-4F85-A520-192569D8D8DB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{838568DF-C15B-4F0D-8736-CD49526ED65D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DLSM.Infrastructure", "DLSM.Infrastructure\DLSM.Infrastructure.csproj", "{6CA1F9CD-4AFB-4840-AAC2-E329BBC2A5CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +25,16 @@ Global
 		{9B84ADB4-401B-4F85-A520-192569D8D8DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B84ADB4-401B-4F85-A520-192569D8D8DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B84ADB4-401B-4F85-A520-192569D8D8DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CA1F9CD-4AFB-4840-AAC2-E329BBC2A5CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CA1F9CD-4AFB-4840-AAC2-E329BBC2A5CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CA1F9CD-4AFB-4840-AAC2-E329BBC2A5CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CA1F9CD-4AFB-4840-AAC2-E329BBC2A5CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6CA1F9CD-4AFB-4840-AAC2-E329BBC2A5CE} = {838568DF-C15B-4F0D-8736-CD49526ED65D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {829E8384-7D25-4002-8164-5134793E0E22}

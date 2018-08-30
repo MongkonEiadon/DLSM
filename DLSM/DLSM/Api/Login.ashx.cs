@@ -9,6 +9,8 @@ using System.Web;
 using System.Web.Script.Serialization;
 using DLSM.MdmServiceTest;
 using System.Configuration;
+using System.Web.Http;
+using DLSM.Infrastructure.MdmServices;
 
 namespace DLSM.Api
 {
@@ -22,6 +24,7 @@ namespace DLSM.Api
         public String upw = ConfigurationManager.AppSettings.Get("upw");
         public String ip = ConfigurationManager.AppSettings.Get("ip");
         public String CodeConfig = ConfigurationManager.AppSettings.Get("CodeConfig").ToString();
+
 
         public void ProcessRequest(HttpContext context)
         {
@@ -50,6 +53,7 @@ namespace DLSM.Api
                             if (CodeConfig == "1")
                             {
                                 DLSM.MdmServiceTest.MdmUserServiceClient soap = new DLSM.MdmServiceTest.MdmUserServiceClient();
+
                                 try
                                 {
                                     MdmServiceTest.authenUser client = new MdmServiceTest.authenUser();
