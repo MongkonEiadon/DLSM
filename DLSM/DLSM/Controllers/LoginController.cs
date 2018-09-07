@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Configuration;
 using AutoMapper;
 using DLSM.Infrastructure.API.MdmServices.Interfaces;
+using DLSM.Infrastructure.API.MdmServices.Models;
 using DLSM.MdmServiceTest;
 
 namespace DLSM.Controllers
@@ -170,13 +171,10 @@ namespace DLSM.Controllers
             return Convert.ToBase64String(hasBytes);
         }
 
-        protected String MdmAuthen(Staff UserDetail)
-        {
+        protected String MdmAuthen(Staff UserDetail) {
 
-            var userInfo = _mdmServiceWrapper.GetUserInfoAsync(
-                new Infrastructure.API.MdmServices.Models.MdmAuthenticationInput(UserDetail.UserLogin,
-                    UserDetail.UserPassword)).Result;
-
+            var userInfo = _mdmServiceWrapper.GetUserInfoAsync( 
+                new MdmAuthenticationInput(UserDetail.UserLogin, UserDetail.UserPassword)).Result;
 
             if (userInfo != null)
             {
@@ -187,10 +185,6 @@ namespace DLSM.Controllers
                 }
             }
 
-            
-
-            //
-
             string retcode = null;
             using (DLSMEntities db = new DLSMEntities())
             {
@@ -198,9 +192,6 @@ namespace DLSM.Controllers
                 {
                     DLSM.MdmServiceTest.MdmUserServiceClient soap = new DLSM.MdmServiceTest.MdmUserServiceClient();
                     try {
-
-
-
 
                         authenUserBean bean = new authenUserBean();
                         bean.userId = UserDetail.UserLogin;

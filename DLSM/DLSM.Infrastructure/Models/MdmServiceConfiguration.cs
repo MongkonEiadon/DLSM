@@ -4,12 +4,14 @@
         public string Password { get; }
         public string Ip { get; }
         public string Thumprint { get; }
+        public string Endpoints { get; }
 
-        public MdmServiceConfiguration(string uid, string password, string ip, string thumprint) {
+        public MdmServiceConfiguration(string uid, string password, string ip, string thumprint, string endPoints) {
             Uid = uid;
             Password = password;
             Ip = ip;
             Thumprint = thumprint;
+            Endpoints = endPoints;
         }
     }
 }

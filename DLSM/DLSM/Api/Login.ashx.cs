@@ -10,7 +10,6 @@ using System.Web.Script.Serialization;
 using DLSM.MdmServiceTest;
 using System.Configuration;
 using System.Web.Http;
-using DLSM.Infrastructure.MdmServices;
 
 namespace DLSM.Api
 {
