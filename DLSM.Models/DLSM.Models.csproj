@@ -1,0 +1,251 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net47</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DLSMModels.Context.tt" />
+    <None Remove="DLSMModels.edmx.diagram" />
+    <None Remove="DLSMModels.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DLSMModels.Context.tt">
+      <DependentUpon>DLSMModels.edmx</DependentUpon>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
+    <Content Include="DLSMModels.edmx.diagram">
+      <DependentUpon>DLSMModels.edmx</DependentUpon>
+    </Content>
+    <Content Include="DLSMModels.tt">
+      <DependentUpon>DLSMModels.edmx</DependentUpon>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Category.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Commend.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Configure.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="DLSMModels.Context.cs">
+      <DependentUpon>DLSMModels.Context.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="DLSMModels.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="DLSMModels.Designer.cs">
+      <DependentUpon>DLSMModels.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Document.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="DocumentDetail.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="GetUserInfo.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Issue.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Module.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Permission.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Product.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Province.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="SerialImagePart.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="SerialOut.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiCancelCard_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiCheckCardSerial_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiCheckWarehouse_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiGetCardInfo_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiGetListTrans_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiLogin_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiPersonImage_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiPrintDailyRept_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiProvImage_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiSaveCard_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiSaveMagInfo_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiUpdateCardInfo_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiUpdatePicture_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ApiUpdatePrintStatus_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_CheckAvailable_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_CheckSerialINReceive_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_CheckSerialIN_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_CheckSerialOut_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_CreateBorrow_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_CreateCardUsageDoc_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_DocumentList_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_GetMainWarehouse_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_ProcessDocument_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_RptBalance_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_RptTransfer_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_SaveCardManual_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_SearchBorrow_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_SearchCard_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_SearchDocument_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_SearchStock_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_Stock_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_WarehouseAuthority_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_WarehouseIndex_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_WarehouseSearch_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_WarehouseTransferAuthority_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_WorkStationIndex_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="sp_WorkStationSearch_Result.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Staff.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="StaffWarehouse.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Stock.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="StockSerial.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Topic.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="TopicGroup.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="TransferStaff.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="UserGroup.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Warehouse.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="WarehouseMinimum.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="WorkHistory.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="WorkSationDetail.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="WorkSationStaff.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+    <Compile Update="WorkStation.cs">
+      <DependentUpon>DLSMModels.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DLSMModels.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DLSMModels.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>

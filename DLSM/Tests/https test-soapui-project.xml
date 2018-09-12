@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="468d338f-9701-4e33-921d-73135f0a55ad" activeEnvironment="Default" name="https test" resourceRoot="${projectDir}" soapui-version="5.4.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="0c1316ca-b010-4763-878e-e32222a0f677" wsaVersion="NONE" name="MdmUserServiceExport1_MdmUserServiceHttpBinding" type="wsdl" bindingName="{http://esv.dlt.go.th}MdmUserServiceExport1_MdmUserServiceHttpBinding" soapVersion="1_2" anonymous="optional" definition="http://gservice.dlt.go.th:10080/EsvProcessWeb/sca/MdmUserService?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.tcpmon.TcpMonAction@values-local">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="Local Port" value=""/>
+  &lt;con:entry key="Add local endpoint" value="false"/>
+  &lt;con:entry key="Endpoint" value=""/>
+&lt;/xml-fragment></con:setting></con:settings><con:definitionCache type="TEXT" rootPart="http://gservice.dlt.go.th:10080/EsvProcessWeb/sca/MdmUserService?wsdl"><con:part><con:url>http://gservice.dlt.go.th:10080/EsvProcessWeb/sca/MdmUserService?wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://esv.dlt.go.th" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsp200409="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsp200607="http://www.w3.org/2006/07/ws-policy" xmlns:ns0="http://esv.dlt.go.th">
+  <wsdl:types xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:schema>
+      <xsd:import schemaLocation="MdmUserService.xsd1.xsd" namespace="http://esv.dlt.go.th"/>
+      <xsd:import schemaLocation="MdmUserService.xsd2.xsd" namespace="http://ws.esv.dlt.go.th"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="authenUser_BusinessFaultMsg">
+    <wsdl:part name="BusinessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="authenUser_SystemFaultMsg">
+    <wsdl:part name="SystemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="authenUserRequestMsg">
+    <wsdl:part name="authenUserParameters" element="xsns:authenUser" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="authenUserResponseMsg">
+    <wsdl:part name="authenUserResult" element="xsns:authenUserResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getUserInfo_BusinessFaultMsg">
+    <wsdl:part name="BusinessFault" element="xsns:BusinessFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getUserInfo_SystemFaultMsg">
+    <wsdl:part name="SystemFault" element="xsns:SystemFault" xmlns:xsns="http://ws.esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getUserInfoRequestMsg">
+    <wsdl:part name="getUserInfoParameters" element="xsns:getUserInfo" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:message name="getUserInfoResponseMsg">
+    <wsdl:part name="getUserInfoResult" element="xsns:getUserInfoResponse" xmlns:xsns="http://esv.dlt.go.th"/>
+  </wsdl:message>
+  <wsdl:portType name="MdmUserService">
+    <wsdl:operation name="authenUser">
+      <wsdl:input name="authenUserRequest" message="ns0:authenUserRequestMsg"/>
+      <wsdl:output name="authenUserResponse" message="ns0:authenUserResponseMsg"/>
+      <wsdl:fault name="BusinessFault" message="ns0:authenUser_BusinessFaultMsg"/>
+      <wsdl:fault name="SystemFault" message="ns0:authenUser_SystemFaultMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getUserInfo">
+      <wsdl:input name="getUserInfoRequest" message="ns0:getUserInfoRequestMsg"/>
+      <wsdl:output name="getUserInfoResponse" message="ns0:getUserInfoResponseMsg"/>
+      <wsdl:fault name="BusinessFault" message="ns0:getUserInfo_BusinessFaultMsg"/>
+      <wsdl:fault name="SystemFault" message="ns0:getUserInfo_SystemFaultMsg"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MdmUserServiceExport1_MdmUserServiceHttpBinding" type="ns0:MdmUserService">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="authenUser">
+      <soap12:operation soapAction="http://esv.dlt.go.th/MdmUserService/authenUser" soapActionRequired="false" style="document"/>
+      <wsdl:input name="authenUserRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="authenUserResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="BusinessFault">
+        <soap12:fault name="BusinessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="SystemFault">
+        <soap12:fault name="SystemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getUserInfo">
+      <soap12:operation soapAction="http://esv.dlt.go.th/MdmUserService/getUserInfo" soapActionRequired="false" style="document"/>
+      <wsdl:input name="getUserInfoRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getUserInfoResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="BusinessFault">
+        <soap12:fault name="BusinessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="SystemFault">
+        <soap12:fault name="SystemFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MdmUserServiceExport1_MdmUserServiceHttpService">
+    <wsdl:port name="MdmUserService_MdmUserServiceHttpPort" binding="ns0:MdmUserServiceExport1_MdmUserServiceHttpBinding">
+      <soap12:address location="https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/MdmUserService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>http://gservice.dlt.go.th:10080/EsvProcessWeb/sca/MdmUserService.xsd1.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://esv.dlt.go.th" xmlns:bons0="http://ws.esv.dlt.go.th" xmlns:bons1="http://esv.dlt.go.th" xmlns:bons2="http://ws.esv.dlt.go.th" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://esv.dlt.go.th" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="MdmUserService.xsd2.xsd" namespace="http://ws.esv.dlt.go.th"/>
+  <xsd:element name="authenUser">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="AuthenUserInput" nillable="true" type="tns:AuthenUserInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="authenUserResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="AuthenUserOutput" nillable="true" type="tns:AuthenUserOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getUserInfo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="GetUserInfoInput" nillable="true" type="tns:GetUserInfoInput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getUserInfoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="GetUserInfoOutput" nillable="true" type="tns:GetUserInfoOutput"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="GetUserInfoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="getUserInfoBeanInput" type="bons0:getUserInfoBean"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AuthenticationInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="userId" type="xsd:string"></xsd:element>
+      <xsd:element minOccurs="0" name="password" type="xsd:string"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetUserInfoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons0:getUserInfoResponse"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AuthenUserOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons0:authenUserResponse"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AuthenUserInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="authenUserBeanInput" type="bons0:authenUserBean"></xsd:element>
+      <xsd:element minOccurs="0" name="authenticationInput" type="bons1:AuthenticationInput"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>http://gservice.dlt.go.th:10080/EsvProcessWeb/sca/MdmUserService.xsd2.xsd</con:url><con:content><![CDATA[<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://ws.esv.dlt.go.th" xmlns:tns="http://ws.esv.dlt.go.th" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bons2="http://ws.esv.dlt.go.th" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="authenUserResultBean">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="authenUserResult" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="authenUserToken" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="authenUserResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:authenUserResultBean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="authenUserResponse" type="tns:authenUserResponse"/>
+  <xs:complexType name="getUserInfoBean">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="authenUserToken" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getUserInfoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:getUserInfoResultBean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getUserInfoResponse" type="tns:getUserInfoResponse"/>
+  <xs:complexType name="getUserInfoResultBean">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="offLocDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="orgFullNameDes" type="xs:string"/>
+      <xs:element minOccurs="0" name="positionDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="surname" type="xs:string"/>
+      <xs:element minOccurs="0" name="title" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BusinessFault" nillable="true" type="tns:businessException"/>
+  <xs:complexType name="businessException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="errorCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="faultName" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SystemFault" nillable="true" type="tns:systemException"/>
+  <xs:complexType name="systemException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="errorCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="exceptionName" type="xs:string"/>
+      <xs:element minOccurs="0" name="faultName" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+      <xs:element minOccurs="0" name="stacktrace" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="authenUserBean">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ipAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="password" type="xs:string"/>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://InvMgmtAppt:8015/</con:endpoint><con:endpoint>https://gservice.dlt.go.th:10443/EsvProcessWeb/sca/MdmUserService</con:endpoint></con:endpoints><con:operation id="1a4ca2db-b575-4f5a-bf39-98ed266cae33" isOneWay="false" action="http://esv.dlt.go.th/MdmUserService/authenUser" name="authenUser" bindingOperationName="authenUser" type="Request-Response" outputName="authenUserResponse" inputName="authenUserRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="008044b9-761d-4ae2-9c9d-81b3721e214f" name="GetToken-Success" sslKeystore="dlt-effectivesoluction.p12"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8015/</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:authenUser>
+         <AuthenUserInput>
+            <!--Optional:-->
+            <authenUserBeanInput>
+               <!--Optional:-->
+               <ipAddress>http://192.169.6.13/</ipAddress>
+               <!--Optional:-->
+               <password>Iam@3101</password>
+               <!--Optional:-->
+               <userId>3120300234990</userId>
+            </authenUserBeanInput>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>effectivesolution</userId>
+               <!--Optional:-->
+               <password>Dlt@1428</password>
+            </authenticationInput>
+         </AuthenUserInput>
+      </esv:authenUser>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/MdmUserService/authenUserRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="10882177-5a85-4340-a410-4b3bcbd7f7c4" isOneWay="false" action="http://esv.dlt.go.th/MdmUserService/getUserInfo" name="getUserInfo" bindingOperationName="getUserInfo" type="Request-Response" outputName="getUserInfoResponse" inputName="getUserInfoRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="ddd6c900-7ed6-4928-b55d-07f654b20884" name="Request 1" useWsReliableMessaging="true" sslKeystore="dlt-effectivesoluction.p12"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th/EsvProcessWeb/sca/MdmUserService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th">\r
+   <soap:Header/>\r
+   <soap:Body>\r
+      <esv:getUserInfo>\r
+         <GetUserInfoInput>\r
+            <!--Optional:-->\r
+            <getUserInfoBeanInput>\r
+               <!--Optional:-->\r
+               <authenUserToken>eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.1fhLh6348uEZ2_Vx9OwNzjzbFuFKTRRTwV7v7k67pvbNNI6VGAszLw.XsNDgQ6sFEZw4ftfsvJAPA.fPIa1wsLXhjBdCvynd-wMrTRF7ck4G6IkkTacEs3Nj6SnQZQE_PajwyvbelREzTloP3nk6GxE7CBodyKV4PUafSraVI4pHaRtU6_5eEOM01VS6O9__QIIuiJ7RAF7nET.NiwdPVloNDJgbDLerU0Mfw</authenUserToken>\r
+            </getUserInfoBeanInput>\r
+            <!--Optional:-->\r
+            <authenticationInput>\r
+               <!--Optional:-->\r
+               <userId>3120200391694</userId>\r
+               <!--Optional:-->\r
+               <password>Dlt@2535</password>\r
+            </authenticationInput>\r
+         </GetUserInfoInput>\r
+      </esv:getUserInfo>\r
+   </soap:Body>\r
+</soap:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/MdmUserService/getUserInfoRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call id="0dd3913a-42e8-4b6b-b32c-c668c7557e61" name="Request 2" sslKeystore="dlt-effectivesoluction.p12"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://gservice.dlt.go.th/EsvProcessWeb/sca/MdmUserService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:esv="http://esv.dlt.go.th">
+   <soap:Header/>
+   <soap:Body>
+      <esv:getUserInfo>
+         <GetUserInfoInput>
+            <!--Optional:-->
+            <getUserInfoBeanInput>
+               <!--Optional:-->
+               <authenUserToken>eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.-vTsIDI1n__oygNEWoRNOAQrRt4NQJuk1kNMrwsEqxA2XicHO6Ol5Q.GnxrXyYPf2qi7_iwKu2tDw.0IQsq3kPGWU43-CsbxrmAcysGP02eMFtVVacVTerPJcCKFLVp0kH_g9q17rjJdH6CEmJHFOFXainwqjNt-PTgqvnf4FqamJRaI00URDkX_8XnWumAy-PLRh5O8jO9AGl.amj5NW2piF6pdwjGmWEI_w</authenUserToken>
+            </getUserInfoBeanInput>
+            <!--Optional:-->
+            <authenticationInput>
+               <!--Optional:-->
+               <userId>effectivesolution</userId>
+               <!--Optional:-->
+               <password>Dlt@1428</password>
+            </authenticationInput>
+         </GetUserInfoInput>
+      </esv:getUserInfo>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/MdmUserService/getUserInfoRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:mockService id="3d113725-2578-4fc6-8ae8-d8cf5bdf9004" port="8015" path="/" host="InvMgmtAppt" name="MockSoapService" bindToHostOnly="false" docroot=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="authenUser" id="d068e182-9466-4be1-bde1-55e1862ad10f" interface="MdmUserServiceExport1_MdmUserServiceHttpBinding" operation="authenUser"><con:settings/><con:defaultResponse>SuccessWithToken</con:defaultResponse><con:dispatchStyle>QUERY_MATCH</con:dispatchStyle><con:response name="NotAuthorize" id="850cff7d-fa8b-43e5-9e7b-52f4f7c3b45e" httpResponseStatus="500" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">
+   <soapenv:Body>
+      <soapenv:Fault xmlns:axis2ns1="http://www.w3.org/2003/05/soap-envelope">
+         <soapenv:Code>
+            <soapenv:Value>soapenv:Receiver</soapenv:Value>
+            <soapenv:Subcode>
+               <soapenv:Value xmlns:m="http://ws.esv.dlt.go.th">m:businessException</soapenv:Value>
+            </soapenv:Subcode>
+         </soapenv:Code>
+         <soapenv:Reason>
+            <soapenv:Text xml:lang="en"/>
+         </soapenv:Reason>
+         <soapenv:Detail>
+            <ws:BusinessFault xmlns:ws="http://ws.esv.dlt.go.th">
+               <errorCode>Not Authorized</errorCode>
+               <faultName>BusinessErrorFault</faultName>
+               <message>Not Authorized</message>
+            </ws:BusinessFault>
+         </soapenv:Detail>
+      </soapenv:Fault>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/MdmUserService/authenUserResponse"/></con:response><con:response name="PasswordExpired" id="850cff7d-fa8b-43e5-9e7b-52f4f7c3b45e" httpResponseStatus="500" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">
+   <soapenv:Body>
+      <soapenv:Fault xmlns:axis2ns1="http://www.w3.org/2003/05/soap-envelope">
+         <soapenv:Code>
+            <soapenv:Value>soapenv:Receiver</soapenv:Value>
+            <soapenv:Subcode>
+               <soapenv:Value xmlns:m="http://ws.esv.dlt.go.th">m:businessException</soapenv:Value>
+            </soapenv:Subcode>
+         </soapenv:Code>
+         <soapenv:Reason>
+            <soapenv:Text xml:lang="en">Password Expired</soapenv:Text>
+         </soapenv:Reason>
+         <soapenv:Detail>
+            <ws:BusinessFault xmlns:ws="http://ws.esv.dlt.go.th">
+               <errorCode>Password Expired</errorCode>
+               <faultName>BusinessErrorFault</faultName>
+               <message/>
+            </ws:BusinessFault>
+         </soapenv:Detail>
+      </soapenv:Fault>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/MdmUserService/authenUserResponse"/></con:response><con:response name="SuccessWithToken" id="c55a8d33-b1ba-4d0a-aa65-acc72ba863e0" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">
+   <soapenv:Body>
+      <esv:authenUserResponse xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+         <AuthenUserOutput>
+            <ws:authenUserResponse>
+               <return>
+                  <authenUserResult>true</authenUserResult>
+                  <authenUserToken>eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.1fhLh6348uEZ2_Vx9OwNzjzbFuFKTRRTwV7v7k67pvbNNI6VGAszLw.XsNDgQ6sFEZw4ftfsvJAPA.fPIa1wsLXhjBdCvynd-wMrTRF7ck4G6IkkTacEs3Nj6SnQZQE_PajwyvbelREzTloP3nk6GxE7CBodyKV4PUafSraVI4pHaRtU6_5eEOM01VS6O9__QIIuiJ7RAF7nET.NiwdPVloNDJgbDLerU0Mfw</authenUserToken>
+               </return>
+            </ws:authenUserResponse>
+         </AuthenUserOutput>
+      </esv:authenUserResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/MdmUserService/authenUserResponse"/></con:response><con:dispatchConfig xsi:type="con:MockOperationQueryMatchDispatch" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:query><con:name>Valid</con:name><con:response>SuccessWithToken</con:response></con:query></con:dispatchConfig></con:mockOperation><con:mockOperation name="getUserInfo" id="a0719a70-4ffb-43a3-836d-f1818fe88a09" interface="MdmUserServiceExport1_MdmUserServiceHttpBinding" operation="getUserInfo"><con:settings/><con:defaultResponse>Success</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Success" id="03127c16-4ecd-4624-be63-feada8882514" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">
+   <soapenv:Body>
+      <esv:getUserInfoResponse xmlns:esv="http://esv.dlt.go.th" xmlns:ws="http://ws.esv.dlt.go.th">
+         <GetUserInfoOutput>
+            <ws:getUserInfoResponse>
+               <return>
+                  <name>บราลี</name>
+                  <offLocCode>00100</offLocCode>
+                  <offLocDesc>สำนักงานขนส่งกรุงเทพมหานครพื้นที่ 5</offLocDesc>
+                  <orgFullNameDes>สำนักงานขนส่งกรุงเทพมหานครพื้นที่ 5 ส่วนใบอนุญาตขับรถ งานใบอนุญาตขับรถ  บญ. หมวดใบอนุญาตส่วนบุคคล</orgFullNameDes>
+                  <positionDesc>เจ้าพนักงานขนส่งชำนาญงาน</positionDesc>
+                  <surname>ยศขุน</surname>
+                  <title>นางสาว</title>
+               </return>
+            </ws:getUserInfoResponse>
+         </GetUserInfoOutput>
+      </esv:getUserInfoResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/MdmUserService/getUserInfoResponse"/></con:response><con:response name="Error" id="e8796d55-760f-4017-a024-0db822b01b07" httpResponseStatus="500" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">
+   <soapenv:Body>
+      <soapenv:Fault xmlns:axis2ns1="http://www.w3.org/2003/05/soap-envelope">
+         <soapenv:Code>
+            <soapenv:Value>soapenv:Receiver</soapenv:Value>
+            <soapenv:Subcode>
+               <soapenv:Value xmlns:m="http://ws.esv.dlt.go.th">m:systemException</soapenv:Value>
+            </soapenv:Subcode>
+         </soapenv:Code>
+         <soapenv:Reason>
+            <soapenv:Text xml:lang="en">SPan07</soapenv:Text>
+         </soapenv:Reason>
+         <soapenv:Detail>
+            <ws:SystemFault xmlns:ws="http://ws.esv.dlt.go.th">
+               <errorCode>SPan07</errorCode>
+               <faultName>SystemErrorFault</faultName>
+               <message>เกิดข้อผิดพลาดภายในระบบ กรุณาติดต่อกรมการขนส่งทางบก</message>
+               <stacktrace/>
+            </ws:SystemFault>
+         </soapenv:Detail>
+      </soapenv:Fault>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://esv.dlt.go.th/MdmUserService/getUserInfoResponse"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer><con:crypto><con:source>dlt-effectivesoluction.p12</con:source><con:password>p@ssw0rd1234</con:password><con:type>KEYSTORE</con:type></con:crypto><con:crypto><con:source>dlt.truststore</con:source><con:password>p@ssw0rd1234</con:password><con:type>TRUSTSTORE</con:type></con:crypto></con:wssContainer><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>

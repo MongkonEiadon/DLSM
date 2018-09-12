@@ -7,9 +7,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Configuration;
 using AutoMapper;
-using DLSM.Infrastructure.API.MdmServices.Interfaces;
 using DLSM.Infrastructure.API.MdmServices.Models;
-using DLSM.MdmServiceTest;
+using DLSM.Infrastructure.API.MdmUserServices.Interfaces;
+using DLSM.Infrastructure.MdmUserServices;
+using DLSM.Infrastructure.Models;
 
 namespace DLSM.Controllers
 {
@@ -188,100 +189,30 @@ namespace DLSM.Controllers
             string retcode = null;
             using (DLSMEntities db = new DLSMEntities())
             {
-                using (var dbContextTransaction = db.Database.BeginTransaction())
+
+                try
                 {
-                    DLSM.MdmServiceTest.MdmUserServiceClient soap = new DLSM.MdmServiceTest.MdmUserServiceClient();
-                    try {
 
-                        authenUserBean bean = new authenUserBean();
-                        bean.userId = UserDetail.UserLogin;
-                        bean.password = passold;
-                        bean.ipAddress = ip;
+                    var respget = _mdmServiceWrapper
+                        .GetUserInfoAsync(new MdmAuthenticationInput(UserDetail.UserLogin, passold)).Result;
 
-                        AuthenticationInput input = new AuthenticationInput();
-                        //input.userId = "TestEffective01";
-                        //input.password = "Dlt@3618";
+                    var gui = _mapper.Map<GetUserInfo>(respget);
 
-                        input.userId = uid;
-                        input.password = upw;
+                    db.GetUserInfoes.Add(gui);
+                    db.SaveChanges();
 
-                        AuthenUserInput aut = new AuthenUserInput();
-                        aut.authenticationInput = input;
-                        aut.authenUserBeanInput = bean;
+                    retcode = "1";
 
-                        authenUser au = new authenUser();
-                        au.AuthenUserInput = aut;
+                }
+                catch (Exception ex)
+                {
+                    retcode = "0";
+                    message = "authenUser Result: Error กรุณาติดต่อเจ้าหน้าที่";
 
-                        authenUserResponse resp = soap.authenUser(au);
-                        if (resp.AuthenUserOutput.authenUserResponse.@return.authenUserResult.ToString() == "True")
-                        {
-                            try
-                            {
-                                MdmServiceTest.getUserInfo clientget = new MdmServiceTest.getUserInfo();
 
-                                getUserInfoBean beanget = new getUserInfoBean();
-                                beanget.authenUserToken = resp.AuthenUserOutput.authenUserResponse.@return.authenUserToken;
-
-                                GetUserInfoInput inputget = new GetUserInfoInput();
-                                inputget.getUserInfoBeanInput = beanget;
-                                inputget.authenticationInput = input;
-
-                                clientget.GetUserInfoInput = inputget;
-
-                                getUserInfoResponse respget = soap.getUserInfo(clientget);
-                                if (respget.GetUserInfoOutput.getUserInfoResponse.@return.name.ToString() != "")
-                                {
-                                    try
-                                    {
-                                        GetUserInfo gui = new GetUserInfo();
-                                        gui.Title = respget.GetUserInfoOutput.getUserInfoResponse.@return.title;
-                                        gui.Name = respget.GetUserInfoOutput.getUserInfoResponse.@return.name;
-                                        gui.Surname = respget.GetUserInfoOutput.getUserInfoResponse.@return.surname;
-                                        gui.OffLocCode = respget.GetUserInfoOutput.getUserInfoResponse.@return.offLocCode;
-                                        gui.OffLocDesc = respget.GetUserInfoOutput.getUserInfoResponse.@return.offLocDesc;
-                                        gui.OrgFullNameDes = respget.GetUserInfoOutput.getUserInfoResponse.@return.orgFullNameDes;
-                                        gui.PositionDesc = respget.GetUserInfoOutput.getUserInfoResponse.@return.positionDesc;
-                                        db.GetUserInfoes.Add(gui);
-                                        db.SaveChanges();
-
-                                        dbContextTransaction.Commit();
-                                        retcode = "1";
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        dbContextTransaction.Rollback();
-                                        retcode = "0";
-                                        message = "GetUserInfo Error";
-                                    }
-                                }
-                                else
-                                {
-                                    retcode = "0";
-                                    message = "getUserInfo Error";
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                retcode = "0";
-                                message = "authenUser Error";
-                            }
-                        }
-                        else
-                        {
-                            retcode = "0";
-                            message = resp.AuthenUserOutput.authenUserResponse.@return.authenUserResult.ToString();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        
-                        dbContextTransaction.Rollback();
-                        retcode = "0";
-                        message = "authenUser Result: Error กรุณาติดต่อเจ้าหน้าที่";
-
-                    }
                 }
             }
+
             return retcode;
         }
 

@@ -7,9 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
-using DLSM.MdmServiceTest;
 using System.Configuration;
 using System.Web.Http;
+using DLSM.Infrastructure.API.MdmUserServices.Interfaces;
+using DLSM.Infrastructure.Models;
 
 namespace DLSM.Api
 {
@@ -18,12 +19,17 @@ namespace DLSM.Api
     /// </summary>
     public class Login : IHttpHandler
     {
+        private readonly IMdmServiceWrapper _mdmServiceWrapper;
         private DLSMEntities db = new DLSMEntities();
         public String uid = ConfigurationManager.AppSettings.Get("uid");
         public String upw = ConfigurationManager.AppSettings.Get("upw");
         public String ip = ConfigurationManager.AppSettings.Get("ip");
         public String CodeConfig = ConfigurationManager.AppSettings.Get("CodeConfig").ToString();
 
+        public Login(IMdmServiceWrapper mdmServiceWrapper)
+        {
+            _mdmServiceWrapper = mdmServiceWrapper;
+        }
 
         public void ProcessRequest(HttpContext context)
         {
@@ -51,6 +57,8 @@ namespace DLSM.Api
 
                             if (CodeConfig == "1")
                             {
+                                _mdmServiceWrapper.AuthenticationUserAsync(new MdmAuthenticationInput())
+
                                 DLSM.MdmServiceTest.MdmUserServiceClient soap = new DLSM.MdmServiceTest.MdmUserServiceClient();
 
                                 try

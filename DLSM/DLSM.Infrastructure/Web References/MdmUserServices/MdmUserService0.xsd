@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.esv.dlt.go.th" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bons2="http://ws.esv.dlt.go.th" xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://ws.esv.dlt.go.th">
+  <xs:complexType name="authenUserResultBean">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="authenUserResult" type="xs:boolean" />
+      <xs:element minOccurs="0" name="authenUserToken" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="authenUserResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="bons2:authenUserResultBean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="authenUserResponse" type="bons2:authenUserResponse" />
+  <xs:complexType name="getUserInfoBean">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="authenUserToken" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getUserInfoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="bons2:getUserInfoResultBean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="getUserInfoResponse" type="bons2:getUserInfoResponse" />
+  <xs:complexType name="getUserInfoResultBean">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="name" type="xs:string" />
+      <xs:element minOccurs="0" name="offLocCode" type="xs:string" />
+      <xs:element minOccurs="0" name="offLocDesc" type="xs:string" />
+      <xs:element minOccurs="0" name="orgFullNameDes" type="xs:string" />
+      <xs:element minOccurs="0" name="positionDesc" type="xs:string" />
+      <xs:element minOccurs="0" name="surname" type="xs:string" />
+      <xs:element minOccurs="0" name="title" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BusinessFault" nillable="true" type="bons2:businessException" />
+  <xs:complexType name="businessException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="errorCode" type="xs:string" />
+      <xs:element minOccurs="0" name="faultName" type="xs:string" />
+      <xs:element minOccurs="0" name="message" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SystemFault" nillable="true" type="bons2:systemException" />
+  <xs:complexType name="systemException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="errorCode" type="xs:string" />
+      <xs:element minOccurs="0" name="exceptionName" type="xs:string" />
+      <xs:element minOccurs="0" name="faultName" type="xs:string" />
+      <xs:element minOccurs="0" name="message" type="xs:string" />
+      <xs:element minOccurs="0" name="stacktrace" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="authenUserBean">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ipAddress" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+      <xs:element minOccurs="0" name="userId" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xsd:schema>

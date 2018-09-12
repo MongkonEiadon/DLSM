@@ -6,8 +6,8 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using DLSM.Infrastructure.API.MdmServices;
-using DLSM.Infrastructure.API.MdmServices.Interfaces;
 using DLSM.Infrastructure.API.MdmServices.Models;
+using DLSM.Infrastructure.API.MdmUserServices.Interfaces;
 using DLSM.Infrastructure.Modules;
 using DLSM.Models;
 
@@ -38,9 +38,6 @@ namespace DLSM {
             //builder.RegisterSource(new ViewRegistrationSource());
             builder.RegisterType<DLSMEntities>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterModule<ApiModules>();
-            builder.RegisterModule<MappingProfileModule>();
-
-            builder.RegisterType<MdmServiceWrapper>().As<IMdmServiceWrapper>().InstancePerLifetimeScope();
 
             //build the container
             var container = builder.Build();

@@ -330,11 +330,6 @@
     <Compile Include="Class\UploadPictureRequest.cs" />
     <Compile Include="Class\UploadPictureResponse.cs" />
     <Compile Include="Class\WarehouseProduct.cs" />
-    <Compile Include="Connected Services\MdmServiceTest\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Controllers\BorrowsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\CheckStocksController.cs" />
@@ -353,7 +348,6 @@
     <Compile Include="Controllers\StaffsController.cs" />
     <Compile Include="Controllers\StocksController.cs" />
     <Compile Include="Controllers\SuppliersController.cs" />
-    <Compile Include="Controllers\TestDltCertificatController.cs" />
     <Compile Include="Controllers\TopicGroupsController.cs" />
     <Compile Include="Controllers\TopicsController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
@@ -364,8 +358,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\API\MdmServices\MdmServiceWrapper.cs" />
-    <Compile Include="Mappings\GetUserInfoProfileMapping.cs" />
+    <Compile Include="Mapping\GetUserProfileMapping.cs" />
     <Compile Include="Models\Category.cs">
       <DependentUpon>DLSMModels.tt</DependentUpon>
     </Compile>
@@ -583,24 +576,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Api\CheckCardSerial.ashx" />
-    <None Include="Connected Services\MdmServiceTest\configuration91.svcinfo" />
-    <None Include="Connected Services\MdmServiceTest\configuration.svcinfo" />
-    <Content Include="Connected Services\MdmServiceTest\DLSM.MdmServiceTest.authenUserResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\MdmServiceTest\DLSM.MdmServiceTest.authenUserResponse2.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\MdmServiceTest\DLSM.MdmServiceTest.getUserInfoResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\MdmServiceTest\DLSM.MdmServiceTest.getUserInfoResponse2.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <None Include="Connected Services\MdmServiceTest\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="Content\bootstrap-datepicker.standalone.min.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -683,13 +658,6 @@
     <Content Include="Api\GetListPrintTrans.ashx" />
     <Content Include="Api\PrintCardDailyRept.ashx" />
     <Content Include="Api\SaveMagInfo.ashx" />
-    <None Include="Connected Services\MdmServiceTest\MdmUserService.wsdl" />
-    <None Include="Connected Services\MdmServiceTest\MdmUserService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\MdmServiceTest\MdmUserService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Models\DLSMModels.Context.tt">
@@ -960,11 +928,8 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\MdmServiceTest\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DLSM.Infrastructure\DLSM.Infrastructure.csproj">
-      <Project>{6ca1f9cd-4afb-4840-aac2-e329bbc2a5ce}</Project>
+      <Project>{549f3a1c-aa9b-4a21-9caf-927ff322b10c}</Project>
       <Name>DLSM.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>

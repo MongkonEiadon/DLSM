@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:bons0="http://ws.esv.dlt.go.th" xmlns:bons1="http://esv.dlt.go.th" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:bons2="http://ws.esv.dlt.go.th" xmlns:tns="http://esv.dlt.go.th" targetNamespace="http://esv.dlt.go.th" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="MdmUserService.xsd2.xsd" namespace="http://ws.esv.dlt.go.th" />
+  <xsd:element name="authenUser">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="AuthenUserInput" nillable="true" type="tns:AuthenUserInput" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="authenUserResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="AuthenUserOutput" nillable="true" type="tns:AuthenUserOutput" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getUserInfo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="GetUserInfoInput" nillable="true" type="tns:GetUserInfoInput" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="getUserInfoResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="GetUserInfoOutput" nillable="true" type="tns:GetUserInfoOutput" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="GetUserInfoInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="getUserInfoBeanInput" type="bons2:getUserInfoBean" />
+      <xsd:element minOccurs="0" name="authenticationInput" type="tns:AuthenticationInput" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AuthenticationInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="userId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="password" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetUserInfoOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:getUserInfoResponse" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AuthenUserOutput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bons2:authenUserResponse" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AuthenUserInput">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="authenUserBeanInput" type="bons2:authenUserBean" />
+      <xsd:element minOccurs="0" name="authenticationInput" type="tns:AuthenticationInput" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

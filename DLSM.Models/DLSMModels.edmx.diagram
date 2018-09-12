@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="93691fadfdad4091839c66facc93984e" Name="Diagram1" ZoomLevel="100">
+        <AssociationConnector Association="DLSMModel.FK_Staff_Staff" />
+        <EntityTypeShape EntityType="DLSMModel.Category" Width="1.5" PointX="1.5" PointY="1.25" />
+        <EntityTypeShape EntityType="DLSMModel.Commend" Width="1.5" PointX="5.25" PointY="9.625" />
+        <EntityTypeShape EntityType="DLSMModel.Document" Width="1.5" PointX="3.75" PointY="16.375" />
+        <EntityTypeShape EntityType="DLSMModel.DocumentDetail" Width="1.5" PointX="6" PointY="16.5" />
+        <EntityTypeShape EntityType="DLSMModel.Issue" Width="1.5" PointX="3" PointY="5.25" />
+        <EntityTypeShape EntityType="DLSMModel.Module" Width="1.5" PointX="5.5" PointY="21.5" />
+        <EntityTypeShape EntityType="DLSMModel.Permission" Width="1.5" PointX="7.75" PointY="12.25" />
+        <EntityTypeShape EntityType="DLSMModel.Product" Width="1.5" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DLSMModel.SerialImagePart" Width="1.5" PointX="8.75" PointY="5.75" />
+        <EntityTypeShape EntityType="DLSMModel.Stock" Width="1.5" PointX="6" PointY="1.75" />
+        <EntityTypeShape EntityType="DLSMModel.StockSerial" Width="1.5" PointX="8.25" PointY="1.75" />
+        <EntityTypeShape EntityType="DLSMModel.Supplier" Width="1.5" PointX="0.75" PointY="21.125" />
+        <EntityTypeShape EntityType="DLSMModel.Topic" Width="1.5" PointX="0.75" PointY="22.625" />
+        <EntityTypeShape EntityType="DLSMModel.TopicGroup" Width="1.5" PointX="1.5" PointY="27.25" />
+        <EntityTypeShape EntityType="DLSMModel.UserGroup" Width="1.5" PointX="1.5" PointY="12.375" />
+        <EntityTypeShape EntityType="DLSMModel.Warehouse" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="DLSMModel.WorkHistory" Width="1.5" PointX="5.25" PointY="12.75" />
+        <AssociationConnector Association="DLSMModel.FK_Product_Category" />
+        <AssociationConnector Association="DLSMModel.FK_Commend_Issue" />
+        <AssociationConnector Association="DLSMModel.FK_Document_Supplier" />
+        <AssociationConnector Association="DLSMModel.FK_DocumentDetail_Document" />
+        <AssociationConnector Association="DLSMModel.FK_DocumentDetail_Product" />
+        <AssociationConnector Association="DLSMModel.FK_StockSerial_DocumentDetail" />
+        <AssociationConnector Association="DLSMModel.FK_Issue_Topic" />
+        <AssociationConnector Association="DLSMModel.FK_Issue_TopicGroup" />
+        <AssociationConnector Association="DLSMModel.FK_Issue_Warehouse" />
+        <AssociationConnector Association="DLSMModel.FK_WorkHistory_Issue" />
+        <AssociationConnector Association="DLSMModel.FK_Permission_Module" />
+        <AssociationConnector Association="DLSMModel.FK_Permission_UserGroup" />
+        <AssociationConnector Association="DLSMModel.FK_Stock_Product" />
+        <AssociationConnector Association="DLSMModel.FK_Stock_Warehouse" />
+        <AssociationConnector Association="DLSMModel.FK_StockSerial_Stock" />
+        <AssociationConnector Association="DLSMModel.FK_Topic_TopicGroup" />
+        <EntityTypeShape EntityType="DLSMModel.TransferStaff" Width="1.5" PointX="10.75" PointY="11" />
+        <AssociationConnector Association="DLSMModel.FK_TransferStaff_Warehouse" />
+        <AssociationConnector Association="DLSMModel.FK_TransferStaff_Warehouse1" />
+        <EntityTypeShape EntityType="DLSMModel.WorkSationDetail" Width="1.5" PointX="13.625" PointY="3.625" />
+        <EntityTypeShape EntityType="DLSMModel.WorkSationStaff" Width="1.5" PointX="13.625" PointY="1" />
+        <EntityTypeShape EntityType="DLSMModel.WorkStation" Width="1.5" PointX="11.375" PointY="2.375" />
+        <AssociationConnector Association="DLSMModel.FK_WorkSationDetail_WorkStation" />
+        <AssociationConnector Association="DLSMModel.FK_WorkSationStaff_WorkStation" />
+        <EntityTypeShape EntityType="DLSMModel.WarehouseMinimum" Width="1.5" PointX="8" PointY="9.25" />
+        <AssociationConnector Association="DLSMModel.FK_WarehouseMinimum_Product" />
+        <AssociationConnector Association="DLSMModel.FK_WarehouseMinimum_Warehouse" />
+        <EntityTypeShape EntityType="DLSMModel.SerialOut" Width="1.5" PointX="8.25" PointY="15.5" />
+        <EntityTypeShape EntityType="DLSMModel.StaffWarehouse" Width="1.5" PointX="5.75" PointY="6.125" />
+        <AssociationConnector Association="DLSMModel.FK_StaffWarehouse_Warehouse1" />
+        <EntityTypeShape EntityType="DLSMModel.Province" Width="1.5" PointX="10.375" PointY="8.75" />
+        <EntityTypeShape EntityType="DLSMModel.Configure" Width="1.5" PointX="12.375" PointY="6.75" />
+        <EntityTypeShape EntityType="DLSMModel.Staff" Width="1.5" PointX="3.75" PointY="24.625" />
+        <AssociationConnector Association="DLSMModel.FK_Document_Staff" />
+        <AssociationConnector Association="DLSMModel.FK_Staff_UserGroup" />
+        <AssociationConnector Association="DLSMModel.FK_StaffWarehouse_Staff" />
+        <AssociationConnector Association="DLSMModel.FK_TransferStaff_Staff" />
+        <EntityTypeShape EntityType="DLSMModel.GetUserInfo" Width="1.5" PointX="13.375" PointY="9.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
